@@ -17,6 +17,7 @@ TODO:
 Implement Racial Abilities
 Quests
 I NEED MORE
+Further updates/features by: thesawolf (@ gmail . com)
 */
 const uint8 GroupIconsFlags[TARGETICONCOUNT] =
 {
@@ -1309,10 +1310,13 @@ void bot_minion_ai::SetStats(bool force, bool shapeshift)
     if (myclass == BOT_CLASS_DEATH_KNIGHT)
         mylevel = std::max<uint8>(mylevel, 55);
 
-    //LEVEL
+        //LEVEL
     if (me->getLevel() != mylevel)
     {
         me->SetLevel(mylevel);
+        //thesawolf - lets add a ding here
+        me->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
+        BotYell("DING!", master);        
         force = true; //reinit spells/passives/other
     }
     if (force)
@@ -2973,7 +2977,7 @@ void bot_minion_ai::_updateMountedState()
     if (master->IsMounted() && !me->IsMounted() && !master->IsInCombat() && !me->IsInCombat() && !me->GetVictim())
     {
         uint32 mount = 0;
-        Unit::AuraEffectList const &mounts = master->GetAuraEffectsByType(SPELL_AURA_MOUNTED);
+        Unit::AuraEffectList const& mounts = master->GetAuraEffectsByType(SPELL_AURA_MOUNTED);
         if (!mounts.empty())
         {
             //Winter Veil addition
@@ -2994,9 +2998,18 @@ void bot_minion_ai::_updateMountedState()
 
             if (!GetSpell(mount))
                 InitSpellMap(mount, true); //learn
-
-            if (doCast(me, mount))
+            
+            //thesawolf - docast wasn't applying mount aura properly
+            //if doCast(me, mount))
+            if (me->AddAura(mount, me))
             {
+                // thesawolf - let's give it some personality
+                me->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);                
+                BotSay("Let's roll out!", master);
+                return;
+            } else {
+                BotSay("I have an issue with that mount, so I'm going to ride my chicken..", master);
+                me->AddAura(65927, me); //summons chicken mount
                 return;
             }
         }
@@ -4643,8 +4656,231 @@ bool bot_minion_ai::OnGossipSelect(Player* player, Creature* creature/* == me*/,
                     else
                     {
                         aftercastTargetGuid = player->GetGUID();
-                        foodspell->prepare(&targets);
-                        BotWhisper("Here you go...", player);
+                        //thesawolf - fix for straight-to-inventory summoning
+                        if (aftercastTargetGuid)
+                        {
+                            std::string summonstr = "Summoning ";
+                            summonstr += iswater ? "water" : "food";
+                            summonstr +=" for you...";
+                            BotWhisper(summonstr.c_str(), player);
+                            Player* pTarget = ObjectAccessor::FindPlayer(aftercastTargetGuid);
+                            aftercastTargetGuid.Clear();
+
+                            if (!pTarget/* || me->GetDistance(pTarget) > 15*/)
+                            {
+                                BotWhisper("You are too far away for me to give you this..", player);
+                                break;
+                            }
+
+                            //handle effects
+                            for (uint8 i = 0; i != MAX_SPELL_EFFECTS; ++i)
+                            {
+                                switch (Info->Effects[i].Effect)
+                                {
+                                    case SPELL_EFFECT_CREATE_ITEM:
+                                    case SPELL_EFFECT_CREATE_ITEM_2:
+                                    {
+                                        uint32 newitemid = Info->Effects[i].ItemType;
+                                        if (newitemid)
+                                        {
+                                            ItemPosCountVec dest;
+                                            ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(newitemid);
+                                            if (!pProto)
+                                                break;
+                                            uint32 count = pProto->GetMaxStackSize();
+                                            uint32 no_space = 0;
+                                            InventoryResult msg = pTarget->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, newitemid, count, &no_space);
+                                            if (msg != EQUIP_ERR_OK)
+                                            {
+                                                if (msg == EQUIP_ERR_INVENTORY_FULL || msg == EQUIP_ERR_CANT_CARRY_MORE_OF_THIS)
+                                                {
+                                                    BotWhisper("No space in your bags!", player);                                
+                                                    count -= no_space;
+                                                }
+                                                else
+                                                {
+                                                    // if not created by another reason from full inventory or unique items amount limitation
+                                                    BotWhisper("There was an issue giving this to you!", player);                                
+                                                    pTarget->SendEquipError(msg, NULL, NULL, newitemid);
+                                                    continue;
+                                                }
+                                            }
+                                            if (count)
+                                            {
+                                                Item* pItem = pTarget->StoreNewItem(dest, newitemid, true, Item::GenerateItemRandomPropertyId(newitemid));
+                                                if (!pItem)
+                                                {
+                                                    BotWhisper("Can't seem to find the item now to give to you!", player);
+                                                    pTarget->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
+                                                    continue;
+                                                }
+                                                //unsafe possible
+                                                pItem->SetUInt32Value(ITEM_FIELD_CREATOR, me->GetGUID().GetCounter());
+                                                        
+                                                pTarget->SendNewItem(pItem, count, true, false, true);
+                                                BotWhisper("Here you go...", player);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    default:
+                                        break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+        case BOT_CLASS_WARLOCK: //thesawolf - stone summoning
+                {
+                    //Prevent high-leveled consumables for low-level characters
+                    Unit* checker;
+                    if (player->getLevel() < me->getLevel())
+                        checker = player;
+                    else
+                        checker = me;
+
+                    // Create Healthstone
+                    uint32 stone = InitSpell(checker, 34130/*6201*/);
+                    bool isfire = (action == GOSSIP_ACTION_INFO_DEF + 2);
+                    if (!isfire)// Create Healthstone
+                    {
+                        //thesawolf - issue with rank healthstone conjuring
+                        // doesn't go to inventory.. only these 2 stones are working
+                        // FIXME
+                        if(player->getLevel() < 69)
+                        { 
+                            stone = InitSpell(checker, 34130); //lvl 60 stone
+                        }
+                        else
+                        {
+                            stone = InitSpell(checker, 58890); //lvl 69 stone
+                        }
+                    }
+                    else// Create Firestone
+                        stone = InitSpell(checker, 6366);
+
+                    if (!stone)
+                    {
+                        std::string stonestr = "I can't create ";
+                        stonestr += isfire ? "fire" : "health";
+                        stonestr += "stones yet...";
+                        BotWhisper(stonestr.c_str(), player);
+                        break;
+                    }
+                    SpellInfo const* Info = sSpellMgr->GetSpellInfo(stone);
+                    Spell* stonespell = new Spell(me, Info, TRIGGERED_NONE, player->GetGUID());
+                    SpellCastTargets targets;
+                    targets.SetUnitTarget(player);
+                    //TODO implement checkcast for bots
+                    SpellCastResult result = me->IsMounted() || CCed(me) ? SPELL_FAILED_CUSTOM_ERROR : stonespell->CheckPetCast(player);
+                    if (result != SPELL_CAST_OK)
+                    {
+                        stonespell->finish(false);
+                        delete stonespell;
+                        BotWhisper("I can't do it right now", player);
+                    }
+                    else
+                    {
+                        aftercastTargetGuid = player->GetGUID();
+                        stonespell->prepare(&targets);
+
+                        //thesawolf - kludgy fix to healthstones.. can't find a spell
+                        //that actually makes the stones.. just the cast effect OR just a stone
+                        if (!isfire) 
+                        {
+                            stone = InitSpell(checker, 6201); // this is only for appearance
+                            SpellInfo const* Info = sSpellMgr->GetSpellInfo(stone);
+                            Spell* stonespell = new Spell(me, Info, TRIGGERED_NONE, player->GetGUID());
+                            SpellCastTargets targets;
+                            targets.SetUnitTarget(player);                            
+                            stonespell->prepare(&targets);
+                        } 
+                        //thesawolf - fix straight-to-inventory summoning
+                        if (aftercastTargetGuid)
+                        {
+                            std::string wstonestr = "Creating ";
+                            wstonestr += isfire ? "fire" : "health";
+                            wstonestr += "stone for you...";
+                            BotWhisper(wstonestr.c_str(), player);
+                            Player* pTarget = ObjectAccessor::FindPlayer(aftercastTargetGuid);
+                            aftercastTargetGuid.Clear();
+
+                            if (!pTarget/* || me->GetDistance(pTarget) > 15*/)
+                            {
+                                BotWhisper("You are too far away for me to give you this..", player);
+                                break;
+                            }
+
+                            //handle effects
+                            for (uint8 i = 0; i != MAX_SPELL_EFFECTS; ++i)
+                            {
+                                switch (Info->Effects[i].Effect)
+                                {
+                                    case SPELL_EFFECT_CREATE_ITEM:
+                                    case SPELL_EFFECT_CREATE_ITEM_2:
+                                    {
+                                        uint32 newitemid = Info->Effects[i].ItemType;
+                                        if (newitemid)
+                                        {
+                                            ItemPosCountVec dest;
+                                            ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(newitemid);
+                                            if (!pProto)
+                                                break;
+                                            uint32 count = pProto->GetMaxStackSize();
+                                            uint32 no_space = 0;
+                                            InventoryResult msg = pTarget->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, newitemid, count, &no_space);
+                                            if (msg != EQUIP_ERR_OK)
+                                            {
+                                                if (msg == EQUIP_ERR_INVENTORY_FULL) 
+                                                {
+                                                    BotWhisper("No space in your bags!", player);                                
+                                                    count -= no_space;
+                                                }
+                                                else if (msg == EQUIP_ERR_CANT_CARRY_MORE_OF_THIS)
+                                                {
+                                                    BotWhisper("You can only have one of those at a time!", player);
+                                                    count -= no_space;
+                                                }
+                                                else
+                                                {
+                                                    // if not created by another reason from full inventory or unique items amount limitation
+                                                    //BotWhisper("There was an issue giving this to you!", player);                                
+                                                    /*
+                                                    std::string dstone = "DEBUG: ";
+                                                    dstone += msg;
+                                                    dstone += " equip error";
+                                                    BotWhisper(dstone.c_str(), player);
+                                                    */
+                                                    pTarget->SendEquipError(msg, NULL, NULL, newitemid);
+                                                    continue;
+                                                }
+                                            }
+                                            if (count)
+                                            {
+                                                Item* pItem = pTarget->StoreNewItem(dest, newitemid, true, Item::GenerateItemRandomPropertyId(newitemid));
+                                                if (!pItem)
+                                                {
+                                                    BotWhisper("Can't seem to find the item now to give to you!", player);                                
+                                                    pTarget->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
+                                                    continue;
+                                                }
+                                                //unsafe possible
+                                                pItem->SetUInt32Value(ITEM_FIELD_CREATOR, me->GetGUID().GetCounter());
+                                                        
+                                                pTarget->SendNewItem(pItem, count, true, false, true);
+                                                BotWhisper("Here you go...", player);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    default:
+                                        break;
+                                }
+                            }
+                            break;
+                        }
                     }
                     break;
                 }
