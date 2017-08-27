@@ -8,7 +8,7 @@ public:
 	{
 		if (sConfigMgr->GetBoolDefault("FireWorksOnLevelUp", true))
 		{
-			if (oldLevel == 79)
+			if (oldLevel < 81)
 				player->CastSpell(player, 11541, true);
 		}
 	}

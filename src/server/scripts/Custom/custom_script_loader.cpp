@@ -23,6 +23,8 @@ void AddSC_LearnSpellsOnLevelUp();
 void AddSC_FireWorksOnLevelUp();
 void AddSC_item_enchant_visuals();
 void AddSC_Player_Boa();
+void AddSC_Boss_Announcer();
+void AddSC_accountachievement();
 
 // Bots
 void AddSC_death_knight_bot();
@@ -46,7 +48,9 @@ void AddCustomScripts()
     AddSC_LearnSpellsOnLevelUp();
     AddSC_FireWorksOnLevelUp();
     AddSC_item_enchant_visuals();    
-    AddSC_Player_Boa();  
+    AddSC_Player_Boa();
+    AddSC_Boss_Announcer();
+    AddSC_accountachievement();  
     //Bots
     AddSC_death_knight_bot();
     AddSC_druid_bot();
