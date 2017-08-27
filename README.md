@@ -43,12 +43,13 @@ Not sure this is necessary but here is the order in which to apply database scri
 Included in `sql/custom`
 
 * Portal Master [rochet2](http://rochet2.github.io/Portal-Master.html)
+
+`C++` Script applied:
+* Item Enchant Visuals [rochet2](http://rochet2.github.io/Item-Enchant-Visuals.html)
 * Fireworks on Level up (All) [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Boss Announcer [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Account Achievements [SingleCore](https://github.com/conan513/SingleCore_TC)
 
-`C++` Script applied:
-* Item Enchant Visuals [rochet2](http://rochet2.github.io/Item-Enchant-Visuals.html)
 
 ## Build
 [Windows Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977296/Windows+Requirements)
