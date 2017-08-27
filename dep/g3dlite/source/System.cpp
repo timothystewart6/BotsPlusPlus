@@ -1689,7 +1689,6 @@ std::string System::currentTimeString() {
 // Windows 64-bit
 void System::cpuid(CPUIDFunction func, uint32& eax, uint32& ebx, uint32& ecx, uint32& edx) {
 	int regs[4] = {eax, ebx, ecx, edx};
-	__cpuid(regs, func);
 	eax = regs[0];
 	ebx = regs[1];
 	ecx = regs[2];
