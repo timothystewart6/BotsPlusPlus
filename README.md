@@ -3,7 +3,7 @@ Great for single player or with friends.
 
 ## New NPC Bots Source by thanosdk
 
-For more informations please go here: [thesawolf New NPC Bots Readme](https://github.com/thesawolf/TrinityCore/blob/TrinityCoreLegacy/README_Bots.md)
+For more information please see: [thesawolf New NPC Bots Readme](https://github.com/thesawolf/TrinityCore/blob/TrinityCoreLegacy/README_Bots.md)
 
 ## Trinity Core
 
@@ -23,12 +23,12 @@ With [Lord Psyan Patches](https://bitbucket.org/technotim/lordpsyan-patches)
 * Auto Learn New Spells
 * Annouce Login
 * Account Mounts
-* Login BoA
+* Login BoA (with enchants)
 * Start Guild
 
 ## SQL Scripts
 
-### World_db
+### world_db
 You will need to use [TDB 335.61](https://github.com/TrinityCore/TrinityCore/releases/tag/TDB335.61)
 
 Not sure this is necessary but here is the order in which to apply database scripts:
@@ -44,16 +44,15 @@ Included in `sql/custom`
 
 * Portal Master [rochet2](http://rochet2.github.io/Portal-Master.html)
 
-`C++` Script applied:
+`C++` scripts applied:
 * Item Enchant Visuals [rochet2](http://rochet2.github.io/Item-Enchant-Visuals.html)
 * Fireworks on Level up (All) [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Boss Announcer [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Account Achievements [SingleCore](https://github.com/conan513/SingleCore_TC)
-
+* Lord Psyan patches mentioned above
 
 ## Build
 [Windows Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977296/Windows+Requirements)
-
 * Visual Studio 2017 (x64)
 * Boost 1.63.0 (x64)
 * MySQL 5.6.37.0 (x64)
