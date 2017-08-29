@@ -39,6 +39,7 @@ void AddSC_warlock_bot();
 void AddSC_warrior_bot();
 void AddSC_blademaster_bot();
 void AddSC_script_bot_commands();
+void AddSC_custom_CongratsOnLevel();
 
 void AddCustomScripts()
 {
@@ -50,7 +51,8 @@ void AddCustomScripts()
     AddSC_item_enchant_visuals();    
     AddSC_Player_Boa();
     AddSC_Boss_Announcer();
-    AddSC_accountachievement();  
+    AddSC_accountachievement();
+    AddSC_custom_CongratsOnLevel();  
     //Bots
     AddSC_death_knight_bot();
     AddSC_druid_bot();
