@@ -2,13 +2,10 @@
 
 - 
 - 
-- 
-
-**Target branch(es)**: 335/6x
 
 **Issues addressed**: Fixes #
 
-**Tests performed**: (Does it build, tested in-game, etc)
+**Tests performed**: - [ ] Travis build passes
 
 **Known issues and TODO list**:
 
