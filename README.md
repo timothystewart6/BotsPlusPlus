@@ -51,6 +51,7 @@ Included in `sql/custom`
 * Fireworks on Level up (All) [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Boss Announcer [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Account Achievements [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Congrats on Level [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Lord Psyan patches mentioned above
 
 ## Build
