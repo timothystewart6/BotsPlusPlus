@@ -1,3 +1,4 @@
+#pragma clang diagnostic ignored "-Wunused-variable"
 //by SymbolixDEV
 //Fixed Error SymbolixDEV
 //release SymbolixDEV

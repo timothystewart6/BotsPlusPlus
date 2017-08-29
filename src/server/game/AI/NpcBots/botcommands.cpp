@@ -1,3 +1,4 @@
+#pragma clang diagnostic ignored "-Wunused-variable"
 #include "bot_ai.h"
 #include "botmgr.h"
 #include "Chat.h"

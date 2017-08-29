@@ -1,3 +1,4 @@
+#pragma clang diagnostic ignored "-Wunused-variable"
 /*
 <--------------------------------------------------------------------------->
 - Developer(s): Lille Carl, Grim/Render

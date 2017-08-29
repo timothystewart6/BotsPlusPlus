@@ -1,3 +1,5 @@
+#pragma clang diagnostic ignored "-Wabsolute-value"
+#pragma clang diagnostic ignored "-Wparentheses"
 #include "bot_ai.h"
 #include "bot_Events.h"
 #include "bot_GridNotifiers.h"
@@ -508,7 +510,7 @@ void bot_minion_ai::_calculatePos(Position& pos)
     if (abs(abs(myangle) - abs(angle)) > M_PI/3.f)
         myangle = angle;
     else
-        angle = myangle;
+        angle = myangle;       
     mydist += std::max<float>(int8(followdist) - 30, 0) / 5.f; //0.f-9.f
     //mydist += followdist > 10 ? float(followdist - 10)/4.f : 0.f; //distance from 10+ is reduced
     //mydist = std::min<float>(mydist, 35.f); //do not spread bots too much

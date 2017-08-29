@@ -1,3 +1,4 @@
+#pragma clang diagnostic ignored "-Wunused-variable"
 class AccountMounts : public PlayerScript
 {
     static const bool limitrace = true; // This set to true will only learn mounts from chars on the same team, do what you want.

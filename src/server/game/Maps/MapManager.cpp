@@ -103,7 +103,10 @@ void MapManager::Initialize()
         }
 
         field = infores->Fetch();
+        #pragma clang diagnostic push        
+        #pragma clang diagnostic ignored "-Wuninitialized"
         uint32 tableGuid = field[0].GetUInt32();
+        #pragma clang diagnostic pop      
         uint32 mapId = uint32(field[1].GetUInt16());
         float pos_x = field[2].GetFloat();
         float pos_y = field[3].GetFloat();
