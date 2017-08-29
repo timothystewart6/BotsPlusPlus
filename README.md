@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/timothystewart6/WoWLK-BotsPlusPlus.svg?branch=master)](https://travis-ci.org/timothystewart6/WoWLK-BotsPlusPlus)
+[![Build Status](https://travis-ci.org/timothystewart6/BotsPlusPlus.svg?branch=master)](https://travis-ci.org/timothystewart6/BotsPlusPlus)
 
 # Trinity Core 3.3.5a with NPC Bots and Extras
 Great for single player or with friends.
