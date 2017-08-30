@@ -1,7 +1,7 @@
 sudo: false
 dist: trusty
 
-language: cpp
+# language: cpp
 # compiler:
 #   - clang
 
@@ -36,8 +36,8 @@ before_install:
 
 
 before_install:
-#   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
-#   - git tag -a -m "Travis build" init
+  - git config user.email "travis@build.bot" && git config user.name "Travis CI"
+  - git tag -a -m "Travis build" init
 
 # install:
 #   - mysql -uroot -e 'create database test_mysql;'
@@ -47,7 +47,7 @@ before_install:
 #   - cd ..
 #   - chmod +x contrib/check_updates.sh
 
-# script:
+script:
 #   - $CXX --version
 #   - mysql -uroot < sql/create/create_mysql.sql
 #   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
@@ -60,5 +60,5 @@ before_install:
 #   - cd bin
 #   - make -j 4 -k && make install
 #   - cd check_install/bin
-#   - ./authserver --version
-#   - ./worldserver --version
+  - ./artifacts/authserver --version
+  - ./artifacts/worldserver --version
