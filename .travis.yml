@@ -30,8 +30,7 @@ services:
 before_install:
 - mkdir artifacts
 - docker pull nicolaw/trinitycore
-- docker run -d --rm -v  "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git -b TRAVIS_COMMIT
-# - docker run -d -p 127.0.0.1:80:4567 carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec foreman start;"
+- docker run -d --rm -v  "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git
 # - docker ps -a
 # - docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
 
