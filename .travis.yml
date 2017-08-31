@@ -18,7 +18,7 @@ before_install:
 
 script:
   - mkdir artifacts
-  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git -b master -R "'$TRAVIS_COMMIT'"
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -R "./timothystewart6/BotsPlusPlus"
   - docker ps -a
   - ./artifacts/authserver --version
   - ./artifacts/worldserver --version
