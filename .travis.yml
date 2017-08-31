@@ -17,6 +17,7 @@ before_install:
   - git tag -a -m "Travis build" init
 
 script:
+  - mkdir artifacts
   - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git --branch ${TRAVIS_COMMIT}
   - docker ps -a
   - ./artifacts/authserver --version
