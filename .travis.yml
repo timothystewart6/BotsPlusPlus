@@ -9,16 +9,15 @@ services:
   - docker
 
 before_install:
-- mkdir artifacts
-- docker pull nicolaw/trinitycore
-
-before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
   - git tag -a -m "Travis build" init
+  - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+  - mkdir artifacts
+  - docker pull nicolaw/trinitycore
 
 script:
   - mkdir artifacts
-  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b "$TRAVIS_BRANCH"
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -R "$TRAVIS_REPO_SLUG"
   - docker ps -a
   - ./artifacts/authserver --version
   - ./artifacts/worldserver --version
