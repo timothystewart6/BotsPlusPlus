@@ -11,7 +11,7 @@ services:
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
   - git tag -a -m "Travis build" init
-  - git clone https://github.com/$TRAVIS_REPO_SLUG.git
+  - git clone https://github.com/$TRAVIS_REPO_SLUG.git "$TRAVIS_REPO_SLUG"
   - mkdir artifacts
   - docker pull nicolaw/trinitycore
 
