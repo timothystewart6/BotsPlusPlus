@@ -16,7 +16,7 @@ before_install:
   - docker pull nicolaw/trinitycore
 
 script:
-  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "$TRAVIS_REPO_SLUG"
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "$TRAVIS_REPO_SLUG" -b "$TRAVIS_BRANCH"
   - docker ps -a
   - ./artifacts/authserver --version
   - ./artifacts/worldserver --version
