@@ -11,13 +11,13 @@ services:
 before_install:
 - mkdir artifacts
 - docker pull nicolaw/trinitycore
-- docker run -d --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git
-- docker ps -a
 
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
   - git tag -a -m "Travis build" init
 
 script:
+  - docker run -d --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git
+  - docker ps -a
   - ./artifacts/authserver --version
   - ./artifacts/worldserver --version
