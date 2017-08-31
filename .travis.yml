@@ -1,17 +1,17 @@
-sudo: false
+sudo: required
 dist: trusty
 
 language: cpp
 compiler:
   - clang
-  
+
 services:
   - docker
 
 before_install:
 - mkdir artifacts
 - docker pull nicolaw/trinitycore
-- docker run -d --rm -v  "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git --branch master
+- docker run -d --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r https://github.com/timothystewart6/BotsPlusPlus.git
 - docker ps -a
 
 before_install:
