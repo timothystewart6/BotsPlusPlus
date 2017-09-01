@@ -67,7 +67,7 @@ script:
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 #auth server
-  - export REPO=$DOCKER_USERNAME/trinitycore-authserver
+  - export REPO=$DOCKER_USERNAME/botsplusplus-authserver
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
   - docker build -f docker/authserver/Dockerfile -t $REPO:$COMMIT .
@@ -75,7 +75,7 @@ after_success:
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
   - docker push $REPO
 # world server
-  - export REPO=$DOCKER_USERNAME/trinitycore-worldserver
+  - export REPO=$DOCKER_USERNAME/botsplusplus-worldserver
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
   - docker build -f docker/worldserver/Dockerfile -t $REPO:$COMMIT .
