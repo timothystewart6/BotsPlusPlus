@@ -39,8 +39,9 @@ WORKDIR "${install_prefix}/bin"
 # Wait for the database server to come up first.
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh "${install_prefix}/bin/wait-for-it.sh"
 
+# Don't need
 # Health checking via the tcadmin client SOAP tool..
-ADD https://raw.githubusercontent.com/neechbear/tcadmin/master/tcadmin "${install_prefix}/bin/tcadmin"
+#ADD https://raw.githubusercontent.com/neechbear/tcadmin/master/tcadmin "${install_prefix}/bin/tcadmin"
 
 # Add worldserver binary and wrapper, and make executable.
 COPY worldserver.sh "${install_prefix}/bin/worldserver.sh"
