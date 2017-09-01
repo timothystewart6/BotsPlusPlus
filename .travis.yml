@@ -61,24 +61,24 @@ script:
   # - ./worldserver --version
   - touch authserver
   - touch worldserver
+  - cp docker/worldserver/worldserver.sh
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 #auth server
-  - cd docker/authserver
-  - export REPO=$DOCKER_USERNAME/botsplusplus-authserver
+  - cd docker authserver
+  - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
-  - docker build -t $REPO:$COMMIT .
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
   - docker push $REPO
 # world server
-  - cd ../authserver
-  - export REPO=$DOCKER_USERNAME/botsplusplus-worldserver
+  - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
-  - docker build -t $REPO:$COMMIT .
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
   - docker push $REPO
