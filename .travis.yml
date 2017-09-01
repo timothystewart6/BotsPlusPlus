@@ -60,9 +60,11 @@ script:
 
 after_success:
 - docker build -t timothystewart6/trinitycore-authserver docker/authserver
+- docker tag timothystewart6/trinitycore-authserver timothystewart6/trinitycore-authserver:latest
 - docker build -t timothystewart6/trinitycore-worldserver docker/worldserver
-- docker ps -a
+- docker tag timothystewart6/trinitycore-worldserver timothystewart6/trinitycore-worldserver:latest
+- docker images
 - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-- docker push timothystewart6/trinitycore-authserver
-- docker push timothystewart6/trinitycore-worldserver
+- docker push "timothystewart6/trinitycore-authserver"
+- docker push "timothystewart6/trinitycore-worldserver"
   
