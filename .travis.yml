@@ -60,7 +60,9 @@ script:
   # - ./authserver --version
   # - ./worldserver --version
   - touch authserver
+  - touch authserver.sh
   - touch worldserver
+  - touch worldserver.sh
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
