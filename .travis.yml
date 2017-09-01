@@ -63,7 +63,7 @@ script:
   - touch worldserver
 
 after_success:
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=$DOCKER_USER/trinitycore-authserver
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
