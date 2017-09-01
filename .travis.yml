@@ -65,7 +65,7 @@ after_success:
 
  — docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
  — export REPO=$DOCKER_USER/trinitycore-authserver
- — export TAG=`if [ “$TRAVIS_BRANCH” != “master” ]; then echo “latest”; else echo $TRAVIS_BRANCH ; fi`
+ — export TAG=latest
  — echo $REPO:$TAG:$COMMIT
  — docker build -f docker/authserver/Dockerfile -t $REPO:$COMMIT .
  — docker tag $REPO:$COMMIT $REPO:$TAG
