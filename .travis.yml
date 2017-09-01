@@ -59,8 +59,8 @@ script:
   # - cd check_install/bin
   # - ./authserver --version
   # - ./worldserver --version
-  - touch authserver
-  - touch worldserver
+  - touch docker/authserver/authserver
+  - touch docker/worldserver/worldserver
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
