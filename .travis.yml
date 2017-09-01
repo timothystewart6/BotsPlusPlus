@@ -69,7 +69,7 @@ after_success:
   - export REPO=$DOCKER_USERNAME/botsplusplus-authserver
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
-  - docker build . -t $REPO:$COMMIT .
+  - docker build -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
   - docker push $REPO
@@ -78,7 +78,7 @@ after_success:
   - export REPO=$DOCKER_USERNAME/botsplusplus-worldserver
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
-  - docker build . -t $REPO:$COMMIT .
+  - docker build -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
   - docker push $REPO
