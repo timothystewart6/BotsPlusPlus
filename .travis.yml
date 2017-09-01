@@ -59,8 +59,6 @@ script:
   - cd check_install/bin
   - ./authserver --version
   - ./worldserver --version
-  - ls -a
-  - pwd
   - cd ../../..
   - cp bin/check_install/bin/authserver docker/authserver/
   - cp bin/check_install/bin/worldserver docker/worldserver/
