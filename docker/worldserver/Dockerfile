@@ -48,7 +48,7 @@ COPY worldserver "${install_prefix}/bin/worldserver"
 RUN chmod +x "${install_prefix}/bin"/*
 
 # Add TDB_*.sql database dump for initial world database initialisation.
-ADD TDB_*.sql "${install_prefix}/bin/"
+# ADD TDB_*.sql "${install_prefix}/bin/"
 
 ENV DEBIAN_FRONTEND newt
 
