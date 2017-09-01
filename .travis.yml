@@ -58,13 +58,16 @@ script:
   - touch authserver
   - touch worldserver
 
+env:
+  global:
+     - COMMIT=${TRAVIS_COMMIT::6}
 after_success:
-- docker build -t timothystewart6/trinitycore-authserver docker/authserver
-- docker tag timothystewart6/trinitycore-authserver timothystewart6/trinitycore-authserver:latest
-- docker build -t timothystewart6/trinitycore-worldserver docker/worldserver
-- docker tag timothystewart6/trinitycore-worldserver timothystewart6/trinitycore-worldserver:latest
-- docker images
-- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-- docker push "timothystewart6/trinitycore-authserver"
-- docker push "timothystewart6/trinitycore-worldserver"
-  
+
+ — docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+ — export REPO=$DOCKER_USER/trinitycore-authserver
+ — export TAG=`if [ “$TRAVIS_BRANCH” != “master” ]; then echo “latest”; else echo $TRAVIS_BRANCH ; fi`
+ — echo $REPO:$TAG:$COMMIT
+ — docker build -f docker/authserver/Dockerfile -t $REPO:$COMMIT .
+ — docker tag $REPO:$COMMIT $REPO:$TAG
+ — docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+ — docker push $REPO
