@@ -64,7 +64,7 @@ script:
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - export REPO=$DOCKER_USER/trinitycore-authserver
+  - export REPO=$DOCKER_USERNAME/trinitycore-authserver
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
   - docker build -f docker/authserver/Dockerfile -t $REPO:$COMMIT .
