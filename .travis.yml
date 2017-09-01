@@ -55,7 +55,3 @@ script:
   - cd check_install/bin
   - ./authserver --version
   - ./worldserver --version
-
-  after_script:
-    - docker build -d docker/authserver/
-    - docker build -d docker/worldserver/
