@@ -12,6 +12,10 @@ compiler:
 git:
   depth: 1
 
+env:
+  global:
+     - COMMIT=${TRAVIS_COMMIT::6}
+
 # addons:
 #   apt:
 #     packages:
@@ -58,16 +62,12 @@ script:
   - touch authserver
   - touch worldserver
 
-env:
-  global:
-     - COMMIT=${TRAVIS_COMMIT::6}
 after_success:
-
- — docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
- — export REPO=$DOCKER_USER/trinitycore-authserver
- — export TAG=latest
- — echo $REPO:$TAG:$COMMIT
- — docker build -f docker/authserver/Dockerfile -t $REPO:$COMMIT .
- — docker tag $REPO:$COMMIT $REPO:$TAG
- — docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
- — docker push $REPO
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=$DOCKER_USER/trinitycore-authserver
+  - export TAG=latest
+  - echo $REPO:$TAG:$COMMIT
+  - docker build -f docker/authserver/Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
