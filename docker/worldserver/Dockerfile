@@ -47,6 +47,7 @@ COPY worldserver.sh "${install_prefix}/bin/worldserver.sh"
 COPY worldserver "${install_prefix}/bin/worldserver"
 RUN chmod +x "${install_prefix}/bin"/*
 
+# Don't need
 # Add TDB_*.sql database dump for initial world database initialisation.
 # ADD TDB_*.sql "${install_prefix}/bin/"
 
@@ -54,8 +55,9 @@ ENV DEBIAN_FRONTEND newt
 
 ENTRYPOINT ["./worldserver.sh"]
 
-HEALTHCHECK --interval=30s --timeout=3s --retries=3 --start-period=30s \
-  CMD "${install_prefix}/bin/tcadmin" --soaphost=127.0.0.1 --soapport=7878 \
-    "--soapuser=${GM_USER}" "--soappass=${GM_PASSWORD}" \
-    server info || exit 1
+# Don't need
+# HEALTHCHECK --interval=30s --timeout=3s --retries=3 --start-period=30s \
+#   CMD "${install_prefix}/bin/tcadmin" --soaphost=127.0.0.1 --soapport=7878 \
+#     "--soapuser=${GM_USER}" "--soappass=${GM_PASSWORD}" \
+#     server info || exit 1
 
