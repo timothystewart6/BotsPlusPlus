@@ -1,0 +1,10 @@
+MENUORDER=9
+LISTEN="80/tcp"
+EXPOSE="8083:80"
+NAME="aowow"
+TITLE="AoWoW"
+SUMMARY="Searchable WoW database website"
+DESCRIPTION="AoWoW is a clone of the popular Wowhead website that provides a
+searchable database, internet forum, guides and player character services for
+the popular massively multiplayer online role-playing game World of Warcraft
+(WoW)."
