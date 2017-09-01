@@ -10,7 +10,7 @@ compiler:
   - clang
 
 git:
-  depth: 1
+  depth: 10000
 
 env:
   global:
