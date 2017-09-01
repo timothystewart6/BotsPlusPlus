@@ -60,6 +60,7 @@ script:
   - ./authserver --version
   - ./worldserver --version
   - ls -a
+  - pwd
   - cp bin/authserver docker/authserver/
   - cp bin/worldserver docker/worldserver/
 
