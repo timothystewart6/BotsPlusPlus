@@ -59,8 +59,8 @@ script:
   - cd check_install/bin
   - ./authserver --version
   - ./worldserver --version
-  - cp authserver docker/authserver/authserver
-  - cp worldserver docker/worldserver/worldserver
+  - cp ./authserver docker/authserver/authserver
+  - cp ./worldserver docker/worldserver/worldserver
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
