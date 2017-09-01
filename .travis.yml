@@ -65,7 +65,7 @@ script:
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 #auth server
-  - cd docker authserver
+  - cd docker/authserver
   - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
@@ -74,6 +74,7 @@ after_success:
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
   - docker push $REPO
 # world server
+  - cd ../worldserver
   - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
   - export TAG=latest
   - echo $REPO:$TAG:$COMMIT
