@@ -61,4 +61,8 @@ script:
 after_success:
 - docker build -t timothystewart6/trinitycore-authserver docker/authserver
 - docker build -t timothystewart6/trinitycore-worldserver docker/worldserver
+- docker ps -a
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- docker push timothystewart6/trinitycore-authserver
+- docker push timothystewart6/trinitycore-worldserver
   
