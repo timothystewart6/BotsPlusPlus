@@ -61,7 +61,6 @@ script:
   # - ./worldserver --version
   - touch authserver
   - touch worldserver
-  - cp docker/worldserver/worldserver.sh
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
