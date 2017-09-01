@@ -63,22 +63,25 @@ script:
   - touch docker/worldserver/worldserver
 
 after_success:
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-#auth server
-  - cd docker/authserver
-  - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
-  - export TAG=latest
-  - echo $REPO:$TAG:$COMMIT
-  - docker build -f Dockerfile -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+ - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+# auth server
+  cd docker/authserver
+  export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
+  export TAG=latest
+  echo $REPO:$TAG:$COMMIT
+  docker build -f Dockerfile -t $REPO:$COMMIT .
+  docker tag $REPO:$COMMIT $REPO:$TAG
+  docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  docker push $REPO
 # world server
-  - cd ../worldserver
-  - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
-  - export TAG=latest
-  - echo $REPO:$TAG:$COMMIT
-  - docker build -f Dockerfile -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+  cd ../worldserver
+  export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
+  export TAG=latest
+  echo $REPO:$TAG:$COMMIT
+  docker build -f Dockerfile -t $REPO:$COMMIT .
+  docker tag $REPO:$COMMIT $REPO:$TAG
+  docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  docker push $REPO
+  fi
+
