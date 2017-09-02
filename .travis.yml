@@ -12,6 +12,8 @@ compiler:
 env:
   global:
      - COMMIT=${TRAVIS_COMMIT::6}
+     
+     
 
 addons:
   apt:
