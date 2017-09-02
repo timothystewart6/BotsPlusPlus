@@ -1,8 +1,8 @@
 |  Travis Build |  Auth Server |  World Server |
 |  ------------ |  ----------- | ------------- |
 | [![Build Status](https://travis-ci.org/timothystewart6/BotsPlusPlus.svg?branch=master)](https://travis-ci.org/timothystewart6/BotsPlusPlus) | [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/botsplusplus-authserver.svg)]()| [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/botsplusplus-worldserver.svg)]()
-# Trinity Core 3.3.5a with NPC Bots and Extras
-Great for single player or with friends.
+# BotsPlusPlus
+Trinity Core 3.3.5a with NPC Bots and Extras. Great for single player or with friends.
 
 ## New NPC Bots Source by thanosdk
 
