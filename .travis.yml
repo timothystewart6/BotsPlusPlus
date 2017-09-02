@@ -64,7 +64,7 @@ script:
   - cp bin/check_install/bin/worldserver docker/worldserver/
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  - if [[ $TRAVIS_PULL_REQUEST == “false” ]] && [[ $TRAVIS_BRANCH == “master” ]]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     cd docker/authserver;
     export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER;
