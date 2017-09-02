@@ -57,7 +57,7 @@ script:
   - ./authserver --version
   - ./worldserver --version
 # Docker
-  - if [[ "$TRAVIS_PULL_REQUEST" == “false” ]] && [[ "$TRAVIS_BRANCH" == “master” ]]; then
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     cd ../../..;
     cp bin/check_install/bin/authserver docker/authserver/;
     cp bin/check_install/bin/worldserver docker/worldserver/;
