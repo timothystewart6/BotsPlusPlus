@@ -69,7 +69,7 @@ script:
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push $REPO;
     fi
 # World Server
