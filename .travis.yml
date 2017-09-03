@@ -56,26 +56,31 @@ script:
   - cd check_install/bin
   - ./authserver --version
   - ./worldserver --version
+  - cd ../../..
+  - cp bin/check_install/bin/authserver docker/authserver/;
+  - cp bin/check_install/bin/worldserver docker/worldserver/;
 # Docker
+# Auth Server
+  - cd docker/authserver
+  - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
+  - export TAG=latest
+  - echo $REPO:$TAG:$COMMIT
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-    cd ../../..;
-    cp bin/check_install/bin/authserver docker/authserver/;
-    cp bin/check_install/bin/worldserver docker/worldserver/;
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    cd docker/authserver;
-    export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER;
-    export TAG=latest;
-    echo $REPO:$TAG:$COMMIT;
-    docker build -f Dockerfile -t $REPO:$COMMIT .;
-    docker tag $REPO:$COMMIT $REPO:$TAG;
-    docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER;
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
     docker push $REPO;
-    cd ../worldserver;
-    export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER;
-    export TAG=latest;
-    echo $REPO:$TAG:$COMMIT;
-    docker build -f Dockerfile -t $REPO:$COMMIT .;
-    docker tag $REPO:$COMMIT $REPO:$TAG;
-    docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER;
+    fi
+# World Server
+  - cd ../worldserver;
+  - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
+  - export TAG=latest
+  - echo $REPO:$TAG:$COMMIT
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push $REPO;
     fi
