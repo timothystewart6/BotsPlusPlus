@@ -46,6 +46,7 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 # Add worldserver binary and wrapper, and make executable.
 COPY worldserver.sh "${install_prefix}/bin/worldserver.sh"
 COPY worldserver "${install_prefix}/bin/worldserver"
+COPY scripts "${install_prefix}/bin/scripts"
 RUN chmod +x "${install_prefix}/bin"/*
 
 # Don't need

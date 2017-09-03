@@ -59,6 +59,7 @@ script:
   - cd ../../..
   - cp bin/check_install/bin/authserver docker/authserver/;
   - cp bin/check_install/bin/worldserver docker/worldserver/;
+  - cp -R bin/check_install/bin/scripts docker/worldserver/;
 # Docker
 # Auth Server
   - cd docker/authserver
