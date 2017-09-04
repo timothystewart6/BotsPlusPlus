@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 
 dist: trusty
 
@@ -37,7 +37,7 @@ install:
   - mysql -uroot -e 'create database test_mysql;'
   - mkdir bin
   - cd bin
-  - cmake ../ -DWITH_WARNINGS=1 -DWITH_COREDEBUG=0 -DUSE_COREPCH=1 -DUSE_SCRIPTPCH=1 -DTOOLS=1 -DSCRIPTS=dynamic -DSERVERS=1 -DNOJEM=1 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror" -DCMAKE_C_FLAGS_DEBUG="-DNDEBUG" -DCMAKE_CXX_FLAGS_DEBUG="-DNDEBUG" -DCMAKE_INSTALL_PREFIX=check_install
+  - cmake ../ -DWITH_WARNINGS=1 -DWITH_COREDEBUG=0 -DUSE_COREPCH=1 -DUSE_SCRIPTPCH=1 -DTOOLS=1 -DSCRIPTS=dynamic -DSERVERS=1 -DNOJEM=1 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror" -DCMAKE_C_FLAGS_DEBUG="-DNDEBUG" -DCMAKE_CXX_FLAGS_DEBUG="-DNDEBUG" -DCMAKE_INSTALL_PREFIX=/usr/local/
   - cd ..
   - chmod +x contrib/check_updates.sh
 
@@ -52,20 +52,22 @@ script:
   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
   - mysql -uroot < sql/create/drop_mysql.sql
   - cd bin
-  - make -j 4 -k && make install
-  - cd check_install/bin
-  - ./authserver --version
-  - ./worldserver --version
-  - cd ../../..
+  - sudo make -j 4 -k && sudo make install
+  - /usr/local/bin/authserver --version
+  - /usr/local/bin/worldserver --version
+  - cd ..
+  - ls -a
 # worldserver
-  - cp bin/check_install/bin/worldserver docker/worldserver/;
-  - cp -R bin/check_install/bin/scripts docker/worldserver/;
-  - mkdir docker/worldserver/etc && cp bin/check_install/etc/worldserver.conf.dist docker/worldserver/etc;
-  - cp -R bin/check_install/lib docker/worldserver/lib;
+  - cp /usr/local/bin/worldserver docker/worldserver/
+  - cp -R /usr/local/bin/scripts docker/worldserver/
+  - mkdir docker/worldserver/etc
+  - cp /usr/local/etc/worldserver.conf.dist docker/worldserver/etc
+  - cp -R /usr/local/lib docker/worldserver/lib
 # authserver
-  - cp bin/check_install/bin/authserver docker/authserver/;
-  - mkdir docker/authserver/etc && cp bin/check_install/etc/authserver.conf.dist docker/authserver/etc;
-  - cp -R bin/check_install/lib docker/authserver/lib;
+  - cp /usr/local/bin/authserver docker/authserver/
+  - mkdir docker/authserver/etc
+  - cp /usr/local/etc/authserver.conf.dist docker/authserver/etc
+  - cp -R /usr/local/lib docker/authserver/lib
 # Docker
 # authserver
   - cd docker/authserver
