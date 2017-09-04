@@ -22,7 +22,7 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
 # Configurable via INSTALL_PREFIX from the Makefile, and/or using
 # --define CMAKE_INSTALL_PREFIX=/your/path with the docker/build/ container,
 # (which is also published on Ducker Hub as nicolaw/trinitycore).
-ENV install_prefix /opt/trinitycore
+ENV install_prefix /user/local
 
 WORKDIR "${install_prefix}/bin"
 VOLUME "${install_prefix}/etc"
@@ -32,7 +32,7 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 COPY authserver.sh "${install_prefix}/bin/authserver.sh"
 COPY authserver "${install_prefix}/bin/authserver"
 COPY etc "${install_prefix}/etc"
-COPY lib/* "/usr/lib/"
+COPY lib/* "${install_prefix}/lib/"
 
 RUN chmod +x "${install_prefix}/bin"/*
 

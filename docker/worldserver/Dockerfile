@@ -28,7 +28,7 @@ ENV GM_PASSWORD trinity
 # Configurable via INSTALL_PREFIX from the Makefile, and/or using
 # --define CMAKE_INSTALL_PREFIX=/your/path with the docker/build/ container,
 # (which is also published on Ducker Hub as nicolaw/trinitycore).
-ENV install_prefix /opt/trinitycore
+ENV install_prefix /user/local
 
 # https://trinitycore.atlassian.net/wiki/display/tc/Databases+Installation
 # Database import of TDB_*.sql files, astonishingly, requires that the
@@ -48,7 +48,7 @@ COPY worldserver.sh "${install_prefix}/bin/worldserver.sh"
 COPY worldserver "${install_prefix}/bin/worldserver"
 COPY scripts "${install_prefix}/bin/scripts"
 COPY etc "${install_prefix}/etc"
-COPY lib/* "/usr/lib/"
+COPY lib/* "${install_prefix}/lib/"
 RUN chmod +x "${install_prefix}/bin"/*
 
 # Don't need
