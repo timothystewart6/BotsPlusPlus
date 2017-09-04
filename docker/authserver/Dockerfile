@@ -22,7 +22,7 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
 # Configurable via INSTALL_PREFIX from the Makefile, and/or using
 # --define CMAKE_INSTALL_PREFIX=/your/path with the docker/build/ container,
 # (which is also published on Ducker Hub as nicolaw/trinitycore).
-ENV install_prefix /user/local
+ENV install_prefix /usr/local
 
 WORKDIR "${install_prefix}/bin"
 VOLUME "${install_prefix}/etc"

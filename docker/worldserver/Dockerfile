@@ -28,7 +28,7 @@ ENV GM_PASSWORD trinity
 # Configurable via INSTALL_PREFIX from the Makefile, and/or using
 # --define CMAKE_INSTALL_PREFIX=/your/path with the docker/build/ container,
 # (which is also published on Ducker Hub as nicolaw/trinitycore).
-ENV install_prefix /user/local
+ENV install_prefix /usr/local
 
 # https://trinitycore.atlassian.net/wiki/display/tc/Databases+Installation
 # Database import of TDB_*.sql files, astonishingly, requires that the
