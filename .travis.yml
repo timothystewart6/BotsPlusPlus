@@ -53,19 +53,20 @@ script:
   - mysql -uroot < sql/create/drop_mysql.sql
   - cd bin
   - sudo make -j 4 -k && sudo make install
-  - cd /usr/local/bin
-  - ./authserver --version
-  - ./worldserver --version
+  - /usr/local/bin/authserver --version
+  - /usr/local/bin/worldserver --version
   - cd ../../..
 # worldserver
-  - cp /usr/local/bin/worldserver docker/worldserver/;
-  - cp -R /usr/local/bin/scripts docker/worldserver/;
-  - mkdir docker/worldserver/etc && cp /usr/local/etc/worldserver.conf.dist docker/worldserver/etc;
-  - cp -R /usr/local/lib docker/worldserver/lib;
+  - cp /usr/local/bin/worldserver docker/worldserver/
+  - cp -R /usr/local/bin/scripts docker/worldserver/
+  - mkdir docker/worldserver/etc
+  - cp /usr/local/etc/worldserver.conf.dist docker/worldserver/etc
+  - cp -R /usr/local/lib docker/worldserver/lib
 # authserver
-  - cp /usr/local/bin/authserver docker/authserver/;
-  - mkdir docker/authserver/etc && cp /usr/local/etc/authserver.conf.dist docker/authserver/etc;
-  - cp -R /usr/local/lib docker/authserver/lib;
+  - cp /usr/local/bin/authserver docker/authserver/
+  - mkdir docker/authserver/etc
+  - cp /usr/local/etc/authserver.conf.dist docker/authserver/etc
+  - cp -R /usr/local/lib docker/authserver/lib
 # Docker
 # authserver
   - cd docker/authserver
