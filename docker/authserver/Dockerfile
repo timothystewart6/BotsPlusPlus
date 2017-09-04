@@ -32,7 +32,7 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 COPY authserver.sh "${install_prefix}/bin/authserver.sh"
 COPY authserver "${install_prefix}/bin/authserver"
 COPY etc "${install_prefix}/etc"
-COPY lib/* "/usr/lib"
+COPY lib/* "/usr/lib/"
 
 RUN chmod +x "${install_prefix}/bin"/*
 
