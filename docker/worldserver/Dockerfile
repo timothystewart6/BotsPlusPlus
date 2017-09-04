@@ -47,6 +47,8 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 COPY worldserver.sh "${install_prefix}/bin/worldserver.sh"
 COPY worldserver "${install_prefix}/bin/worldserver"
 COPY scripts "${install_prefix}/bin/scripts"
+COPY etc "${install_prefix}/etc"
+COPY lib "${install_prefix}/lib"
 RUN chmod +x "${install_prefix}/bin"/*
 
 # Don't need

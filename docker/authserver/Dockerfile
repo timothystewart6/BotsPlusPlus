@@ -31,6 +31,8 @@ VOLUME "${install_prefix}/etc"
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh "${install_prefix}/bin/wait-for-it.sh"
 COPY authserver.sh "${install_prefix}/bin/authserver.sh"
 COPY authserver "${install_prefix}/bin/authserver"
+COPY etc "${install_prefix}/etc"
+COPY lib "${install_prefix}/lib"
 
 RUN chmod +x "${install_prefix}/bin"/*
 

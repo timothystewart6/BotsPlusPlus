@@ -57,11 +57,17 @@ script:
   - ./authserver --version
   - ./worldserver --version
   - cd ../../..
-  - cp bin/check_install/bin/authserver docker/authserver/;
+# worldserver
   - cp bin/check_install/bin/worldserver docker/worldserver/;
   - cp -R bin/check_install/bin/scripts docker/worldserver/;
+  - mkdir docker/worldserver/etc && cp bin/check_install/etc/worldserver.conf.dist docker/worldserver/etc;
+  - cp -R bin/check_install/lib docker/worldserver/lib;
+# authserver
+  - cp bin/check_install/bin/authserver docker/authserver/;
+  - mkdir docker/authserver/etc && cp bin/check_install/etc/authserver.conf.dist docker/authserver/etc;
+  - cp -R bin/check_install/lib docker/authserver/lib;
 # Docker
-# Auth Server
+# authserver
   - cd docker/authserver
   - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
   - export TAG=latest
@@ -73,7 +79,7 @@ script:
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push $REPO;
     fi
-# World Server
+# worldserver
   - cd ../worldserver;
   - export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
   - export TAG=latest
