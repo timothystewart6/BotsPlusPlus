@@ -61,6 +61,11 @@ Included in `sql/custom`
 * Congrats on Level [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Lord Psyan patches mentioned above
 
+## Docker
+
+* Docker images use a modified version of [neechbear/trinitycore](https://github.com/neechbear/trinitycore)
+* All credit goes to [neechbear](https://github.com/neechbear) for creating a great set of Docker images to boostrap the ones used in this repo.
+
 ## Build
 
 [Windows Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977296/Windows+Requirements)
@@ -70,3 +75,7 @@ Included in `sql/custom`
 * MySQL 5.6.37.0 (x64)
 * CMake 3.9.1 (x64)
 * OpenSSL 1.0.2L (x64)
+
+[Linux Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977288/Linux+Requirements)
+
+* Tested on Debian 9.x
