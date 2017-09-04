@@ -16,19 +16,6 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     libssl1.0.0 \
     libmysqlclient18 \
     netcat \
-    libboost1.55-dev \
-    libboost-filesystem1.55-dev \
-    libboost-iostreams1.55-dev \
-    libboost-program-options1.55-dev \
-    libboost-regex1.55-dev \
-    libboost-system1.55-dev \
-    libboost-thread1.55-dev \
-    libssl-dev \
-    libmysqlclient-dev \
-    libreadline6-dev \
-    zlib1g-dev \
-    libbz2-dev \
-    libncurses-dev \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
