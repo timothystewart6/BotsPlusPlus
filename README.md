@@ -4,7 +4,7 @@
 |  ------------ |  ----------- | ------------- |
 | [![Build Status](https://travis-ci.org/timothystewart6/BotsPlusPlus.svg?branch=master)](https://travis-ci.org/timothystewart6/BotsPlusPlus) | [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/botsplusplus-authserver.svg)](https://hub.docker.com/r/timothystewart6/botsplusplus-authserver/)| [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/botsplusplus-worldserver.svg)](https://hub.docker.com/r/timothystewart6/botsplusplus-worldserver/)
 
-Trinity Core 3.3.5a with NPC Bots and Extras. Great for learning, single player, or with friends.
+Trinity Core 3.3.5a with NPC Bots and Extras. Great for learning, single player, or playing with friends.
 
 ## New NPC Bots Source by thanosdk
 
