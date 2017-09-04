@@ -55,7 +55,8 @@ script:
   - sudo make -j 4 -k && sudo make install
   - /usr/local/bin/authserver --version
   - /usr/local/bin/worldserver --version
-  - cd ../../..
+  - cd ..
+  - ls -a
 # worldserver
   - cp /usr/local/bin/worldserver docker/worldserver/
   - cp -R /usr/local/bin/scripts docker/worldserver/
