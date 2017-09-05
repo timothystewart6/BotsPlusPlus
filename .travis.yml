@@ -59,7 +59,6 @@ script:
   - ls -a
 # worldserver
   - cp /usr/local/bin/worldserver docker/worldserver/
-  - cp -R /usr/local/bin/scripts docker/worldserver/
   - mkdir docker/worldserver/etc
   - cp /usr/local/etc/worldserver.conf.dist docker/worldserver/etc
   - cp -R /usr/local/lib docker/worldserver/lib
