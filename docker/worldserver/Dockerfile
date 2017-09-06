@@ -22,6 +22,11 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     netcat \
     xml2 \
     zlib1g \
+    gcc \
+    g++ \
+    autoconf \
+    build-essential \
+    cmake \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
