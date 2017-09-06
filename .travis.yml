@@ -1,5 +1,4 @@
-sudo: true
-
+sudo: required
 dist: trusty
 
 language: cpp
@@ -37,7 +36,7 @@ install:
   - mysql -uroot -e 'create database test_mysql;'
   - mkdir bin
   - cd bin
-  - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
+  - sudo cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
   - cd ..
   - chmod +x contrib/check_updates.sh
 
