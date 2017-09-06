@@ -12,14 +12,16 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     libboost-filesystem1.55 \
     libboost-iostreams1.55 \
     libboost-program-options1.55 \
-    libboost-regex1.55-dev \
+    libboost-regex1.55 \
     libboost-system1.55 \
     libboost-thread1.55 \
     libssl1.0.0 \
     libmysqlclient18 \
+    libreadline6 \
     mysql-client \
     netcat \
     xml2 \
+    zlib1g \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
