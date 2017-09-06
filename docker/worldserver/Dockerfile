@@ -12,6 +12,7 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     libboost-filesystem1.55 \
     libboost-iostreams1.55 \
     libboost-program-options1.55 \
+    libboost-regex1.55-dev \
     libboost-system1.55 \
     libboost-thread1.55 \
     libssl1.0.0 \
