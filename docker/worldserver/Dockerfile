@@ -7,29 +7,19 @@ LABEL author="Nicola Worthington <nicolaw@tfb.net>"
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
-    apt-get -qq -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
-    autoconf \
-    build-essential \
-    cmake \
-    gcc \
-    g++ \
-    git \
-    libtool \
-    make \
-    libncurses5-dev \
-    openssl \
-    libssl-dev \
-    libmysqlclient15-dev \
-    libmysql++-dev \
-    libreadline6-dev \
-    zlib1g-dev \
-    libbz2-dev \
-    libboost-dev \
-    libboost-thread-dev \
-    libboost-system-dev \
-    libboost-filesystem-dev \
-    libboost-program-options-dev \
-    libzmq-dev \
+    apt-get -qq -o Dpkg::Use-Pty=0 install -y \
+    curl \
+    libboost-filesystem1.55 \
+    libboost-iostreams1.55 \
+    libboost-program-options1.55 \
+    libboost-regex1.55 \
+    libboost-system1.55 \
+    libboost-thread1.55 \
+    libssl1.0.0 \
+    libmysqlclient18 \
+    mysql-client \
+    netcat \
+    xml2 \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
