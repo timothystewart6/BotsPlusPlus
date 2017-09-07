@@ -6,7 +6,7 @@ language: cpp
 services: docker
 
 compiler:
-  - clang
+  - gcc
   
 env:
   global:
