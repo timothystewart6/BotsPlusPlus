@@ -39,11 +39,11 @@ install:
   - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
   - cd ..
   - chmod +x contrib/check_updates.sh
-
-script:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
   - sudo apt-get update -qq
   - sudo apt-get install g++-4.9
+
+script:
   - $CXX --version
   - mysql -uroot < sql/create/create_mysql.sql
   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
