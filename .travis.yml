@@ -11,20 +11,10 @@ compiler:
 env:
   global:
      - COMMIT=${TRAVIS_COMMIT::6}
-
-script:
-  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
-  - gcc --version
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-5
-    - g++-5
-    
-addons:
-  apt:
+      - ubuntu-toolchain-r-test
     packages:
       - libboost1.55-dev
       - libboost-filesystem1.55-dev
@@ -38,6 +28,8 @@ addons:
       - libreadline6-dev
       - zlib1g-dev
       - libbz2-dev
+      - gcc-5
+      - g++-5
 
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
