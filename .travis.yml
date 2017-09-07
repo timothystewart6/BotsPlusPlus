@@ -29,6 +29,9 @@ addons:
       - libbz2-dev
 
 before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
+  - sudo apt-get update -qq
+  - sudo apt-get install g++-4.9
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
   - git tag -a -m "Travis build" init
 
