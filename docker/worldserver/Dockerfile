@@ -8,37 +8,28 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     apt-get -qq -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
-    curl \
-    libboost-filesystem1.55 \
-    libboost-iostreams1.55 \
-    libboost-program-options1.55 \
-    libboost-regex1.55 \
-    libboost-system1.55 \
-    libboost-thread1.55 \
-    libssl1.0.0 \
-    libmysqlclient18 \
-    libreadline6 \
-    mysql-client \
-    netcat \
-    xml2 \
-    zlib1g \
-    gcc \
-    g++ \
     autoconf \
     build-essential \
     cmake \
-    libboost1.55-dev \
-    libboost-filesystem1.55-dev \
-    libboost-iostreams1.55-dev \
-    libboost-program-options1.55-dev \
-    libboost-regex1.55-dev \
-    libboost-system1.55-dev \
-    libboost-thread1.55-dev \
+    gcc \
+    g++ \
+    git \
+    libtool \
+    make \
+    libncurses5-dev \
+    openssl \
     libssl-dev \
-    libmysqlclient-dev \
+    libmysqlclient15-dev \
+    libmysql++-dev \
     libreadline6-dev \
     zlib1g-dev \
     libbz2-dev \
+    libboost-dev \
+    libboost-thread-dev \
+    libboost-system-dev \
+    libboost-filesystem-dev \
+    libboost-program-options-dev \
+    libzmq-dev \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
