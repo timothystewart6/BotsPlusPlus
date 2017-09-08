@@ -44,10 +44,10 @@ script:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
     BRANCH_NAME="master";
     fi
-  - echo "Building with ${BRANCH_NAME}"
+  - echo "Building with $BRANCH_NAME"
   - docker pull nicolaw/trinitycore
   - mkdir artifacts
-  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b ${BRANCH_NAME}
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $BRANCH_NAME
 #   - $CXX --version
 #   - mysql -uroot < sql/create/create_mysql.sql
 #   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
