@@ -44,11 +44,13 @@ script:
     BRANCH="master";
     fi
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
+  - echo TRAVIS_BRANCH=$TRAVIS_BRANCH
+  - echo PR=$PR 
+  - echo BRANCH=$BRANCH
   - echo Building with $BRANCH
   - docker pull nicolaw/trinitycore
   - mkdir artifacts
-  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $SOURCE_BRANCH
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $BRANCH
 #   - $CXX --version
 #   - mysql -uroot < sql/create/create_mysql.sql
 #   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
