@@ -1,7 +1,7 @@
 # MIT License
 # Copyright (c) 2017 Nicola Worthington <nicolaw@tfb.net>
 
-FROM ubuntu:trusty
+FROM debian:jessie
 LABEL author="Nicola Worthington <nicolaw@tfb.net>"
 
 ENV DEBIAN_FRONTEND noninteractive
