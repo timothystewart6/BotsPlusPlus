@@ -40,7 +40,6 @@ before_install:
 #   - chmod +x contrib/check_updates.sh
 
 script:
-  # - export BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
     SOURCE_BRANCH="master";
     fi
