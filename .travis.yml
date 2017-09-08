@@ -41,9 +41,11 @@ before_install:
 
 script:
   # - export BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-    SOURCE_BRANCH="master";
+
+  - if ["$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+      SOURCE_BRANCH="master";
     fi
+
   - if [[ "${TRAVIS_EVENT_TYPE}" == "pull_request" ]]; then
       # We have to do some shinanigans to figure out what the source
       # branch is for this pull request.  Travis is not kindly giving
