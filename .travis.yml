@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 dist: trusty
 
 language: cpp
@@ -61,7 +61,7 @@ script:
 #   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
 #   - mysql -uroot < sql/create/drop_mysql.sql
 #   - cd bin
-#   - sudo make -j 4 -k && sudo make install
+#   - make -j 4 -k && sudo make install
 #   - /usr/local/bin/authserver --version
 #   - /usr/local/bin/worldserver --version
 #   - cd ..
