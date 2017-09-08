@@ -48,9 +48,9 @@ script:
   - echo PR=$PR 
   - echo BRANCH=$BRANCH
   - echo Building with $BRANCH
-  - docker pull nicolaw/trinitycore
+  - docker pull timothystewart6/trinitycore-docker
   - mkdir artifacts
-  - docker run -it --rm -v "$PWD/artifacts":/artifacts nicolaw/trinitycore -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $BRANCH
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $BRANCH
 #   - $CXX --version
 #   - mysql -uroot < sql/create/create_mysql.sql
 #   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
