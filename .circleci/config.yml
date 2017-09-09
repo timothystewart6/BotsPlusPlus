@@ -22,10 +22,14 @@ jobs:
             echo Building with $CIRCLE_BRANCH
             mkdir artifacts
             #docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
+            ## testing
+            mkdir -p artifacts/bin
+            mkdir -p artifacts/etc
             touch artifacts/bin/authserver
             touch artifacts/bin/worldserver
             touch artifacts/etc/worldserver.conf.dist
             touch artifacts/etc/authserver.conf.dist
+            ## testing
       - run:
           name: Build & Push Docker Image
           command: |
