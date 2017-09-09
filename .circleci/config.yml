@@ -32,8 +32,8 @@ jobs:
             ## testing
 
             # artifacts
-            - store_artifacts:
-              path: artifacts/bin/
+      - store_artifacts:
+        path: artifacts/
       - run:
           name: Build & Push Docker Image
           command: |
