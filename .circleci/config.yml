@@ -3,6 +3,7 @@ jobs:
   build:
     machine: true
     steps:
+      - checkout
       # build and push Docker image
       - run:
           name: Build trinityCore binaries
