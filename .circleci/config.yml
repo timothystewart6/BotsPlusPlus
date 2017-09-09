@@ -16,12 +16,27 @@ jobs:
             mv /tmp/docker/* /usr/bin
 
       # build and push Docker image
-      - run: |
-            ls -a
-            docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
+      - run:
+          name: Build trinityCore binaries
+          command: |
+            echo Building with $CIRCLE_BRANCH
+            mkdir artifacts
+            #docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
+            touch artifacts/bin/authserver
+            touch artifacts/bin/worldserver
+            touch artifacts/etc/worldserver.conf.dist
+            touch artifacts/etc/authserver.conf.dist
       - run:
           name: Build & Push Docker Image
-          command: | 
+          command: |
+            # worldserver
+            cp artifacts/bin/worldserver docker/worldserver/
+            mkdir docker/worldserver/etc
+            cp artifacts/etc/worldserver.conf.dist docker/worldserver/etc
+            # authserver
+            cp artifacts/bin/authserver docker/authserver/
+            mkdir docker/authserver/etc
+            cp artifacts/etc/authserver.conf.dist docker/authserver/etc
             cd docker/authserver
             export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
             export TAG=latest
