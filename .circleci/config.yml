@@ -17,13 +17,8 @@ jobs:
             touch artifacts/bin/worldserver
             touch artifacts/etc/worldserver.conf.dist
             touch artifacts/etc/authserver.conf.dist
-            ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
             # testing
-      - store_artifacts:
-          path: artifacts/
-      - run:
-          name: Build & Push Docker Image
-          command: |
+
             # prep
             export SHORT_GIT_HASH=$(echo $CIRCLE_SHA1 | cut -c -7)
             # worldserver
@@ -42,10 +37,10 @@ jobs:
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
             # push if master
-            if ["$CIRCLE_BRANCH" == "master"]; then
+            # if ["$CIRCLE_BRANCH" == "master"]; then
               docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
               docker push $REPO
-            fi
+            # fi
             # worldserver
             cd ../worldserver;
             export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
@@ -55,7 +50,10 @@ jobs:
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
             # push if master
-            if ["$CIRCLE_BRANCH" == "master"]; then
+            # if ["$CIRCLE_BRANCH" == "master"]; then
               docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
               docker push $REPO
-            fi
+            # fi
+
+      - store_artifacts:
+          path: artifacts/
