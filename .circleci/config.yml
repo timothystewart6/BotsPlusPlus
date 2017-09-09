@@ -1,8 +1,6 @@
 version: 2
 jobs:
   build:
-    environment:
-      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
     docker:
       - image: circleci/ubuntu-server:trusty-latest
     steps:
@@ -35,6 +33,7 @@ jobs:
       - run:
           name: Build & Push Docker Image
           command: |
+            SHORT_HASH=$(echo $CIRCLE_SHA1 | cut -c -7)
             # worldserver
             cp artifacts/bin/worldserver docker/worldserver/
             mkdir docker/worldserver/etc
