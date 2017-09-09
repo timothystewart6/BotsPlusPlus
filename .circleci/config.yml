@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+  environment:
+    SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
     docker:
       - image: circleci/ubuntu-server:trusty-latest
     steps:
@@ -44,9 +46,9 @@ jobs:
             cd docker/authserver
             export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
             export TAG=latest
-            echo $REPO:$TAG:$CIRCLE_SHA1
-            docker build -f Dockerfile -t $REPO:$CIRCLE_SHA1 .
-            docker tag $REPO:$CIRCLE_SHA1 $REPO:$TAG
-            docker tag $REPO:$CIRCLE_SHA1 $REPO:$CIRCLE_BUILD_NUM
+            echo $REPO:$TAG:$SHORT_GIT_HASH
+            docker build -f Dockerfile -t $REPO:$SHORT_GIT_HASH .
+            docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
+            docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
             docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
             docker push $REPO
