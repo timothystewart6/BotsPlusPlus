@@ -27,6 +27,7 @@ jobs:
             # prep
             export SHORT_GIT_HASH=$(echo $CIRCLE_SHA1 | cut -c -7)
             # worldserver
+            sudo chmod -R 755 artifacts/
             cp artifacts/bin/worldserver docker/worldserver/
             mkdir docker/worldserver/etc
             cp artifacts/etc/worldserver.conf.dist docker/worldserver/etc
