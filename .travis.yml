@@ -55,7 +55,3 @@ script:
   - cd check_install/bin
   - ./authserver --version
   - ./worldserver --version
-  - ./mapextractor --version
-  - ./mmaps_generator --version
-  - ./vmap4assembler --version
-  - ./vmap4extractor --version
