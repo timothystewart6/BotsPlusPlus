@@ -5,4 +5,4 @@ jobs:
       - image: timothystewart6/trinitycore-docker
     steps:
       - run: |
-          docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
+          -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
