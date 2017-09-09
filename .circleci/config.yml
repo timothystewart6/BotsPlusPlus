@@ -33,17 +33,31 @@ jobs:
       - run:
           name: Build & Push Docker Image
           command: |
+            # prep
             export SHORT_GIT_HASH=$(echo $CIRCLE_SHA1 | cut -c -7)
+            
             # worldserver
             cp artifacts/bin/worldserver docker/worldserver/
             mkdir docker/worldserver/etc
             cp artifacts/etc/worldserver.conf.dist docker/worldserver/etc
+            
             # authserver
             cp artifacts/bin/authserver docker/authserver/
             mkdir docker/authserver/etc
             cp artifacts/etc/authserver.conf.dist docker/authserver/etc
             cd docker/authserver
             export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
+            export TAG=latest
+            echo $REPO:$TAG:$SHORT_GIT_HASH
+            docker build -f Dockerfile -t $REPO:$SHORT_GIT_HASH .
+            docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
+            docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
+            docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+            docker push $REPO
+
+            # worldserver
+            cd ../worldserver;
+            export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
             export TAG=latest
             echo $REPO:$TAG:$SHORT_GIT_HASH
             docker build -f Dockerfile -t $REPO:$SHORT_GIT_HASH .
