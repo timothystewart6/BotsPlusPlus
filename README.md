@@ -1,6 +1,6 @@
 # BotsPlusPlus
 
-|  Travis Build |  Auth Server |  World Server |  Build Tools  |
+|  CircleCI     |  Auth Server |  World Server |  Build Tools  |
 |  ------------ |  ----------- | ------------- | ------------- |
 | [![CircleCI](https://circleci.com/gh/timothystewart6/BotsPlusPlus/tree/master.svg?style=shield)](https://circleci.com/gh/timothystewart6/BotsPlusPlus/tree/master)| [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/botsplusplus-authserver.svg)](https://hub.docker.com/r/timothystewart6/botsplusplus-authserver/)| [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/botsplusplus-worldserver.svg)](https://hub.docker.com/r/timothystewart6/botsplusplus-worldserver/)| [![Docker Pulls](https://img.shields.io/docker/pulls/timothystewart6/trinitycore-docker.svg)](https://hub.docker.com/r/timothystewart6/trinitycore-docker/)
 
