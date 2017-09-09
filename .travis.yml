@@ -23,6 +23,7 @@ addons:
       - libreadline6-dev
       - zlib1g-dev
       - libbz2-dev
+      - p7zip-full
 
 services:
   - mysql
@@ -50,7 +51,9 @@ script:
   - cat sql/updates/characters/3.3.5/*.sql | mysql -utrinity -ptrinity characters
   - cat sql/custom/characters/*.sql | mysql -utrinity -ptrinity characters
   - ./contrib/check_updates.sh characters 3.3.5 characters
-  - mysql -utrinity -ptrinity world < sql/base/dev/world_database.sql
+  - curl --remote-name https://github.com/TrinityCore/TrinityCore/releases/tag/TDB335.61
+  - 7z x -y TDB_full_335-2.61_2016_04_11.7z
+  - mysql -utrinity -ptrinity world < TDB_full_335-2.61_2016_04_11/TDB_full_world_335.61_2016_04_11.sql.sql
   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
   - cat sql/custom/world/*.sql | mysql -utrinity -ptrinity world
   - mysql -uroot < sql/create/drop_mysql.sql
