@@ -30,6 +30,10 @@ jobs:
             touch artifacts/etc/worldserver.conf.dist
             touch artifacts/etc/authserver.conf.dist
             ## testing
+
+            # artifacts
+            - store_artifacts:
+              path: artifacts/bin/
       - run:
           name: Build & Push Docker Image
           command: |
