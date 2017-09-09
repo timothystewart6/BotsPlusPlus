@@ -43,11 +43,14 @@ script:
   - $CXX --version
   - mysql -uroot < sql/create/create_mysql.sql
   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
+  - cat sql/updates/auth/3.3.5/*.sql | mysql -utrinity -ptrinity auth
+  - cat sql/custom/auth/*.sql | mysql -utrinity -ptrinity auth
   - ./contrib/check_updates.sh auth 3.3.5 auth
   - mysql -utrinity -ptrinity characters < sql/base/characters_database.sql
+  - cat sql/updates/characters/3.3.5/*.sql | mysql -utrinity -ptrinity characters
+  - cat sql/custom/characters/*.sql | mysql -utrinity -ptrinity characters
   - ./contrib/check_updates.sh characters 3.3.5 characters
   - mysql -utrinity -ptrinity world < sql/base/dev/world_database.sql
-  - mysql -utrinity -ptrinity hotfixes < sql/base/dev/hotfixes_database.sql
   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
   - mysql -uroot < sql/create/drop_mysql.sql
   - cd bin
