@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node
+      - image: timothystewart6/trinitycore-docker
     steps:
       - checkout
       - setup_remote_docker
