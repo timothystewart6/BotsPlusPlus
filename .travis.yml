@@ -53,7 +53,7 @@ script:
   - ./contrib/check_updates.sh characters 3.3.5 characters
   - curl -LOk https://github.com/TrinityCore/TrinityCore/releases/download/TDB335.61/TDB_full_335.61_2016_04_11.7z
   - 7z x -y TDB_full_335.61_2016_04_11.7z
-  - mysql -utrinity -ptrinity world < TDB_full_world_335.61_2016_04_11/TDB_full_world_335.61_2016_04_11.sql
+  - mysql -utrinity -ptrinity world < TDB_full_335.61_2016_04_11/TDB_full_world_335.61_2016_04_11.sql
   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
   - cat sql/custom/world/*.sql | mysql -utrinity -ptrinity world
   - mysql -uroot < sql/create/drop_mysql.sql
