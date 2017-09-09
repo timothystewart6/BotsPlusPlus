@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: timothystewart6/trinitycore-docker
+      - image: circleci/node
     steps:
       - checkout
       - setup_remote_docker
@@ -10,11 +10,23 @@ jobs:
           name: Install Docker client
           command: |
             set -x
-              VER="17.07.0-ce"
+            VER="17.07.0-ce"
             curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/test/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
 
       # build and push Docker image
       - run: |
-           docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
+           docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
+      - run:
+        name: Build & Push Docker Images
+        command: | 
+        cd docker/authserver
+        export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
+        export TAG=latest
+        echo $REPO:$TAG:$CIRCLE_SHA1
+        docker build -f Dockerfile -t $REPO:$CIRCLE_SHA1 .
+        docker tag $REPO:$CIRCLE_SHA1 $REPO:$TAG
+        docker tag $REPO:$CIRCLE_SHA1 $REPO:$CIRCLE_BUILD_NUM
+        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+        docker push $REPO
