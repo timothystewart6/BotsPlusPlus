@@ -1,7 +1,6 @@
 machine:
   services:
     - docker
-
 dependencies:
   cache_directories:
     - "~/docker"
