@@ -1,12 +1,17 @@
 sudo: false
 dist: trusty
+
 language: cpp
+
 services: docker
+
 compiler:
   - clang
+
 env:
   global:
      - COMMIT=${TRAVIS_COMMIT::6}
+
 addons:
   apt:
     packages:
@@ -22,9 +27,11 @@ addons:
       - libreadline6-dev
       - zlib1g-dev
       - libbz2-dev
+
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
   - git tag -a -m "Travis build" init
+
 install:
   - mysql -uroot -e 'create database test_mysql;'
   - mkdir bin
@@ -32,6 +39,7 @@ install:
   - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
   - cd ..
   - chmod +x contrib/check_updates.sh
+
 script:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
     BRANCH="master";
