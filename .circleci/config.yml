@@ -23,6 +23,10 @@ jobs:
             mkdir artifacts
             docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
             ls -a
+            cd artifacts
+            ls -a
+            cd bin
+            ls - a
             ## testing
             # mkdir -p artifacts/bin
             # mkdir -p artifacts/etc
