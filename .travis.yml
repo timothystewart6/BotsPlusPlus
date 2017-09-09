@@ -23,8 +23,9 @@ addons:
       - libreadline6-dev
       - zlib1g-dev
       - libbz2-dev
-      
-services: mysql
+
+services: 
+  - mysql
 
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
