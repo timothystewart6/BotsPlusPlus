@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: timothystewart6/trinitycore-docker
+      - image: circleci/ubuntu-server:trusty-latest
     steps:
       - checkout
       - setup_remote_docker
