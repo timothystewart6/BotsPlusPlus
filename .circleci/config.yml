@@ -19,14 +19,14 @@ jobs:
       - run: |
            docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
       - run:
-        name: Build & Push Docker Images
+        name: Build & Push Docker Image
         command: | 
-        cd docker/authserver
-        export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
-        export TAG=latest
-        echo $REPO:$TAG:$CIRCLE_SHA1
-        docker build -f Dockerfile -t $REPO:$CIRCLE_SHA1 .
-        docker tag $REPO:$CIRCLE_SHA1 $REPO:$TAG
-        docker tag $REPO:$CIRCLE_SHA1 $REPO:$CIRCLE_BUILD_NUM
-        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-        docker push $REPO
+          cd docker/authserver
+          export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_AUTHSERVER
+          export TAG=latest
+          echo $REPO:$TAG:$CIRCLE_SHA1
+          docker build -f Dockerfile -t $REPO:$CIRCLE_SHA1 .
+          docker tag $REPO:$CIRCLE_SHA1 $REPO:$TAG
+          docker tag $REPO:$CIRCLE_SHA1 $REPO:$CIRCLE_BUILD_NUM
+          docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+          docker push $REPO
