@@ -5,7 +5,7 @@
 
 **Issues addressed**: Fixes #
 
-**Tests performed**: - [ ] Travis build passes
+**Tests performed**: - [ ] CircleCI build passes
 
 **Known issues and TODO list**:
 
