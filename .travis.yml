@@ -1,16 +1,13 @@
-sudo: required
+sudo: false
 dist: trusty
 
 language: cpp
-
-services: docker
-
 compiler:
   - clang
-  
-env:
-  global:
-     - COMMIT=${TRAVIS_COMMIT::6}
+
+ git:
+  depth: 1
+
 addons:
   apt:
     packages:
@@ -26,6 +23,8 @@ addons:
       - libreadline6-dev
       - zlib1g-dev
       - libbz2-dev
+      
+services: mysql
 
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
@@ -35,7 +34,7 @@ install:
   - mysql -uroot -e 'create database test_mysql;'
   - mkdir bin
   - cd bin
-  - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
+  - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=check_install
   - cd ..
   - chmod +x contrib/check_updates.sh
 
@@ -49,11 +48,11 @@ script:
   - mysql -utrinity -ptrinity world < sql/base/dev/world_database.sql
   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
   - mysql -uroot < sql/create/drop_mysql.sql
-  - cd bin
-  - sudo make -j 4 -k && sudo make install
-  - /usr/local/bin/authserver --version
-  - /usr/local/bin/worldserver --version
-  - /usr/local/bin/mapextractor --version
-  - /usr/local/bin/mmaps_generator --version
-  - /usr/local/bin/vmap4assembler --version
-  - /usr/local/bin/vmap4extractor --version
+  - make -j 4 -k && sudo make install
+  - cd check_install/bin
+  - ./authserver --version
+  - ./worldserver --version
+  - ./mapextractor --version
+  - ./mmaps_generator --version
+  - ./vmap4assembler --version
+  - ./vmap4extractor --version
