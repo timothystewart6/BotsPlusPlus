@@ -33,7 +33,7 @@ jobs:
 
             # artifacts
       - store_artifacts:
-        path: artifacts/
+          path: artifacts/
       - run:
           name: Build & Push Docker Image
           command: |
