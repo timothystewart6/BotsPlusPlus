@@ -1,17 +1,10 @@
 version: 2
 jobs:
-  prepare:
+  build:
+    docker:
+      - image: timothystewart6/trinitycore-docker   # (1)
     steps:
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="17.07.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
-  build_trinity:
-    steps:
-      # build and push Docker image
-      - run: |
-           docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
+      - checkout
+      # ... steps for building/testing app ...
+      - setup_remote_docker   # (2)
+      - run: docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
