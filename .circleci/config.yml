@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node/node:6.11.3
+      - image: node:6.11.3
     steps:
       - run:
           name: Install Docker client
