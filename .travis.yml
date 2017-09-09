@@ -7,38 +7,37 @@ services: docker
 
 compiler:
   - clang
-
+  
 env:
   global:
      - COMMIT=${TRAVIS_COMMIT::6}
-
-addons:
-  apt:
-    packages:
-      - libboost1.55-dev
-      - libboost-filesystem1.55-dev
-      - libboost-iostreams1.55-dev
-      - libboost-program-options1.55-dev
-      - libboost-regex1.55-dev
-      - libboost-system1.55-dev
-      - libboost-thread1.55-dev
-      - libssl-dev
-      - libmysqlclient-dev
-      - libreadline6-dev
-      - zlib1g-dev
-      - libbz2-dev
+# addons:
+#   apt:
+#     packages:
+#       - libboost1.55-dev
+#       - libboost-filesystem1.55-dev
+#       - libboost-iostreams1.55-dev
+#       - libboost-program-options1.55-dev
+#       - libboost-regex1.55-dev
+#       - libboost-system1.55-dev
+#       - libboost-thread1.55-dev
+#       - libssl-dev
+#       - libmysqlclient-dev
+#       - libreadline6-dev
+#       - zlib1g-dev
+#       - libbz2-dev
 
 before_install:
   - git config user.email "travis@build.bot" && git config user.name "Travis CI"
   - git tag -a -m "Travis build" init
 
-install:
-  - mysql -uroot -e 'create database test_mysql;'
-  - mkdir bin
-  - cd bin
-  - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
-  - cd ..
-  - chmod +x contrib/check_updates.sh
+# install:
+#   - mysql -uroot -e 'create database test_mysql;'
+#   - mkdir bin
+#   - cd bin
+#   - cmake ../ -DWITH_WARNINGS=0 -DSCRIPTS=static -DSERVERS=1 -DCMAKE_INSTALL_PREFIX=/usr/local
+#   - cd ..
+#   - chmod +x contrib/check_updates.sh
 
 script:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
@@ -51,20 +50,21 @@ script:
   - echo Building with $BRANCH
   - docker pull timothystewart6/trinitycore-docker
   - mkdir artifacts
-  - $CXX --version
-  - mysql -uroot < sql/create/create_mysql.sql
-  - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
-  - ./contrib/check_updates.sh auth 3.3.5 auth
-  - mysql -utrinity -ptrinity characters < sql/base/characters_database.sql
-  - ./contrib/check_updates.sh characters 3.3.5 characters
-  - mysql -utrinity -ptrinity world < sql/base/dev/world_database.sql
-  - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
-  - mysql -uroot < sql/create/drop_mysql.sql
-  - cd bin
-  - make -j 4 -k && sudo make install
-  - /usr/local/bin/authserver --version
-  - /usr/local/bin/worldserver --version
-  - cd ..
+  - docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $BRANCH
+#   - $CXX --version
+#   - mysql -uroot < sql/create/create_mysql.sql
+#   - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
+#   - ./contrib/check_updates.sh auth 3.3.5 auth
+#   - mysql -utrinity -ptrinity characters < sql/base/characters_database.sql
+#   - ./contrib/check_updates.sh characters 3.3.5 characters
+#   - mysql -utrinity -ptrinity world < sql/base/dev/world_database.sql
+#   - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
+#   - mysql -uroot < sql/create/drop_mysql.sql
+#   - cd bin
+#   - make -j 4 -k && sudo make install
+#   - /usr/local/bin/authserver --version
+#   - /usr/local/bin/worldserver --version
+#   - cd ..
 # worldserver
   - cp artifacts/bin/worldserver docker/worldserver/
   - mkdir docker/worldserver/etc
@@ -83,8 +83,8 @@ script:
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-    # docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    # docker push $REPO;
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push $REPO;
     fi
 # worldserver
   - cd ../worldserver;
@@ -95,6 +95,6 @@ script:
   - docker tag $REPO:$COMMIT $REPO:$TAG
   - docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-    # docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    # docker push $REPO;
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push $REPO;
     fi
