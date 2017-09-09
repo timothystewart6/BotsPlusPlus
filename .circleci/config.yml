@@ -1,11 +1,7 @@
-machine:
-  services:
-    - docker
-dependencies:
-  cache_directories:
-    - "~/docker"
-  override:
-    - docker info
-test:
-  override:
-    - docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: timothystewart6/trinitycore-docker
+    steps:
+      - docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b master
