@@ -17,7 +17,8 @@ jobs:
 
       # build and push Docker image
       - run: |
-           docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
+            ls -a
+            docker run -it --rm -v "$PWD/artifacts":/artifacts timothystewart6/trinitycore-docker -r "https://github.com/timothystewart6/BotsPlusPlus.git" -b $CIRCLE_BRANCH
       - run:
           name: Build & Push Docker Image
           command: | 
