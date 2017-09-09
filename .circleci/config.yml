@@ -17,6 +17,7 @@ jobs:
             touch artifacts/bin/worldserver
             touch artifacts/etc/worldserver.conf.dist
             touch artifacts/etc/authserver.conf.dist
+            ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
             # testing
       - store_artifacts:
           path: artifacts/
@@ -24,7 +25,6 @@ jobs:
           name: Build & Push Docker Image
           command: |
             # prep
-            ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
             export SHORT_GIT_HASH=$(echo $CIRCLE_SHA1 | cut -c -7)
             # worldserver
             cp artifacts/bin/worldserver docker/worldserver/
