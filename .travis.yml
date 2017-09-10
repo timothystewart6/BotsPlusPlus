@@ -1,0 +1,64 @@
+sudo: false
+dist: trusty
+
+language: cpp
+compiler:
+  - clang
+
+git:
+  depth: 1
+
+addons:
+  apt:
+    packages:
+      - libboost1.55-dev
+      - libboost-filesystem1.55-dev
+      - libboost-iostreams1.55-dev
+      - libboost-program-options1.55-dev
+      - libboost-regex1.55-dev
+      - libboost-system1.55-dev
+      - libboost-thread1.55-dev
+      - libssl-dev
+      - libmysqlclient-dev
+      - libreadline6-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - p7zip-full
+
+services:
+  - mysql
+
+before_install:
+  - git config user.email "travis@build.bot" && git config user.name "Travis CI"
+  - git tag -a -m "Travis build" init
+
+install:
+  - mysql -uroot -e 'create database test_mysql;'
+  - mkdir bin
+  - cd bin
+  - cmake ../ -DWITH_WARNINGS=0 -DTOOLS=1 -DCMAKE_INSTALL_PREFIX=check_install
+  - cd ..
+  - chmod +x contrib/check_updates.sh
+
+script:
+  - $CXX --version
+  - mysql -uroot < sql/create/create_mysql.sql
+  - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
+  - cat sql/updates/auth/3.3.5/*.sql | mysql -utrinity -ptrinity auth
+  - cat sql/custom/auth/*.sql | mysql -utrinity -ptrinity auth
+  - ./contrib/check_updates.sh auth 3.3.5 auth
+  - mysql -utrinity -ptrinity characters < sql/base/characters_database.sql
+  - cat sql/updates/characters/3.3.5/*.sql | mysql -utrinity -ptrinity characters
+  - cat sql/custom/characters/*.sql | mysql -utrinity -ptrinity characters
+  - ./contrib/check_updates.sh characters 3.3.5 characters
+  - curl -LOk https://github.com/TrinityCore/TrinityCore/releases/download/TDB335.61/TDB_full_335.61_2016_04_11.7z
+  - 7z x -y TDB_full_335.61_2016_04_11.7z
+  - mysql -utrinity -ptrinity world < TDB_full_335.61_2016_04_11/TDB_full_world_335.61_2016_04_11.sql
+  - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
+  - cat sql/custom/world/*.sql | mysql -utrinity -ptrinity world
+  - mysql -uroot < sql/create/drop_mysql.sql
+  - cd bin
+  - make -j 4 -k && make install
+  - cd check_install/bin
+  - ./authserver --version
+  - ./worldserver --version
