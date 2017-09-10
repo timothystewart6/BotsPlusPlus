@@ -1,246 +1,313 @@
-#include "ScriptPCH.h"
-#include "Pet.h"
-#include "Player.h"
+/*
+ * Copyright (C) 2008-2014 TrinityCore <http://www.trinitycore.org/>
+ *
+ * Copyright (C) 2009-2014 DSS Mortos <dss_mortos@outlook.com>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-class Npc_Beastmaster : public CreatureScript
-{
-public:
-    Npc_Beastmaster() : CreatureScript("Npc_Beastmaster") { }
-
-    void CreatePet(Player *player, Creature * m_creature, uint32 entry) 
-    {
-
-        if (player->getClass() != CLASS_HUNTER)
-        {
-            m_creature->Whisper("You are not a Hunter!", LANG_UNIVERSAL, player);
-            player->PlayerTalkClass->SendCloseGossip();
-            return;
-        }
-
-        if (player->GetPet())
-        {
-            player->PlayerTalkClass->SendCloseGossip();
-            return;
-        }
-
-        Creature *creatureTarget = m_creature->SummonCreature(entry, player->GetPositionX(), player->GetPositionY() + 2, player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 500);
-        if (!creatureTarget) return;
-
-        Pet* pet = player->CreateTamedPetFrom(creatureTarget, 0);
-
-        if (!pet)
-            return;
-
-        // kill original creature
-        creatureTarget->setDeathState(JUST_DIED);
-        creatureTarget->RemoveCorpse();
-        creatureTarget->SetHealth(0);                       // just for nice GM-mode view
-
-        pet->SetPower(POWER_HAPPINESS, 1048000);
-
-        pet->SetUInt64Value(UNIT_FIELD_CREATEDBY, player->GetGUID());
-        pet->SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, player->getFaction());
-
-        // prepare visual effect for levelup
-        pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel() - 1);
-        pet->GetMap()->AddToMap(pet->ToCreature());
-        // visual effect for levelup for lulz
-        pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel());
-
-        pet->GetCharmInfo()->SetPetNumber(sObjectMgr->GeneratePetNumber(), true);
-        if (!pet->InitStatsForLevel(player->getLevel()))
-            pet->UpdateAllStats();
-
-        // caster has pet now
-        player->SetMinion(pet, true);
-
-        pet->SavePetToDB(PET_SAVE_AS_CURRENT);
-        pet->InitTalentForLevel();
-        player->PetSpellInitialize();
-
-        //inform that has da pet
-        player->PlayerTalkClass->SendCloseGossip();
-    }
-
-    bool OnGossipHello(Player * player, Creature * m_creature)
-    {
-        if (player->getClass() != CLASS_HUNTER)
-        {
-            m_creature->Whisper("You are not a Hunter!", LANG_UNIVERSAL, player);
-            player->PlayerTalkClass->SendCloseGossip();
-            return true;
-        }
-        player->ADD_GOSSIP_ITEM(4, "New Normal Pet.", GOSSIP_SENDER_MAIN, 30);
-        if (player->CanTameExoticPets())
-        {
-            player->ADD_GOSSIP_ITEM(4, "New Exotic Pet.", GOSSIP_SENDER_MAIN, 50);
-        }
-        player->ADD_GOSSIP_ITEM(4, "Stable your pet.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_STABLEPET);
-        player->ADD_GOSSIP_ITEM(4, "Nevermind!", GOSSIP_SENDER_MAIN, 150);
-        player->SEND_GOSSIP_MENU(60022, m_creature->GetGUID());
-        return true;
-    }
-
-    bool OnGossipSelect(Player * player, Creature * m_creature, uint32 sender, uint32 action)
-    {
-        player->PlayerTalkClass->ClearMenus();
-
-        switch (action)
-        {
-        case 100:
-            OnGossipHello(player, m_creature);
-            break;
-
-        case 150:
-            player->CLOSE_GOSSIP_MENU();
-            break;
-
-        case 30:
-            player->ADD_GOSSIP_ITEM(2, "Main Menu!", GOSSIP_SENDER_MAIN, 100);
-            player->ADD_GOSSIP_ITEM(2, "Next Page!", GOSSIP_SENDER_MAIN, 31);
-            player->ADD_GOSSIP_ITEM(4, "Bat.", GOSSIP_SENDER_MAIN, 18);
-            player->ADD_GOSSIP_ITEM(4, "Bear.", GOSSIP_SENDER_MAIN, 1);
-            player->ADD_GOSSIP_ITEM(4, "Boar.", GOSSIP_SENDER_MAIN, 2);
-            player->ADD_GOSSIP_ITEM(4, "Cat.", GOSSIP_SENDER_MAIN, 4);
-            player->ADD_GOSSIP_ITEM(4, "Carrion Bird.", GOSSIP_SENDER_MAIN, 5);
-            player->ADD_GOSSIP_ITEM(4, "Crab.", GOSSIP_SENDER_MAIN, 6);
-            player->ADD_GOSSIP_ITEM(4, "Crocolisk.", GOSSIP_SENDER_MAIN, 7);
-            player->ADD_GOSSIP_ITEM(4, "Dragonhawk.", GOSSIP_SENDER_MAIN, 17);
-            player->ADD_GOSSIP_ITEM(4, "Gorilla.", GOSSIP_SENDER_MAIN, 8);
-            player->ADD_GOSSIP_ITEM(4, "Hound.", GOSSIP_SENDER_MAIN, 9);
-            player->ADD_GOSSIP_ITEM(4, "Hyena.", GOSSIP_SENDER_MAIN, 10);
-            player->ADD_GOSSIP_ITEM(4, "Moth.", GOSSIP_SENDER_MAIN, 11);
-            player->ADD_GOSSIP_ITEM(4, "Owl.", GOSSIP_SENDER_MAIN, 12);
-            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
-            break;
-
-        case 31:
-            player->ADD_GOSSIP_ITEM(2, "Main Menu!", GOSSIP_SENDER_MAIN, 100);
-            player->ADD_GOSSIP_ITEM(2, "Previous Page!", GOSSIP_SENDER_MAIN, 30);
-            player->ADD_GOSSIP_ITEM(4, "Raptor.", GOSSIP_SENDER_MAIN, 20);
-            player->ADD_GOSSIP_ITEM(4, "Ravager.", GOSSIP_SENDER_MAIN, 19);
-            player->ADD_GOSSIP_ITEM(4, "Strider.", GOSSIP_SENDER_MAIN, 13);
-            player->ADD_GOSSIP_ITEM(4, "Scorpid.", GOSSIP_SENDER_MAIN, 414);
-            player->ADD_GOSSIP_ITEM(4, "Spider.", GOSSIP_SENDER_MAIN, 16);
-            player->ADD_GOSSIP_ITEM(4, "Serpent.", GOSSIP_SENDER_MAIN, 21);
-            player->ADD_GOSSIP_ITEM(4, "Turtle.", GOSSIP_SENDER_MAIN, 15);
-            player->ADD_GOSSIP_ITEM(4, "Wasp.", GOSSIP_SENDER_MAIN, 93);
-            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
-            break;
-
-        case 50:
-            player->ADD_GOSSIP_ITEM(2, "Main Menu!", GOSSIP_SENDER_MAIN, 100);
-            player->ADD_GOSSIP_ITEM(4, "Chimaera.", GOSSIP_SENDER_MAIN, 51);
-            player->ADD_GOSSIP_ITEM(4, "Core Hound.", GOSSIP_SENDER_MAIN, 52);
-            player->ADD_GOSSIP_ITEM(4, "Devilsaur.", GOSSIP_SENDER_MAIN, 53);
-            player->ADD_GOSSIP_ITEM(4, "Rhino.", GOSSIP_SENDER_MAIN, 54);
-            player->ADD_GOSSIP_ITEM(4, "Silithid.", GOSSIP_SENDER_MAIN, 55);
-            player->ADD_GOSSIP_ITEM(4, "Worm.", GOSSIP_SENDER_MAIN, 56);
-            player->ADD_GOSSIP_ITEM(4, "Loque'nahak.", GOSSIP_SENDER_MAIN, 57);
-            player->ADD_GOSSIP_ITEM(4, "Skoll.", GOSSIP_SENDER_MAIN, 58);
-            player->ADD_GOSSIP_ITEM(4, "Gondria.", GOSSIP_SENDER_MAIN, 59);
-            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
-            break;
-
-        case GOSSIP_OPTION_STABLEPET:
-            player->GetSession()->SendStablePet(m_creature->GetGUID());
-            break;
-        case 51: //chimera
-            CreatePet(player, m_creature, 21879);
-            break;
-        case 52: //core hound
-            CreatePet(player, m_creature, 21108);
-            break;
-        case 53: //Devilsaur
-            CreatePet(player, m_creature, 20931);
-            break;
-        case 54: //rhino
-            CreatePet(player, m_creature, 30445);
-            break;
-        case 55: //silithid
-            CreatePet(player, m_creature, 5460);
-            break;
-        case 56: //Worm
-            CreatePet(player, m_creature, 30148);
-            break;
-        case 57: //Loque'nahak
-            CreatePet(player, m_creature, 32517);
-            break;
-        case 58: //Skoll
-            CreatePet(player, m_creature, 35189);
-            break;
-        case 59: //Gondria
-            CreatePet(player, m_creature, 33776);
-            break;
-        case 16: //Spider
-            CreatePet(player, m_creature, 2349);
-            break;
-        case 17: //Dragonhawk
-            CreatePet(player, m_creature, 27946);
-            break;
-        case 18: //Bat
-            CreatePet(player, m_creature, 28233);
-            break;
-        case 19: //Ravager
-            CreatePet(player, m_creature, 17199);
-            break;
-        case 20: //Raptor
-            CreatePet(player, m_creature, 14821);
-            break;
-        case 21: //Serpent
-            CreatePet(player, m_creature, 28358);
-            break;
-        case 1: //bear
-            CreatePet(player, m_creature, 29319);
-            break;
-        case 2: //Boar
-            CreatePet(player, m_creature, 29996);
-            break;
-        case 93: //Bug
-            CreatePet(player, m_creature, 28085);
-            break;
-        case 4: //cat
-            CreatePet(player, m_creature, 28097);
-            break;
-        case 5: //carrion
-            CreatePet(player, m_creature, 26838);
-            break;
-        case 6: //crab
-            CreatePet(player, m_creature, 24478);
-            break;
-        case 7: //crocolisk
-            CreatePet(player, m_creature, 1417);
-            break;
-        case 8: //gorila
-            CreatePet(player, m_creature, 28213);
-            break;
-        case 9: //hound
-            CreatePet(player, m_creature, 29452);
-            break;
-        case 10: //hynea
-            CreatePet(player, m_creature, 13036);
-            break;
-        case 11: //Moth
-            CreatePet(player, m_creature, 27421);
-            break;
-        case 12: //owl
-            CreatePet(player, m_creature, 23136);
-            break;
-        case 13: //strider
-            CreatePet(player, m_creature, 22807);
-            break;
-        case 414: //scorpid
-            CreatePet(player, m_creature, 9698);
-            break;
-        case 15: //turtle
-            CreatePet(player, m_creature, 25482);
-            break;
-        }
-        return true;
-    }
-};
-
-void ADDSC_Npc_Beastmaster()
-{
-    new Npc_Beastmaster;
-}
+ #include "Config.h"
+ #include "Pet.h"
+ 
+ enum GOSSIPS {
+     GOSSIP_OPTION_MAINMENU                  = 20,        //Main Menu entry
+     GOSSIP_OPTION_NEWPET_EXOTIC             = 21,        //Exotic pet menu entry
+     GOSSIP_OPTION_NEWPET                    = 22,        //Normal pet menu entry
+     GOSSIP_OPTION_CHIMERA                   = 23,        //Cast Pet Chimera
+     GOSSIP_OPTION_CORE_HOUND                = 24,        //Cast Pet Core Hound
+     GOSSIP_OPTION_DEVILSAUR                 = 25,        //Cast Pet Devilsaur
+     GOSSIP_OPTION_RHINO                     = 26,        //Cast Pet Rhino
+     GOSSIP_OPTION_SILITHID                  = 27,        //Cast Pet Silithid
+     GOSSIP_OPTION_WORM                      = 28,        //Cast Pet Worm
+     GOSSIP_OPTION_SPIRIT_BEAST              = 29,        //Cast Pet SpiritBeast
+     GOSSIP_OPTION_BAT                       = 30,        //Cast Pet Bat
+     GOSSIP_OPTION_BOAR                      = 31,        //Cast Pet Boar
+     GOSSIP_OPTION_BEAR                      = 32,        //Cast Pet Bear
+     GOSSIP_OPTION_CAT                       = 33,        //Cast Pet Cat
+     GOSSIP_OPTION_CARRION_BIRD              = 34,        //Cast Pet Carrion Bird
+     GOSSIP_OPTION_CROCOLISK                 = 35,        //Cast Pet Crocolisk
+     GOSSIP_OPTION_CRAB                      = 36,        //Cast Pet Crab
+     GOSSIP_OPTION_DRAGONHAWK                = 37,        //Cast Pet Dragonhawk
+     GOSSIP_OPTION_GORILLA                   = 38,        //Cast Pet Gorilla
+     GOSSIP_OPTION_HOUND                     = 39,        //Cast Pet Hound
+     GOSSIP_OPTION_HYENA                     = 40,        //Cast Pet Hyena
+     GOSSIP_OPTION_MOTH                      = 41,        //Cast Pet Moth
+     GOSSIP_OPTION_NETHER_RAY                = 42,        //Cast Pet Nether Ray
+     GOSSIP_OPTION_OWL                       = 43,        //Cast Pet Bird of Prey
+     GOSSIP_OPTION_RAPTOR                    = 44,        //Cast Pet Raptor
+     GOSSIP_OPTION_RAVAGER                   = 45,        //Cast Pet Ravager
+     GOSSIP_OPTION_SCORPID                   = 46,        //Cast Pet Scorpid
+     GOSSIP_OPTION_SERPENT                   = 47,        //Cast Pet Serpent
+     GOSSIP_OPTION_SPIDER                    = 48,        //Cast Pet Spider
+     GOSSIP_OPTION_TURTLE                    = 49,        //Cast Pet Turtle
+     GOSSIP_OPTION_WASP                      = 50,        //Cast Pet Wasp
+     GOSSIP_OPTION_WARP_STALKER              = 51,        //Cast Pet Warp Stalker
+     GOSSIP_OPTION_WIND_SERPENT              = 52,        //Cast Pet Wind Serpent
+     GOSSIP_OPTION_WOLF                      = 53,        //Cast Pet Wolf
+     GOSSIP_OPTION_SPOREBAT                  = 55,        //Cast Pet Sporebat
+     GOSSIP_OPTION_TALLSTRIDER               = 56,        //Cast Pet Tallstriker
+ };
+ 
+ enum NormalPetEntry {
+     SPELL_PET_BAT                       = 46717,          //Add Tamable Bat (26017)
+     SPELL_PET_BOAR                      = 46718,          //Add Tamable Boar (26020)
+     SPELL_PET_BEAR                      = 64330,          //Add Tamable Bear (34025)
+     SPELL_PET_CAT                       = 46720,          //Add Tamable Cat (26021)
+     SPELL_PET_CARRION_BIRD              = 46719,          //Add Tamable Carrion Bird (26019)
+     SPELL_PET_CROCOLISK                 = 64332,          //Add Tamable Crocolisk (34027)
+     SPELL_PET_CRAB                      = 64331,          //Add Tamable Crab (34026)
+     SPELL_PET_DRAGONHAWK                = 46721,          //Add Tamable Dragonhawk (26024)
+     SPELL_PET_HOUND                     = 96234,          //Add Tamable Dog (52010)
+     SPELL_PET_GORILLA                   = 64333,          //Add Tamable Gorilla (34028)
+     SPELL_PET_HYENA                     = 64335,          //Add Tamable Hyena (34019)
+     SPELL_PET_MOTH                      = 64334,          //Add Tamable Moth (34021)
+     SPELL_PET_NETHER_RAY                = 46722,          //Add Tamable Nether Ray (26027)
+     SPELL_PET_BIRD_OF_PREY              = 46723,          //Add Tamable Bird of Prey (26028)
+     SPELL_PET_RAPTOR                    = 46724,          //Add Tamable Raptor (26029)
+     SPELL_PET_RAVAGER                   = 46725,          //Add Tamable Ravager (26030)
+     SPELL_PET_SCORPID                   = 46726,          //Add Tamable Scorpid (26031)
+     SPELL_PET_SERPENT                   = 46727,          //Add Tamable Serpent (26032)
+     SPELL_PET_SPIDER                    = 46728,          //Add Tamable Spider (26033)
+     SPELL_PET_SPOREBAT                  = 64336,          //Add Tameable Sporebat (34018)
+     SPELL_PET_TALLSTRIDER               = 64337,          //Add Tameable Tallstrider (34022)
+     SPELL_PET_TURTLE                    = 64339,          //Add Tamable Turtle (34029)
+     SPELL_PET_WASP                      = 64338,          //Add Tamable Wasp (34024)
+     SPELL_PET_WARP_STALKER              = 46716,          //Add Tamable Warp Stalker (26037)
+     SPELL_PET_WIND_SERPENT              = 46729,          //Add Tamable Wind Serpent (26038)
+     SPELL_PET_WOLF                      = 46730,          //Add Tamable Wolf (26016)
+ };
+ 
+ enum ExoticPetEntry {
+     SPELL_PET_CHIMAERA           = 63177,        //Add Tamable Chimaera (33504)
+     SPELL_PET_CORE_HOUND         = 63178,        //Add Tamable Core Hound (33502)
+     SPELL_PET_DEVILSAUR          = 63179,        //Add Tamable Devilsaur (33505)
+     SPELL_PET_RHINO              = 63180,        //Add Tamable Rhino (33506)
+     SPELL_PET_SILITHID           = 63183,        //Add Tamable Silithid (33508)
+     SPELL_PET_WORM               = 63185,        //Add Tamable Worm (33511)
+     SPELL_PET_SPIRIT_BEAST       = 63184,        //Add Tamable Spirit Beast (33510)
+ };
+ 
+ class beastmaster_creaturescript : public CreatureScript {
+ public:
+     beastmaster_creaturescript() : CreatureScript("Npc_Beastmaster") { }
+ 
+     void CreateNewPet(Player* player, Creature* npc, uint32 entry) {
+         //check for existing pets
+         if (player->GetPet()) {
+             ChatHandler(player->GetSession()).PSendSysMessage("You already have a pet.");
+             player->PlayerTalkClass->SendCloseGossip();
+             return;
+         }
+         //add the new pet
+         npc->CastSpell(player, entry);
+         if (Pet* newpet = player->GetPet())
+             //because feed your pet is boring
+             newpet->SetPower(POWER_HAPPINESS, 1048000);
+         //we're done!
+         player->PlayerTalkClass->SendCloseGossip();
+     }
+ 
+     void DisplayMainMenu(Player* player, Creature* npc) {
+         if (player->CanTameExoticPets()) 
+             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "What exotic pets do you have?", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_NEWPET_EXOTIC);
+         
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "I need a new pet.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_NEWPET);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Sell me some food for my pet.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_VENDOR);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to the stable.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_STABLEPET);
+         player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, npc->GetGUID());
+     }
+ 
+     void DisplayExoticPetMenu(Player* player, Creature* npc) {
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Main Menu.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_MAINMENU);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Chimaera.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_CHIMERA);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Core Hound.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_CORE_HOUND);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Devilsaur.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_DEVILSAUR);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Rhino.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_RHINO);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Silithid.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_SILITHID);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Worm.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_WORM);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Spirit Beast", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_SPIRIT_BEAST);
+         player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, npc->GetGUID());
+     }
+ 
+     void DisplayNormalPetMenu(Player* player, Creature* npc) {
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Main Menu.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_MAINMENU);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Bat.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_BAT);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Boar.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_BOAR);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Bear.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_BEAR);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Cat.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_CAT);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Carrion Bird.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_CARRION_BIRD);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Crocolisk.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_CROCOLISK);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Crab.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_CRAB);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Dragonhawk.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_DRAGONHAWK);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Gorilla.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_GORILLA);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Hound.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_HOUND);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Hyena.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_HYENA);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Moth.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_MOTH);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Nether Ray.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_NETHER_RAY);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Owl.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_OWL);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Raptor.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_RAPTOR);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Ravager.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_RAVAGER);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Scorpid.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_SCORPID);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Serpent.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_SERPENT);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Spider.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_SPIDER);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Sporebat.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_SPIDER);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Tallstrider.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_TALLSTRIDER);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Turtle.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_TURTLE);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Warp Stalker.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_WARP_STALKER);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Wasp.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_WASP);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Wind Serpent.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_WIND_SERPENT);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Wolf.",  GOSSIP_SENDER_MAIN, GOSSIP_OPTION_WOLF);
+         player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, npc->GetGUID());
+     }
+ 
+     bool OnGossipHello(Player* player, Creature* npc) {
+         if (player->getClass() != CLASS_HUNTER) {
+             player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, npc->GetGUID());
+             return true;
+         }
+ 
+         DisplayMainMenu(player, npc);
+         return true;
+     }
+ 
+     bool OnGossipSelect(Player* player, Creature* npc, uint32 sender, uint32 action) {
+         if (!player)
+             return false;
+ 
+         player->PlayerTalkClass->ClearMenus();
+         switch (action) {
+             //Display Main Menu
+             case GOSSIP_OPTION_MAINMENU:
+                 DisplayMainMenu(player, npc);
+                 break;
+             //Exotic Pets
+             case GOSSIP_OPTION_NEWPET_EXOTIC:
+                 DisplayExoticPetMenu(player, npc);
+                 break;
+             case GOSSIP_OPTION_CHIMERA:
+                 CreateNewPet(player, npc, SPELL_PET_CHIMAERA);
+                 break;
+             case GOSSIP_OPTION_CORE_HOUND:
+                 CreateNewPet(player, npc, SPELL_PET_CORE_HOUND);
+                 break;
+             case GOSSIP_OPTION_DEVILSAUR:
+                 CreateNewPet(player, npc, SPELL_PET_DEVILSAUR);
+                 break;
+             case GOSSIP_OPTION_RHINO:
+                 CreateNewPet(player, npc, SPELL_PET_RHINO);
+                 break;
+             case GOSSIP_OPTION_SILITHID:
+                 CreateNewPet(player, npc, SPELL_PET_SILITHID);
+                 break;
+             case GOSSIP_OPTION_WORM:
+                 CreateNewPet(player, npc, SPELL_PET_WORM);
+                 break;
+             case GOSSIP_OPTION_SPIRIT_BEAST:
+                 CreateNewPet(player, npc, SPELL_PET_SPIRIT_BEAST);
+                 break;
+             //Normal pets
+             case GOSSIP_OPTION_NEWPET:
+                 DisplayNormalPetMenu(player, npc);
+                 break;
+             case GOSSIP_OPTION_BAT:
+                 CreateNewPet(player, npc, SPELL_PET_BAT);
+                 break;
+             case GOSSIP_OPTION_BOAR:
+                 CreateNewPet(player, npc, SPELL_PET_BOAR);
+                 break;
+             case GOSSIP_OPTION_BEAR:
+                 CreateNewPet(player, npc, SPELL_PET_BEAR);
+                 break;
+             case GOSSIP_OPTION_CAT:
+                 CreateNewPet(player, npc, SPELL_PET_CAT);
+                 break;
+             case GOSSIP_OPTION_CARRION_BIRD:
+                 CreateNewPet(player, npc, SPELL_PET_CARRION_BIRD);
+                 break;
+             case GOSSIP_OPTION_CROCOLISK:
+                 CreateNewPet(player, npc, SPELL_PET_CARRION_BIRD);
+                 break;
+             case GOSSIP_OPTION_CRAB:
+                 CreateNewPet(player, npc, SPELL_PET_CRAB);
+                 break;
+             case GOSSIP_OPTION_DRAGONHAWK:
+                 CreateNewPet(player, npc, SPELL_PET_DRAGONHAWK);
+                 break;
+             case GOSSIP_OPTION_GORILLA:
+                 CreateNewPet(player, npc, SPELL_PET_GORILLA);
+                 break;
+             case GOSSIP_OPTION_HOUND:
+                 CreateNewPet(player, npc, SPELL_PET_HOUND);
+                 break;
+             case GOSSIP_OPTION_HYENA:
+                 CreateNewPet(player, npc, SPELL_PET_HYENA);
+                 break;
+             case GOSSIP_OPTION_MOTH:
+                 CreateNewPet(player, npc, SPELL_PET_MOTH);
+                 break;
+             case GOSSIP_OPTION_NETHER_RAY:
+                 CreateNewPet(player, npc, SPELL_PET_NETHER_RAY);
+                 break;
+             case GOSSIP_OPTION_OWL:
+                 CreateNewPet(player, npc, SPELL_PET_BIRD_OF_PREY);
+                 break;
+             case GOSSIP_OPTION_RAPTOR:
+                 CreateNewPet(player, npc, SPELL_PET_RAPTOR);
+                 break;
+             case GOSSIP_OPTION_RAVAGER:
+                 CreateNewPet(player, npc, SPELL_PET_RAVAGER);
+                 break;
+             case GOSSIP_OPTION_SCORPID:
+                 CreateNewPet(player, npc, SPELL_PET_SCORPID);
+                 break;
+             case GOSSIP_OPTION_SERPENT:
+                 CreateNewPet(player, npc, SPELL_PET_SERPENT);
+                 break;
+             case GOSSIP_OPTION_SPIDER:
+                 CreateNewPet(player, npc, SPELL_PET_SPIDER);
+                 break;
+             case GOSSIP_OPTION_TURTLE:
+                 CreateNewPet(player, npc, SPELL_PET_TURTLE);
+                 break;
+             case GOSSIP_OPTION_WASP:
+                 CreateNewPet(player, npc, SPELL_PET_WASP);
+                 break;
+             case GOSSIP_OPTION_WIND_SERPENT:
+                 CreateNewPet(player, npc, SPELL_PET_WIND_SERPENT);
+                 break;
+             case GOSSIP_OPTION_WOLF:
+                 CreateNewPet(player, npc, SPELL_PET_WOLF);
+                 break;
+             case GOSSIP_OPTION_SPOREBAT:
+                 CreateNewPet(player, npc, SPELL_PET_SPOREBAT);
+                 break;
+             case GOSSIP_OPTION_TALLSTRIDER:
+                 CreateNewPet(player, npc, SPELL_PET_TALLSTRIDER);
+                 break;
+             //Stable
+             case GOSSIP_OPTION_STABLEPET:
+                 player->GetSession()->SendStablePet(npc->GetGUID());
+                 break;
+             //Food vendor
+             case GOSSIP_OPTION_VENDOR:
+                 player->GetSession()->SendListInventory(npc->GetGUID());
+                 break;
+         }
+         return true;
+     }
+ };
+ 
+ void AddSC_beastmaster_npc() {
+     new beastmaster_creaturescript;
+ }
