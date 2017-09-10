@@ -42,7 +42,7 @@ void AddSC_Player_Boa();
 void AddSC_Boss_Announcer();
 void AddSC_accountachievement();
 void AddSC_custom_CongratsOnLevel();
-void AddSC_Beastmaster_NPC();
+void AddSC_Npc_Beastmaster();
 
 void AddCustomScripts()
 {
@@ -70,5 +70,5 @@ void AddCustomScripts()
     AddSC_Boss_Announcer();
     AddSC_accountachievement();
     AddSC_custom_CongratsOnLevel();
-    AddSC_Beastmaster_NPC();
+    AddSC_Npc_Beastmaster();
 }
