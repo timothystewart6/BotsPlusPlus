@@ -81,7 +81,7 @@ public:
                 trinkett = 42992;
                 weapon = 42948;
                 shoulders2 = 42951;
-                chest2 = 48683;
+                chest2 = 48691;
                 weapon2 = 42947;
                 enchantWeapon = 38873;
                 enchantWeapon2 = 38877;                
