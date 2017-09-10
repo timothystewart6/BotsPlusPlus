@@ -45,21 +45,15 @@ jobs:
             docker build -f Dockerfile -t $REPO:$SHORT_GIT_HASH .
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
-            # push if master
-            if ["$CIRCLE_BRANCH" == "master"]; then
-              docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-              docker push $REPO
-            fi
+            docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+            docker push $REPO
             # worldserver
-            cd ../worldserver;
+            cd ../worldserver
             export REPO=$DOCKER_USERNAME/$DOCKER_BOTSPLUSPLUS_WORLDSERVER
             export TAG=latest
             echo $REPO:$TAG:$SHORT_GIT_HASH
             docker build -f Dockerfile -t $REPO:$SHORT_GIT_HASH .
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
-            # push if master
-            if ["$CIRCLE_BRANCH" == "master"]; then
-              docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-              docker push $REPO
-            fi
+            docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+            docker push $REPO
