@@ -31,6 +31,7 @@ With [Lord Psyan Patches](https://bitbucket.org/technotim/lordpsyan-patches)
 * Account Mounts
 * Login BoA (with enchants)
 * Start Guild
+* Beastmaster
 
 ## SQL Scripts
 
