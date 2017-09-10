@@ -2,10 +2,10 @@
 #include "Pet.h"
 #include "Player.h"
 
-class Beastmaster_NPC : public CreatureScript
+class Npc_Beastmaster : public CreatureScript
 {
 public:
-    Beastmaster_NPC() : CreatureScript("Beastmaster_NPC") { }
+    Npc_Beastmaster() : CreatureScript("Npc_Beastmaster") { }
 
     void CreatePet(Player *player, Creature * m_creature, uint32 entry) 
     {
@@ -240,7 +240,7 @@ public:
     }
 };
 
-void AddSC_Beastmaster_NPC()
+void ADDSC_Npc_Beastmaster()
 {
-    new Beastmaster_NPC;
+    new Npc_Beastmaster;
 }
