@@ -43,9 +43,9 @@ jobs:
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
             # push if master
-            # if ["$CIRCLE_BRANCH" == "master"]; then
+            if ["$CIRCLE_BRANCH" == "master"]; then
               docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-              # docker push $REPO
+              docker push $REPO
             fi
             # worldserver
             cd ../worldserver;
@@ -56,7 +56,7 @@ jobs:
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
             # push if master
-            # if ["$CIRCLE_BRANCH" == "master"]; then
+            if ["$CIRCLE_BRANCH" == "master"]; then
               docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-              # docker push $REPO
+              docker push $REPO
             fi
