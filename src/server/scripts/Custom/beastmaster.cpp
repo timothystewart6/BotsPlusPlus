@@ -100,7 +100,7 @@
  
  class beastmaster_creaturescript : public CreatureScript {
  public:
-    
+
      beastmaster_creaturescript() : CreatureScript("beastmaster_creaturescript") { }
  
      void CreateNewPet(Player* player, Creature* npc, uint32 entry) {
@@ -125,7 +125,7 @@
          
          player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "I need a new pet.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_NEWPET);
          player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Sell me some food for my pet.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_VENDOR);
-         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to the stable.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_STABLEPET);
+         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Let me see the stable.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_STABLEPET);
          player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, npc->GetGUID());
      }
  
