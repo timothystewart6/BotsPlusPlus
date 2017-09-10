@@ -1,383 +1,246 @@
-//Modified by Marcus rewritten by LordPsyan
-//original script created by ??
-#include "Config.h"
+#include "ScriptPCH.h"
 #include "Pet.h"
-
-#define GOSSIP_SENDER_MAIN      1000
-#define MSG_TYPE                100004
-#define MSG_PET                 100005
-#define MAIN_MENU               "<= [Main Menu]"
+#include "Player.h"
 
 class Npc_Beastmaster : public CreatureScript
 {
 public:
-        Npc_Beastmaster() : CreatureScript("Npc_Beastmaster") { }
+    Npc_Beastmaster() : CreatureScript("Npc_Beastmaster") { }
 
-void CreatePet(Player *player, Creature * m_creature, uint32 entry) {
+    void CreatePet(Player *player, Creature * m_creature, uint32 entry) 
+    {
 
-    if(sConfigMgr->GetBoolDefault("BeastMaster.OnlyHunter", false)) // Checks to see if Only Hunters can have pets.
-     {
-        if(player->getClass() != CLASS_HUNTER) {
+        if (player->getClass() != CLASS_HUNTER)
+        {
             m_creature->Whisper("You are not a Hunter!", LANG_UNIVERSAL, player);
+            player->PlayerTalkClass->SendCloseGossip();
             return;
         }
-     }
 
-    if(player->GetPet()) {
-        m_creature->Whisper("First you must abandon your Pet!", LANG_UNIVERSAL, player);
-        return;
-    }
+        if (player->GetPet())
+        {
+            player->PlayerTalkClass->SendCloseGossip();
+            return;
+        }
 
-    Creature *creatureTarget = m_creature->SummonCreature(entry, player->GetPositionX(), player->GetPositionY()+2, player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 500);
-    if(!creatureTarget) return;
+        Creature *creatureTarget = m_creature->SummonCreature(entry, player->GetPositionX(), player->GetPositionY() + 2, player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 500);
+        if (!creatureTarget) return;
 
-    Pet* pet = player->CreateTamedPetFrom(creatureTarget, 0);
+        Pet* pet = player->CreateTamedPetFrom(creatureTarget, 0);
 
-    if(!pet) return;
+        if (!pet)
+            return;
 
         // kill original creature
-    creatureTarget->setDeathState(JUST_DIED);
-    creatureTarget->RemoveCorpse();
-    creatureTarget->SetHealth(0);                       // just for nice GM-mode view
+        creatureTarget->setDeathState(JUST_DIED);
+        creatureTarget->RemoveCorpse();
+        creatureTarget->SetHealth(0);                       // just for nice GM-mode view
 
-    pet->SetPower(POWER_HAPPINESS, 1048000);
+        pet->SetPower(POWER_HAPPINESS, 1048000);
 
-    // prepare visual effect for levelup
-    pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel() - 1);
-    pet->GetMap()->AddToMap((Creature*)pet);
-        // visual effect for levelup
-    pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel());
+        pet->SetUInt64Value(UNIT_FIELD_CREATEDBY, player->GetGUID());
+        pet->SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, player->getFaction());
 
-    if(!pet->InitStatsForLevel(player->getLevel()))
-        TC_LOG_ERROR("scripts", "Pet Create fail: no init stats for entry %u", entry);
-        pet->UpdateAllStats();
+        // prepare visual effect for levelup
+        pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel() - 1);
+        pet->GetMap()->AddToMap(pet->ToCreature());
+        // visual effect for levelup for lulz
+        pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel());
 
-    // caster have pet now
+        pet->GetCharmInfo()->SetPetNumber(sObjectMgr->GeneratePetNumber(), true);
+        if (!pet->InitStatsForLevel(player->getLevel()))
+            pet->UpdateAllStats();
+
+        // caster has pet now
         player->SetMinion(pet, true);
 
         pet->SavePetToDB(PET_SAVE_AS_CURRENT);
         pet->InitTalentForLevel();
         player->PetSpellInitialize();
-    //end
-        CloseGossipMenuFor(player);
-        m_creature->Whisper("Pet added. You might want to feed it and name it somehow.", LANG_UNIVERSAL, player);
-        return;
+
+        //inform that has da pet
+        player->PlayerTalkClass->SendCloseGossip();
     }
 
-bool OnGossipHello(Player* player, Creature* m_creature)
-{
-    bool EnableNormalPet = sConfigMgr->GetBoolDefault("BeastMaster.EnableNormalPet", true);
-    bool EnableExoticPet = sConfigMgr->GetBoolDefault("BeastMaster.EnableExoticPet", true);
-
-    // Main Menu
-
-    // Check config if "Normal Pet " is enabled or not
-    if(EnableNormalPet)
-        AddGossipItemFor(player, 7, "Normal Pets ->"              , GOSSIP_SENDER_MAIN, 1000);
-    // Check if player can have an exotic pet, and check config if "Exotic" is enabled or not
-    if(player->CanTameExoticPets() && EnableExoticPet)
-        AddGossipItemFor(player, 7, "Exotic Pets ->"              , GOSSIP_SENDER_MAIN, 2000);
-    // Now to add the spells, vendor, and stable stuffs
-    AddGossipItemFor(player, 4, "Teach Me Pet spells ->"      , GOSSIP_SENDER_MAIN, 3000);
-    AddGossipItemFor(player, 2, "Take me to the Stable.", GOSSIP_SENDER_MAIN, 6006);
-    AddGossipItemFor(player, 6, "Sell me some Food for my Pet.", GOSSIP_SENDER_MAIN, 6007);
-    SendGossipMenuFor(player, MSG_TYPE, m_creature->GetGUID());
-return true;
-}
-
-bool showNormalPet(Player *player, Creature *m_creature, uint32 showFromId = 0)
-{
- QueryResult result;
- result = WorldDatabase.PQuery("SELECT `entry`, `name` FROM `beastmaster` WHERE `cat_number` = 0 ORDER BY `entry` ASC");
-
- if (result)
- {
- uint32 entryNum = 0;
- std::string petName = "";
- uint8 tokenOrGold = 0;
- uint32 price = 0;
- uint32 nToken = 0;
-
-  do
- {
- Field *fields = result->Fetch();
- entryNum = fields[0].GetInt32();
- petName = fields[1].GetString();
-
-    AddGossipItemFor(player, 9, petName, GOSSIP_SENDER_MAIN, entryNum);
-}
- while (result->NextRow());
-
-    SendGossipMenuFor(player, MSG_PET, m_creature->GetGUID());
- return true;
- }
- else
- {
- if (showFromId = 0)
- {
- //you are too poor
- m_creature->Whisper("You don't have enough money.", LANG_UNIVERSAL, player);
- CloseGossipMenuFor(player);
- }
- else
- {
-
- //show Spells from beginning
- showNormalPet(player, m_creature, 0);
- }
- }
-
- return false;
-}
-
-bool showExoticPet(Player *player, Creature *m_creature, uint32 showFromId = 0)
-{
- QueryResult result;
- result = WorldDatabase.PQuery("SELECT `entry`, `name` FROM `beastmaster` WHERE `cat_number` = 1 ORDER BY `entry` ASC");
-
- if (result)
- {
- uint32 entryNum = 0;
- std::string petName = "";
-  do
- {
- Field *fields = result->Fetch();
- entryNum = fields[0].GetInt32();
- petName = fields[1].GetString();
-
-    AddGossipItemFor(player, 9, petName, GOSSIP_SENDER_MAIN, entryNum);
-}
- while (result->NextRow());
-
-    SendGossipMenuFor(player, MSG_PET, m_creature->GetGUID());
- return true;
- }
- else
- {
- if (showFromId = 0)
- {
- //you are too poor
- //m_creature->Whisper("You don't have enough money.", LANG_UNIVERSAL, player);
- //CloseGossipMenuFor(player);
- }
- else
- {
-
- //show Spells from beginning
- showExoticPet(player, m_creature, 0);
- }
- }
-
- return false;
-}
-
-bool showPetSpells(Player *player, Creature *m_creature, uint32 showFromId = 0)
-{
- QueryResult result;
- result = WorldDatabase.PQuery("SELECT `entry`, `name` FROM `beastmaster` WHERE `cat_number` = 2 ORDER BY `entry` ASC");
-
- if (result)
- {
- uint32 entryNum = 0;
- std::string petName = "";
- uint8 tokenOrGold = 0;
- uint32 price = 0;
- uint32 nToken = 0;
-
-  do
- {
- Field *fields = result->Fetch();
- entryNum = fields[0].GetInt32();
- petName = fields[1].GetString();
-
-    AddGossipItemFor(player, 9, petName, GOSSIP_SENDER_MAIN, entryNum);
-}
- while (result->NextRow());
-
-    SendGossipMenuFor(player, MSG_PET, m_creature->GetGUID());
- return true;
- }
- else
- {
- if (showFromId = 0)
- {
- //you are too poor
- m_creature->Whisper("You don't have enough money.", LANG_UNIVERSAL, player);
- CloseGossipMenuFor(player);
- }
- else
- {
-
- //show Spells from beginning
- showPetSpells(player, m_creature, 0);
- }
- }
-
- return false;
-}
-
-void SendDefaultMenu(Player* player, Creature* m_creature, uint32 uiAction)
-{
-
-// Not allow in combat
-if (player->IsInCombat())
-{
-    CloseGossipMenuFor(player);
-    m_creature->Say("You are in combat!", LANG_UNIVERSAL);
-    return;
-}
-
-    bool EnableNormalPet = sConfigMgr->GetBoolDefault("BeastMaster.EnableNormalPet", true);
-    bool EnableExoticPet = sConfigMgr->GetBoolDefault("BeastMaster.EnableExoticPet", true);
-
-  // send name as gossip item
-        QueryResult result;
-        uint32 spellId = 0;
-        uint32 catNumber = 0;
-        uint32 cost = 0;
-        std::string spellName = "";
-        uint32 token = 0;
-        bool tokenOrGold = true;
-
-        result = WorldDatabase.PQuery("SELECT * FROM `beastmaster` WHERE `entry` = %u LIMIT 1", uiAction);
-
-if (result)
-{
-    do {
-        Field *fields = result->Fetch();
-        catNumber = fields[1].GetInt32();
-        tokenOrGold = fields[2].GetBool();
-        cost = fields[3].GetInt32();
-        token = fields[4].GetInt32();
-        spellName = fields[5].GetString();
-        spellId = fields[6].GetInt32();
-
-        if (tokenOrGold)
+    bool OnGossipHello(Player * player, Creature * m_creature)
+    {
+        if (player->getClass() != CLASS_HUNTER)
         {
-            if (!player->HasItemCount(token, cost))
-                {
-                    m_creature->Whisper("You ain't gots no darn chips.", LANG_UNIVERSAL, player);
-                    CloseGossipMenuFor(player);
-                    return;
-                }
-            else if (uiAction != 1000 && uiAction != 2000 && uiAction != 3000 && catNumber != 2)
-            {
-    CloseGossipMenuFor(player);
-    CreatePet(player, m_creature, spellId);
-    player->DestroyItemCount(token, cost, true);
-            }
-            else if (catNumber = 2)
-            {
-            if (player->HasSpell(spellId))
-            {
-                m_creature->Whisper("You already know this spell.", LANG_UNIVERSAL, player);
-                CloseGossipMenuFor(player);
-                return;
-            } else {
-    CloseGossipMenuFor(player);
-    player->LearnSpell(spellId, false);
-    player->DestroyItemCount(token, cost, true);
-            }
+            m_creature->Whisper("You are not a Hunter!", LANG_UNIVERSAL, player);
+            player->PlayerTalkClass->SendCloseGossip();
+            return true;
         }
-
-        } else {
-            if (player->GetMoney() < cost)
-            {
-                m_creature->Whisper("You dont have enough money!", LANG_UNIVERSAL, player);
-                CloseGossipMenuFor(player);
-                return;
-            }
-        else if (uiAction != 1000 && uiAction != 2000 && uiAction != 3000 && catNumber != 2)
+        player->ADD_GOSSIP_ITEM(4, "New Normal Pet.", GOSSIP_SENDER_MAIN, 30);
+        if (player->CanTameExoticPets())
         {
-    CloseGossipMenuFor(player);
-    CreatePet(player, m_creature, spellId);
-    player->ModifyMoney(-int(cost));
+            player->ADD_GOSSIP_ITEM(4, "New Exotic Pet.", GOSSIP_SENDER_MAIN, 50);
         }
-        else if (catNumber = 2)
-        {
-            if (player->HasSpell(spellId))
-            {
-                m_creature->Whisper("You already know this spell.", LANG_UNIVERSAL, player);
-                CloseGossipMenuFor(player);
-                return;
-            } else {
-    CloseGossipMenuFor(player);
-    player->LearnSpell(spellId, false);
-    player->ModifyMoney(-int(cost));
-            }
-        }
+        player->ADD_GOSSIP_ITEM(4, "Stable your pet.", GOSSIP_SENDER_MAIN, GOSSIP_OPTION_STABLEPET);
+        player->ADD_GOSSIP_ITEM(4, "Nevermind!", GOSSIP_SENDER_MAIN, 150);
+        player->SEND_GOSSIP_MENU(60022, m_creature->GetGUID());
+        return true;
     }
-} while (result->NextRow());
-} else {
-//AddGossipItemFor(player, 7, MAIN_MENU, GOSSIP_SENDER_MAIN, 5005);
-}
 
- switch(uiAction)
-{
+    bool OnGossipSelect(Player * player, Creature * m_creature, uint32 sender, uint32 action)
+    {
+        player->PlayerTalkClass->ClearMenus();
 
-case 1000: //Normal Pet
-        showNormalPet(player, m_creature, 0);
-        AddGossipItemFor(player, 7, "<- Main Menu"                            , GOSSIP_SENDER_MAIN, 5005);
+        switch (action)
+        {
+        case 100:
+            OnGossipHello(player, m_creature);
+            break;
 
-    SendGossipMenuFor(player, MSG_PET, m_creature->GetGUID());
-break;
+        case 150:
+            player->CLOSE_GOSSIP_MENU();
+            break;
 
-case 2000: //Exotic Pet
-        showExoticPet(player, m_creature, 0);
-        AddGossipItemFor(player, 7, "<- Main Menu"                            , GOSSIP_SENDER_MAIN, 5005);
+        case 30:
+            player->ADD_GOSSIP_ITEM(2, "Main Menu!", GOSSIP_SENDER_MAIN, 100);
+            player->ADD_GOSSIP_ITEM(2, "Next Page!", GOSSIP_SENDER_MAIN, 31);
+            player->ADD_GOSSIP_ITEM(4, "Bat.", GOSSIP_SENDER_MAIN, 18);
+            player->ADD_GOSSIP_ITEM(4, "Bear.", GOSSIP_SENDER_MAIN, 1);
+            player->ADD_GOSSIP_ITEM(4, "Boar.", GOSSIP_SENDER_MAIN, 2);
+            player->ADD_GOSSIP_ITEM(4, "Cat.", GOSSIP_SENDER_MAIN, 4);
+            player->ADD_GOSSIP_ITEM(4, "Carrion Bird.", GOSSIP_SENDER_MAIN, 5);
+            player->ADD_GOSSIP_ITEM(4, "Crab.", GOSSIP_SENDER_MAIN, 6);
+            player->ADD_GOSSIP_ITEM(4, "Crocolisk.", GOSSIP_SENDER_MAIN, 7);
+            player->ADD_GOSSIP_ITEM(4, "Dragonhawk.", GOSSIP_SENDER_MAIN, 17);
+            player->ADD_GOSSIP_ITEM(4, "Gorilla.", GOSSIP_SENDER_MAIN, 8);
+            player->ADD_GOSSIP_ITEM(4, "Hound.", GOSSIP_SENDER_MAIN, 9);
+            player->ADD_GOSSIP_ITEM(4, "Hyena.", GOSSIP_SENDER_MAIN, 10);
+            player->ADD_GOSSIP_ITEM(4, "Moth.", GOSSIP_SENDER_MAIN, 11);
+            player->ADD_GOSSIP_ITEM(4, "Owl.", GOSSIP_SENDER_MAIN, 12);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+            break;
 
-    SendGossipMenuFor(player, MSG_PET, m_creature->GetGUID());
-break;
+        case 31:
+            player->ADD_GOSSIP_ITEM(2, "Main Menu!", GOSSIP_SENDER_MAIN, 100);
+            player->ADD_GOSSIP_ITEM(2, "Previous Page!", GOSSIP_SENDER_MAIN, 30);
+            player->ADD_GOSSIP_ITEM(4, "Raptor.", GOSSIP_SENDER_MAIN, 20);
+            player->ADD_GOSSIP_ITEM(4, "Ravager.", GOSSIP_SENDER_MAIN, 19);
+            player->ADD_GOSSIP_ITEM(4, "Strider.", GOSSIP_SENDER_MAIN, 13);
+            player->ADD_GOSSIP_ITEM(4, "Scorpid.", GOSSIP_SENDER_MAIN, 414);
+            player->ADD_GOSSIP_ITEM(4, "Spider.", GOSSIP_SENDER_MAIN, 16);
+            player->ADD_GOSSIP_ITEM(4, "Serpent.", GOSSIP_SENDER_MAIN, 21);
+            player->ADD_GOSSIP_ITEM(4, "Turtle.", GOSSIP_SENDER_MAIN, 15);
+            player->ADD_GOSSIP_ITEM(4, "Wasp.", GOSSIP_SENDER_MAIN, 93);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+            break;
 
-case 3000: //Pet Spells
-        showPetSpells(player, m_creature, 0);
-        AddGossipItemFor(player, 7, "<- Main Menu"                            , GOSSIP_SENDER_MAIN, 5005);
+        case 50:
+            player->ADD_GOSSIP_ITEM(2, "Main Menu!", GOSSIP_SENDER_MAIN, 100);
+            player->ADD_GOSSIP_ITEM(4, "Chimaera.", GOSSIP_SENDER_MAIN, 51);
+            player->ADD_GOSSIP_ITEM(4, "Core Hound.", GOSSIP_SENDER_MAIN, 52);
+            player->ADD_GOSSIP_ITEM(4, "Devilsaur.", GOSSIP_SENDER_MAIN, 53);
+            player->ADD_GOSSIP_ITEM(4, "Rhino.", GOSSIP_SENDER_MAIN, 54);
+            player->ADD_GOSSIP_ITEM(4, "Silithid.", GOSSIP_SENDER_MAIN, 55);
+            player->ADD_GOSSIP_ITEM(4, "Worm.", GOSSIP_SENDER_MAIN, 56);
+            player->ADD_GOSSIP_ITEM(4, "Loque'nahak.", GOSSIP_SENDER_MAIN, 57);
+            player->ADD_GOSSIP_ITEM(4, "Skoll.", GOSSIP_SENDER_MAIN, 58);
+            player->ADD_GOSSIP_ITEM(4, "Gondria.", GOSSIP_SENDER_MAIN, 59);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+            break;
 
-    SendGossipMenuFor(player, MSG_PET, m_creature->GetGUID());
-break;
-
-case 5005: //Back To Main Menu
-    // Main Menu
-    // Check config if "Normal Pet " is enabled or not
-    if(EnableNormalPet)
-        AddGossipItemFor(player, 7, "Normal Pets ->"              , GOSSIP_SENDER_MAIN, 1000);
-    // Check if player can have an exotic pet, and check config if "Exotic" is enabled or not
-    if(player->CanTameExoticPets() && EnableExoticPet)
-        AddGossipItemFor(player, 7, "Exotic Pets ->"              , GOSSIP_SENDER_MAIN, 2000);
-    // Now to add the spells, vendor, and stable stuffs
-    AddGossipItemFor(player, 4, "Teach Me Pet spells ->"      , GOSSIP_SENDER_MAIN, 3000);
-    AddGossipItemFor(player, 2, "Take me to the Stable.", GOSSIP_SENDER_MAIN, 6006);
-    AddGossipItemFor(player, 6, "Sell me some Food for my Pet.", GOSSIP_SENDER_MAIN, 6007);
-    SendGossipMenuFor(player, MSG_TYPE, m_creature->GetGUID());
-break;
-
-case 6006:
-    player->GetSession()->SendStablePet(m_creature->GetGUID());
-    CloseGossipMenuFor(player);
-    break;
-
-case 6007:
-    player->GetSession()->SendListInventory(m_creature->GetGUID());
-    CloseGossipMenuFor(player);
-    break;
-
- CloseGossipMenuFor(player);
- }
-
-} //end of function
-
-bool OnGossipSelect(Player* player, Creature* m_creature, uint32 uiSender, uint32 uiAction)
-{
-    // Main menu
-    player->PlayerTalkClass->ClearMenus();
-    if (uiSender == GOSSIP_SENDER_MAIN)
-    SendDefaultMenu(player, m_creature, uiAction);
-
-return true;
-}
+        case GOSSIP_OPTION_STABLEPET:
+            player->GetSession()->SendStablePet(m_creature->GetGUID());
+            break;
+        case 51: //chimera
+            CreatePet(player, m_creature, 21879);
+            break;
+        case 52: //core hound
+            CreatePet(player, m_creature, 21108);
+            break;
+        case 53: //Devilsaur
+            CreatePet(player, m_creature, 20931);
+            break;
+        case 54: //rhino
+            CreatePet(player, m_creature, 30445);
+            break;
+        case 55: //silithid
+            CreatePet(player, m_creature, 5460);
+            break;
+        case 56: //Worm
+            CreatePet(player, m_creature, 30148);
+            break;
+        case 57: //Loque'nahak
+            CreatePet(player, m_creature, 32517);
+            break;
+        case 58: //Skoll
+            CreatePet(player, m_creature, 35189);
+            break;
+        case 59: //Gondria
+            CreatePet(player, m_creature, 33776);
+            break;
+        case 16: //Spider
+            CreatePet(player, m_creature, 2349);
+            break;
+        case 17: //Dragonhawk
+            CreatePet(player, m_creature, 27946);
+            break;
+        case 18: //Bat
+            CreatePet(player, m_creature, 28233);
+            break;
+        case 19: //Ravager
+            CreatePet(player, m_creature, 17199);
+            break;
+        case 20: //Raptor
+            CreatePet(player, m_creature, 14821);
+            break;
+        case 21: //Serpent
+            CreatePet(player, m_creature, 28358);
+            break;
+        case 1: //bear
+            CreatePet(player, m_creature, 29319);
+            break;
+        case 2: //Boar
+            CreatePet(player, m_creature, 29996);
+            break;
+        case 93: //Bug
+            CreatePet(player, m_creature, 28085);
+            break;
+        case 4: //cat
+            CreatePet(player, m_creature, 28097);
+            break;
+        case 5: //carrion
+            CreatePet(player, m_creature, 26838);
+            break;
+        case 6: //crab
+            CreatePet(player, m_creature, 24478);
+            break;
+        case 7: //crocolisk
+            CreatePet(player, m_creature, 1417);
+            break;
+        case 8: //gorila
+            CreatePet(player, m_creature, 28213);
+            break;
+        case 9: //hound
+            CreatePet(player, m_creature, 29452);
+            break;
+        case 10: //hynea
+            CreatePet(player, m_creature, 13036);
+            break;
+        case 11: //Moth
+            CreatePet(player, m_creature, 27421);
+            break;
+        case 12: //owl
+            CreatePet(player, m_creature, 23136);
+            break;
+        case 13: //strider
+            CreatePet(player, m_creature, 22807);
+            break;
+        case 414: //scorpid
+            CreatePet(player, m_creature, 9698);
+            break;
+        case 15: //turtle
+            CreatePet(player, m_creature, 25482);
+            break;
+        }
+        return true;
+    }
 };
 
-void AddSC_Npc_Beastmaster()
+void ADDSC_Npc_Beastmaster()
 {
-    new Npc_Beastmaster();
+    new Npc_Beastmaster;
 }
