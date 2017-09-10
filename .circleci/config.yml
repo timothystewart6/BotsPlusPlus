@@ -2,14 +2,14 @@ version: 2
 jobs:
   build:
     machine: true
-    general:
-      branches:
-        only:
-        - master # list of branches to build
     steps:
       - checkout
       # build and push Docker image
       - run:
+          general:
+          branches:
+            only:
+            - master # only build/deploy from master
           name: Build trinityCore binaries
           command: |
             echo Building BotsPlusPlus with $CIRCLE_BRANCH branch
@@ -27,6 +27,10 @@ jobs:
       - store_artifacts:
           path: artifacts/
       - run:
+        general:
+          branches:
+            only:
+              - master # only build/deploy from master
           name: Build & Push Docker Image
           command: |
             # prep
