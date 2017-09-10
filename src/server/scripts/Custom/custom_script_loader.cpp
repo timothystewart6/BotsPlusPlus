@@ -16,15 +16,6 @@
  */
 
 // This is where scripts' loading functions should be declared:
-void AddSC_gon_playerscripts();
-void AddSC_accontmounts();
-void AddSC_announce_login();
-void AddSC_LearnSpellsOnLevelUp();
-void AddSC_FireWorksOnLevelUp();
-void AddSC_item_enchant_visuals();
-void AddSC_Player_Boa();
-void AddSC_Boss_Announcer();
-void AddSC_accountachievement();
 
 // Bots
 void AddSC_death_knight_bot();
@@ -39,21 +30,23 @@ void AddSC_warlock_bot();
 void AddSC_warrior_bot();
 void AddSC_blademaster_bot();
 void AddSC_script_bot_commands();
+
+// Custom
+void AddSC_gon_playerscripts();
+void AddSC_accontmounts();
+void AddSC_announce_login();
+void AddSC_LearnSpellsOnLevelUp();
+void AddSC_FireWorksOnLevelUp();
+void AddSC_item_enchant_visuals();
+void AddSC_Player_Boa();
+void AddSC_Boss_Announcer();
+void AddSC_accountachievement();
 void AddSC_custom_CongratsOnLevel();
+void AddSC_beastmaster_npc();
 
 void AddCustomScripts()
 {
-    AddSC_gon_playerscripts();
-    AddSC_accontmounts();
-    AddSC_announce_login();
-    AddSC_LearnSpellsOnLevelUp();
-    AddSC_FireWorksOnLevelUp();
-    AddSC_item_enchant_visuals();    
-    AddSC_Player_Boa();
-    AddSC_Boss_Announcer();
-    AddSC_accountachievement();
-    AddSC_custom_CongratsOnLevel();  
-    //Bots
+    // Bots
     AddSC_death_knight_bot();
     AddSC_druid_bot();
     AddSC_hunter_bot();
@@ -66,4 +59,16 @@ void AddCustomScripts()
     AddSC_warrior_bot();
     AddSC_blademaster_bot();
     AddSC_script_bot_commands();
+    // Custom
+    AddSC_gon_playerscripts();
+    AddSC_accontmounts();
+    AddSC_announce_login();
+    AddSC_LearnSpellsOnLevelUp();
+    AddSC_FireWorksOnLevelUp();
+    AddSC_item_enchant_visuals();    
+    AddSC_Player_Boa();
+    AddSC_Boss_Announcer();
+    AddSC_accountachievement();
+    AddSC_custom_CongratsOnLevel();
+    AddSC_beastmaster_npc();
 }
