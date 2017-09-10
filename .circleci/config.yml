@@ -1,11 +1,11 @@
 version: 2
 jobs:
-general:
-branches:
-  only:
-  - master
   build:
     machine: true
+    general:
+      branches:
+        only:
+        - master
     steps:
       - checkout
       # build and push Docker image
