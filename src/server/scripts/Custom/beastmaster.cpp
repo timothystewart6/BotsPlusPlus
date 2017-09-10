@@ -100,7 +100,8 @@
  
  class beastmaster_creaturescript : public CreatureScript {
  public:
-     beastmaster_creaturescript() : CreatureScript("Npc_Beastmaster") { }
+    
+     beastmaster_creaturescript() : CreatureScript("beastmaster_creaturescript") { }
  
      void CreateNewPet(Player* player, Creature* npc, uint32 entry) {
          //check for existing pets
