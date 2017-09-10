@@ -25,6 +25,7 @@ void AddSC_item_enchant_visuals();
 void AddSC_Player_Boa();
 void AddSC_Boss_Announcer();
 void AddSC_accountachievement();
+void AddSC_Npc_Beastmaster();
 
 // Bots
 void AddSC_death_knight_bot();
@@ -52,7 +53,8 @@ void AddCustomScripts()
     AddSC_Player_Boa();
     AddSC_Boss_Announcer();
     AddSC_accountachievement();
-    AddSC_custom_CongratsOnLevel();  
+    AddSC_custom_CongratsOnLevel();
+    AddSC_Npc_Beastmaster();
     //Bots
     AddSC_death_knight_bot();
     AddSC_druid_bot();
