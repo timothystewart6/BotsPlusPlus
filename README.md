@@ -6,10 +6,6 @@
 
 Trinity Core 3.3.5a with NPC Bots and Extras. Great for learning, single player, or playing with friends.
 
-## New NPC Bots Source by thanosdk
-
-For more information please see: [thesawolf New NPC Bots Readme](https://github.com/thesawolf/TrinityCore/blob/TrinityCoreLegacy/README_Bots.md)
-
 ## Trinity Core
 
 This source is based on [TrinityCore Revision 330e5b0](https://github.com/TrinityCore/TrinityCore/commit/330e5b0ebcc6753a355afc3824121c5eba1bf5bc)
@@ -20,6 +16,10 @@ This source is based on [TrinityCore Revision 330e5b0](https://github.com/Trinit
 * AH Bot
 
 With [NewNPC Bots f7936eb9](https://github.com/martin26/NewNPCBots/commit/f7936eb9ea332c45146c59810f7d0d6bd3313308)
+
+## New NPC Bots Source by thanosdk
+
+For more information on how to use NPC Bots please see: [thesawolf New NPC Bots Readme](https://github.com/thesawolf/TrinityCore/blob/TrinityCoreLegacy/README_Bots.md)
 
 ## Lord Psyan Patches
 
@@ -60,6 +60,7 @@ Included in `sql/custom`
 * Boss Announcer [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Account Achievements [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Congrats on Level [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Arcane Reforger [rochet2](http://rochet2.github.io/Reforging.html)
 * Lord Psyan patches mentioned above
 
 ## Docker
