@@ -43,6 +43,7 @@ void AddSC_Boss_Announcer();
 void AddSC_accountachievement();
 void AddSC_custom_CongratsOnLevel();
 void AddSC_beastmaster_npc();
+void AddSC_REFORGER_NPC();
 
 void AddCustomScripts()
 {
@@ -71,4 +72,5 @@ void AddCustomScripts()
     AddSC_accountachievement();
     AddSC_custom_CongratsOnLevel();
     AddSC_beastmaster_npc();
+    AddSC_REFORGER_NPC();
 }
