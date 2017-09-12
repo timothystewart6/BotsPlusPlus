@@ -1,12 +1,3 @@
-/************************************
-*        Made by ??                 *
-*                                   *
-*   sLog error fixed by Eatos       *
-*   Release by Ghostcrawler336      *
-*                                   *
-*************************************
-*/
-
 enum Enchants
 {
     ENCHANT_WEP_BERSERKING              = 3789,
@@ -142,28 +133,14 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
     if (!enchantid)
     {
         player->GetSession()->SendNotification("Something went wrong in the code. It has been logged for developers and will be looked into, sorry for the inconvenience.");
-       sLog->("enchant_vendor::Enchant: Enchant NPC 'enchantid' is NULL, something went wrong here!");
         return;
     }
 		
-    player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, false);
-       item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
-       player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, true);
-    player->GetSession()->SendNotification("|cff800080%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
+    item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+    item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
+    player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
 }
-
-void RemoveEnchant(Player* player, Item* item)
-{
-	if (!item)
-	{
-		player->GetSession()->SendNotification("You don't have the item equipped?");
-		return;
-	}
-
-	item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
-	player->GetSession()->SendNotification("|cff800080%s's |cffFF0000enchant has successfully been removed!", item->GetTemplate()->Name1.c_str());
-}
-
+ 
 class npc_enchantment : public CreatureScript
 {
 public:
@@ -171,24 +148,21 @@ public:
  
         bool OnGossipHello(Player* player, Creature* creature)
         {
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Weapon-]", GOSSIP_SENDER_MAIN, 1);
-			player->ADD_GOSSIP_ITEM(1, "[-Enchant Off-Hand Weapon-]", GOSSIP_SENDER_MAIN, 13);
-			player->ADD_GOSSIP_ITEM(1, "[-Enchant 2H Weapon-]", GOSSIP_SENDER_MAIN, 2);
-			player->ADD_GOSSIP_ITEM(1, "[-Enchant Shield-]", GOSSIP_SENDER_MAIN, 3);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Head-]", GOSSIP_SENDER_MAIN, 4);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Shoulders-]", GOSSIP_SENDER_MAIN, 5);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Cloak-]", GOSSIP_SENDER_MAIN, 6);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Chest-]", GOSSIP_SENDER_MAIN, 7);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Bracers-]", GOSSIP_SENDER_MAIN, 8);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Gloves-]", GOSSIP_SENDER_MAIN, 9);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Legs-]", GOSSIP_SENDER_MAIN, 10);
-            player->ADD_GOSSIP_ITEM(1, "[-Enchant Feet-]", GOSSIP_SENDER_MAIN, 11);
+			player->ADD_GOSSIP_ITEM(1, "[Welcome to the enchanting NPC!]", GOSSIP_SENDER_MAIN, 0);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Weapon]", GOSSIP_SENDER_MAIN, 1);
+			player->ADD_GOSSIP_ITEM(1, "[Enchant 2H Weapon]", GOSSIP_SENDER_MAIN, 2);
+			player->ADD_GOSSIP_ITEM(1, "[Enchant Shield]", GOSSIP_SENDER_MAIN, 3);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Head]", GOSSIP_SENDER_MAIN, 4);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Shoulders]", GOSSIP_SENDER_MAIN, 5);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Cloak]", GOSSIP_SENDER_MAIN, 6);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Chest]", GOSSIP_SENDER_MAIN, 7);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Bracers]", GOSSIP_SENDER_MAIN, 8);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Gloves]", GOSSIP_SENDER_MAIN, 9);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Legs]", GOSSIP_SENDER_MAIN, 10);
+            player->ADD_GOSSIP_ITEM(1, "[Enchant Feet]", GOSSIP_SENDER_MAIN, 11);
 
             if (player->HasSkill(SKILL_ENCHANTING) && player->GetSkillValue(SKILL_ENCHANTING) == 450)
-			{
-                player->ADD_GOSSIP_ITEM(1, "[-Enchant Rings-]", GOSSIP_SENDER_MAIN, 12);
-			}
-			player->ADD_GOSSIP_ITEM(1, "[-I wish to remove my enchant-]", GOSSIP_SENDER_MAIN, 14);
+                player->ADD_GOSSIP_ITEM(1, "[Enchant Rings]", GOSSIP_SENDER_MAIN, 12);
 
             player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
 			return true;
@@ -196,12 +170,37 @@ public:
  
         bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
         {
-			player->PlayerTalkClass->ClearMenus();
 			Item * item;
+			player->PlayerTalkClass->ClearMenus();
 
             switch (action)
             {
-				
+				case 0: //Welcome message on click
+					player->GetSession()->SendAreaTriggerMessage("|cffFF0000Hello there, I will be enchanting your gear!");
+
+				{
+					player->ADD_GOSSIP_ITEM(1, "[Welcome to the enchanting NPC!]", GOSSIP_SENDER_MAIN, 0);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Weapon]", GOSSIP_SENDER_MAIN, 1);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant 2H Weapon]", GOSSIP_SENDER_MAIN, 2);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Shield]", GOSSIP_SENDER_MAIN, 3);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Head]", GOSSIP_SENDER_MAIN, 4);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Shoulders]", GOSSIP_SENDER_MAIN, 5);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Cloak-]", GOSSIP_SENDER_MAIN, 6);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Chest]", GOSSIP_SENDER_MAIN, 7);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Bracers]", GOSSIP_SENDER_MAIN, 8);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Gloves]", GOSSIP_SENDER_MAIN, 9);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Legs]", GOSSIP_SENDER_MAIN, 10);
+					player->ADD_GOSSIP_ITEM(1, "[Enchant Feet]", GOSSIP_SENDER_MAIN, 11);
+
+					if (player->HasSkill(SKILL_ENCHANTING) && player->GetSkillValue(SKILL_ENCHANTING) == 450)
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Rings]", GOSSIP_SENDER_MAIN, 12);
+						
+					player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
+					return true;
+					break;
+				}
+
+
                 case 1: // Enchant Weapon
                     if (player->HasSkill(SKILL_ENCHANTING) && player->GetSkillValue(SKILL_ENCHANTING) == 450)
                     {
@@ -227,47 +226,40 @@ public:
 					break;
 
                 case 2: // Enchant 2H Weapon
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-
-						if (!item)
-						{
-							player->GetSession()->SendNotification("You must equip a Two-Handed weapon first.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
-						{
-							player->ADD_GOSSIP_ITEM(1, "Berserking", GOSSIP_SENDER_MAIN, 104);
-							player->ADD_GOSSIP_ITEM(1, "Greater Spellpower", GOSSIP_SENDER_MAIN, 115);
-							player->ADD_GOSSIP_ITEM(1, "Major Agility", GOSSIP_SENDER_MAIN, 116);
-							player->ADD_GOSSIP_ITEM(1, "Massacre", GOSSIP_SENDER_MAIN, 117);
-							player->ADD_GOSSIP_ITEM(1, "Mongoose", GOSSIP_SENDER_MAIN, 113);
-							player->ADD_GOSSIP_ITEM(1, "Executioner", GOSSIP_SENDER_MAIN, 114);
-							player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
-							player->PlayerTalkClass->SendGossipMenu(100003, creature->GetGUID());
-							return true;
-						}
-						else
-						{
-							player->GetSession()->SendNotification("You don't have a Two-Handed weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+								if (!item)
+													{
+															creature->Whisper("This enchant needs a 2H weapon equiped.", LANG_UNIVERSAL, player);
+															player->CLOSE_GOSSIP_MENU();
+														return false;
+													}
+								if(item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
+								{
+									player->ADD_GOSSIP_ITEM(1, "Berserking", GOSSIP_SENDER_MAIN, 104);
+									player->ADD_GOSSIP_ITEM(1, "Mongoose", GOSSIP_SENDER_MAIN, 113);
+									player->ADD_GOSSIP_ITEM(1, "Executioner", GOSSIP_SENDER_MAIN, 114);
+									player->ADD_GOSSIP_ITEM(1, "Greater Spellpower", GOSSIP_SENDER_MAIN, 115);
+									player->ADD_GOSSIP_ITEM(1, "Major Agility", GOSSIP_SENDER_MAIN, 116);
+									player->ADD_GOSSIP_ITEM(1, "Massacre", GOSSIP_SENDER_MAIN, 117);
+									player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
+								}
+								else 
+								{
+									creature->Whisper("This enchant needs a 2H weapon equiped.", LANG_UNIVERSAL, player);
+									player->CLOSE_GOSSIP_MENU();
+								}
+									player->PlayerTalkClass->SendGossipMenu(100003, creature->GetGUID());
+					return true;
 					break;
 
                 case 3: // Enchant Shield
-					{
 						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if (!item)
-						{
-							player->GetSession()->SendNotification("You must equip a shield first.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
+														if (!item)
+													{
+															creature->Whisper("This enchant needs a shield equiped.", LANG_UNIVERSAL, player);
+															player->CLOSE_GOSSIP_MENU();
+														return false;
+													}
 						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
 						{
 							player->ADD_GOSSIP_ITEM(1, "Defense", GOSSIP_SENDER_MAIN, 118);
@@ -277,16 +269,15 @@ public:
 							player->ADD_GOSSIP_ITEM(1, "Major Stamina", GOSSIP_SENDER_MAIN, 122);
 							player->ADD_GOSSIP_ITEM(1, "Tough Shield", GOSSIP_SENDER_MAIN, 123);
 							player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
-							player->PlayerTalkClass->SendGossipMenu(100004, creature->GetGUID());
-							return true;
 						}
 						else
 						{
-							player->GetSession()->SendNotification("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
+							creature->Whisper("This enchant needs a shield equiped.", LANG_UNIVERSAL, player);
+							player->CLOSE_GOSSIP_MENU();
 						}
-					}
-					break;
+							player->PlayerTalkClass->SendGossipMenu(100004, creature->GetGUID());
+							return true;
+							break;
 
                 case 4: // Enchant Head
                     player->ADD_GOSSIP_ITEM(1, "Arcanum of Blissful Mending", GOSSIP_SENDER_MAIN, 124);
@@ -327,11 +318,17 @@ public:
 					break;
 
                 case 6: // Enchant Cloak
-                    player->ADD_GOSSIP_ITEM(1, "Springy Arachnoweave", GOSSIP_SENDER_MAIN, 147);
-                    player->ADD_GOSSIP_ITEM(1, "Shadow Armor", GOSSIP_SENDER_MAIN, 148);                    
-                    player->ADD_GOSSIP_ITEM(1, "Darkglow Embroidery", GOSSIP_SENDER_MAIN, 149);
+				 if (player->HasSkill(SKILL_TAILORING) && player->GetSkillValue(SKILL_TAILORING) == 450)
+				  {
+					player->ADD_GOSSIP_ITEM(1, "Darkglow Embroidery", GOSSIP_SENDER_MAIN, 149);
                     player->ADD_GOSSIP_ITEM(1, "Lightweave Embroidery", GOSSIP_SENDER_MAIN, 150);
-                    player->ADD_GOSSIP_ITEM(1, "Swordguard Embroidery", GOSSIP_SENDER_MAIN, 151);                    
+                    player->ADD_GOSSIP_ITEM(1, "Swordguard Embroidery", GOSSIP_SENDER_MAIN, 151); 
+				  }
+				  if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) == 450)
+				  {
+                    player->ADD_GOSSIP_ITEM(1, "Springy Arachnoweave", GOSSIP_SENDER_MAIN, 147);
+				  }
+                    player->ADD_GOSSIP_ITEM(1, "Shadow Armor", GOSSIP_SENDER_MAIN, 148);                  
                     player->ADD_GOSSIP_ITEM(1, "Wisdom", GOSSIP_SENDER_MAIN, 152);
                     player->ADD_GOSSIP_ITEM(1, "Titanweave", GOSSIP_SENDER_MAIN, 153);
                     player->ADD_GOSSIP_ITEM(1, "Spell Piercing", GOSSIP_SENDER_MAIN, 154);
@@ -362,6 +359,8 @@ public:
 					player->ADD_GOSSIP_ITEM(1, "Expertise", GOSSIP_SENDER_MAIN, 167);
 					player->ADD_GOSSIP_ITEM(1, "Greater Stats", GOSSIP_SENDER_MAIN, 168);
 					player->ADD_GOSSIP_ITEM(1, "Exceptional Intellect", GOSSIP_SENDER_MAIN, 169);
+					 if (player->HasSkill(SKILL_LEATHERWORKING) && player->GetSkillValue(SKILL_LEATHERWORKING) == 450)
+				   {
 					player->ADD_GOSSIP_ITEM(1, "Fur Lining - Arcane Resist", GOSSIP_SENDER_MAIN, 170);
 					player->ADD_GOSSIP_ITEM(1, "Fur Lining - Fire Resist", GOSSIP_SENDER_MAIN, 171);
 					player->ADD_GOSSIP_ITEM(1, "Fur Lining - Frost Resist", GOSSIP_SENDER_MAIN, 172);
@@ -370,13 +369,17 @@ public:
 					player->ADD_GOSSIP_ITEM(1, "Fur Lining - Attack power", GOSSIP_SENDER_MAIN, 175);
 					player->ADD_GOSSIP_ITEM(1, "Fur Lining - Stamina", GOSSIP_SENDER_MAIN, 176);
 					player->ADD_GOSSIP_ITEM(1, "Fur Lining - Spellpower", GOSSIP_SENDER_MAIN, 177);
+				   }
 					player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
 					player->PlayerTalkClass->SendGossipMenu(100009, creature->GetGUID());
 					return true;
 					break;
 
 				case 9: //Enchant Gloves
+				 if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) == 450)
+				   {
 					player->ADD_GOSSIP_ITEM(1, "Greater Blasting", GOSSIP_SENDER_MAIN, 178);
+				   }
 					player->ADD_GOSSIP_ITEM(1, "Armsman", GOSSIP_SENDER_MAIN, 179);
 					player->ADD_GOSSIP_ITEM(1, "Crusher", GOSSIP_SENDER_MAIN, 180);
 					player->ADD_GOSSIP_ITEM(1, "Agility", GOSSIP_SENDER_MAIN, 181);
@@ -408,10 +411,13 @@ public:
 					player->ADD_GOSSIP_ITEM(1, "Greater Vitality", GOSSIP_SENDER_MAIN, 195);
 					player->ADD_GOSSIP_ITEM(1, "Icewalker", GOSSIP_SENDER_MAIN, 196);
 					player->ADD_GOSSIP_ITEM(1, "Greater Fortitude", GOSSIP_SENDER_MAIN, 197);
+					 if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) == 450)
+				   {
 					player->ADD_GOSSIP_ITEM(1, "Nitro Boots", GOSSIP_SENDER_MAIN, 198);
 					player->ADD_GOSSIP_ITEM(1, "Hand-Mounted Pyro Rocket", GOSSIP_SENDER_MAIN, 199);
 					player->ADD_GOSSIP_ITEM(1, "Hyperspeed Accedlerators", GOSSIP_SENDER_MAIN, 200);
 					player->ADD_GOSSIP_ITEM(1, "Reticulated Armor Webbing", GOSSIP_SENDER_MAIN, 201);
+				   }
 					player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
 					player->PlayerTalkClass->SendGossipMenu(100012, creature->GetGUID());
 					return true;
@@ -423,63 +429,6 @@ public:
 					player->ADD_GOSSIP_ITEM(1, "Stamina", GOSSIP_SENDER_MAIN, 204);
 					player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
 					player->PlayerTalkClass->SendGossipMenu(100013, creature->GetGUID());
-					return true;
-					break;
-
-				case 13: //Enchant Off-Hand weapons
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendNotification("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							player->ADD_GOSSIP_ITEM(1, "Blade Ward", GOSSIP_SENDER_MAIN, 205);
-							player->ADD_GOSSIP_ITEM(1, "Blood Draining", GOSSIP_SENDER_MAIN, 219);
-							player->ADD_GOSSIP_ITEM(1, "Exceptional Agility", GOSSIP_SENDER_MAIN, 206);
-							player->ADD_GOSSIP_ITEM(1, "Exceptional Spirit", GOSSIP_SENDER_MAIN, 207);
-							player->ADD_GOSSIP_ITEM(1, "Berserking", GOSSIP_SENDER_MAIN, 208);
-							player->ADD_GOSSIP_ITEM(1, "Accuracy", GOSSIP_SENDER_MAIN, 209);
-							player->ADD_GOSSIP_ITEM(1, "Black Magic", GOSSIP_SENDER_MAIN, 210);
-							player->ADD_GOSSIP_ITEM(1, "Battlemaster", GOSSIP_SENDER_MAIN, 211);
-							player->ADD_GOSSIP_ITEM(1, "Icebreaker", GOSSIP_SENDER_MAIN, 212);
-							player->ADD_GOSSIP_ITEM(1, "Lifeward", GOSSIP_SENDER_MAIN, 213);
-							player->ADD_GOSSIP_ITEM(1, "Titanguard", GOSSIP_SENDER_MAIN, 214);
-							player->ADD_GOSSIP_ITEM(1, "Superior Potency", GOSSIP_SENDER_MAIN, 215);
-							player->ADD_GOSSIP_ITEM(1, "Mighty Spellpower", GOSSIP_SENDER_MAIN, 216);
-							player->ADD_GOSSIP_ITEM(1, "Mongoose", GOSSIP_SENDER_MAIN, 217);
-							player->ADD_GOSSIP_ITEM(1, "Executioner", GOSSIP_SENDER_MAIN, 218);
-							player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
-							player->PlayerTalkClass->SendGossipMenu(100002, creature->GetGUID());
-							return true;
-						}
-						else
-						{
-							player->GetSession()->SendNotification("Your Off-Hand is not a weapon.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 14: //Remove enchant menu
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Main-hand", GOSSIP_SENDER_MAIN, 400);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Off-hand", GOSSIP_SENDER_MAIN, 401);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Head", GOSSIP_SENDER_MAIN, 402);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Shoulders", GOSSIP_SENDER_MAIN, 403);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Cloak", GOSSIP_SENDER_MAIN, 404);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Chest", GOSSIP_SENDER_MAIN, 405);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Bracers", GOSSIP_SENDER_MAIN, 406);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Gloves", GOSSIP_SENDER_MAIN, 407);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Legs", GOSSIP_SENDER_MAIN, 408);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Feet", GOSSIP_SENDER_MAIN, 409);
-					player->ADD_GOSSIP_ITEM(1, "Remove enchant on Rings", GOSSIP_SENDER_MAIN, 409);
-					player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
-					player->PlayerTalkClass->SendGossipMenu(100014, creature->GetGUID());
 					return true;
 					break;
 
@@ -549,8 +498,8 @@ public:
                     break;
 
 				case 113:
-					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_MONGOOSE);
-					player->PlayerTalkClass->SendCloseGossip();
+                    Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_MONGOOSE);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 114:
@@ -559,219 +508,48 @@ public:
                     break;
 
 				case 115:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-
-						if (!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a 2H weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_GREATER_SPELL_POWER);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a Two-Handed weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_GREATER_SPELL_POWER);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 116:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-
-						if (!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a 2H weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_AGILITY);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a Two-Handed weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_AGILITY);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 117:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-
-						if (!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a 2H weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_MASSACRE);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a Two-Handed weapon equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_MASSACRE);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 118:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_DEFENSE);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}						
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_DEFENSE);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 119:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_INTELLECT);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_INTELLECT);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 120:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_RESILIENCE);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_RESILIENCE);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 121:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_TITANIUM_PLATING);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_TITANIUM_PLATING);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 122:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_STAMINA);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_STAMINA);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 123:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_SHIELD)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_TOUGHSHIELD);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("You don't have a shield equipped.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_SHIELD_TOUGHSHIELD);
+                    player->PlayerTalkClass->SendCloseGossip();
                     break;
 
 				case 124:
@@ -1182,449 +960,30 @@ public:
                     player->PlayerTalkClass->SendCloseGossip();
                     break;
 
-				case 205:
+				case 300:
 					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_BLADE_WARD);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 206:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_AGILITY_1H);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 207:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_SPIRIT);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 208:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_BERSERKING);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 209:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_ACCURACY);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 210:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_BLACK_MAGIC);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 211:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_BATTLEMASTER);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 212:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_ICEBREAKER);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 213:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_LIFEWARD);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 214:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_TITANGUARD);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 215:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_POTENCY);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 216:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_MIGHTY_SPELL_POWER);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 217:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_2WEP_MONGOOSE);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 218:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_EXECUTIONER);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 219:
-					{
-						item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-
-						if(!item)
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-							return false;
-						}
-						
-						if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
-						{
-							Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_BLOOD_DRAINING);
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-						else
-						{
-							player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
-							player->PlayerTalkClass->SendCloseGossip();
-						}
-					}
-					break;
-
-				case 300: //<-Back menu
-					{
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Weapon-]", GOSSIP_SENDER_MAIN, 1);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Off-Hand Weapon-]", GOSSIP_SENDER_MAIN, 13);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant 2H Weapon-]", GOSSIP_SENDER_MAIN, 2);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Shield-]", GOSSIP_SENDER_MAIN, 3);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Head-]", GOSSIP_SENDER_MAIN, 4);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Shoulders-]", GOSSIP_SENDER_MAIN, 5);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Cloak-]", GOSSIP_SENDER_MAIN, 6);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Chest-]", GOSSIP_SENDER_MAIN, 7);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Bracers-]", GOSSIP_SENDER_MAIN, 8);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Gloves-]", GOSSIP_SENDER_MAIN, 9);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Legs-]", GOSSIP_SENDER_MAIN, 10);
-						player->ADD_GOSSIP_ITEM(1, "[-Enchant Feet-]", GOSSIP_SENDER_MAIN, 11);
+						player->ADD_GOSSIP_ITEM(1, "[Welcome to the enchanting NPC!]", GOSSIP_SENDER_MAIN, 0);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Weapon]", GOSSIP_SENDER_MAIN, 1);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant 2H Weapon]", GOSSIP_SENDER_MAIN, 2);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Shield]", GOSSIP_SENDER_MAIN, 3);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Head]", GOSSIP_SENDER_MAIN, 4);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Shoulders]", GOSSIP_SENDER_MAIN, 5);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Cloak]", GOSSIP_SENDER_MAIN, 6);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Chest]", GOSSIP_SENDER_MAIN, 7);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Bracers]", GOSSIP_SENDER_MAIN, 8);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Gloves]", GOSSIP_SENDER_MAIN, 9);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Legs]", GOSSIP_SENDER_MAIN, 10);
+						player->ADD_GOSSIP_ITEM(1, "[Enchant Feet]", GOSSIP_SENDER_MAIN, 11);
 
 						if (player->HasSkill(SKILL_ENCHANTING) && player->GetSkillValue(SKILL_ENCHANTING) == 450)
-						{
-							player->ADD_GOSSIP_ITEM(1, "[-Enchant Rings-]", GOSSIP_SENDER_MAIN, 12);
-						}
-						player->ADD_GOSSIP_ITEM(1, "[-I wish to remove my enchant-]", GOSSIP_SENDER_MAIN, 14);
+							player->ADD_GOSSIP_ITEM(1, "[Enchant Rings]", GOSSIP_SENDER_MAIN, 12);
 
 						player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
 						return true;
-					}
 						break;
-
-				case 400: //Remove enchant for mainhand
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 401: //Remove enchant for offhand
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 402: //Remove enchant for head
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HEAD));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 403: //Remove enchant for shoulders
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_SHOULDERS));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 404: //remove enchant for cloak
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_BACK));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 405: //remove enchant for chest
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 406: //remove enchant for bracers
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_WRISTS));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 407: //remove enchant for gloves
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HANDS));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 408: //remove enchant for legs
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_LEGS));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 409: //remove enchant for feet
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_FEET));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
-				case 410:
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_FINGER1));
-					RemoveEnchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_FINGER2));
-					player->PlayerTalkClass->SendCloseGossip();
-					break;
-
+					}
 			}
+			return true;
         }
 };
 
