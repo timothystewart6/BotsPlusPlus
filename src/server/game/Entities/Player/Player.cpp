@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
+ #include "TransmogDisplayVendorConf.h" 
 #include "Player.h"
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
@@ -12279,6 +12279,9 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
     if (pItem)
     {
+        if (uint32 entry = TransmogDisplayVendorMgr::GetFakeEntry(pItem))
+            SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), entry);
+        else
         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
@@ -12412,7 +12415,7 @@ void Player::MoveItemFromInventory(uint8 bag, uint8 slot, bool update)
     {
     // Prepatch by LordPsyan
         RemoveReforge(this, it->GetGUID().GetCounter(), true);
-    // 02
+        TransmogDisplayVendorMgr::DeleteFakeEntry(this, it);        
     // 03
     // 04
     // 05
@@ -21705,6 +21708,12 @@ bool Player::BuyItemFromVendorSlot(ObjectGuid vendorguid, uint32 vendorslot, uin
         TC_LOG_DEBUG("network", "Player::BuyItemFromVendorSlot: Vendor (%s) not found or player '%s' (%s) can't interact with him.",
             vendorguid.ToString().c_str(), GetName().c_str(), GetGUID().ToString().c_str());
         SendBuyError(BUY_ERR_DISTANCE_TOO_FAR, nullptr, item, 0);
+        return false;
+    }
+
+    if (creature->GetScriptName() == "NPC_TransmogDisplayVendor")
+    {
+        TransmogDisplayVendorMgr::HandleTransmogrify(this, creature, vendorslot, item);
         return false;
     }
 
