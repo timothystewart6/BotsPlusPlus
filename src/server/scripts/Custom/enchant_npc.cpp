@@ -121,6 +121,7 @@ enum Enchants
 };
 
 #include "ScriptPCH.h"
+#include "Item.h"
 #include "ItemTemplate.h"
 
 void Enchant(Player* player, Item* item, uint32 enchantid)
