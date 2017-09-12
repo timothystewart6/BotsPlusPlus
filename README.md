@@ -60,6 +60,7 @@ Included in `sql/custom`
 * Boss Announcer [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Account Achievements [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Congrats on Level [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Arcane Reforger [rochet2](http://rochet2.github.io/Reforging.html) from [fd44b6d9](https://github.com/Rochet2/TrinityCore/commit/fd44b6d998818ffaa70b605a58c63318598e3f9a)
 * Lord Psyan patches mentioned above
 
 ## Docker
