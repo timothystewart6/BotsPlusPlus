@@ -143,6 +143,10 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
         item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
         player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
     }
+    else 
+    {
+        player->GetSession()->SendNotification("Not enough money");        
+    }
 }
  
 class npc_enchantment : public CreatureScript
