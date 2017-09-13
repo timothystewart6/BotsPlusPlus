@@ -121,7 +121,8 @@ enum Enchants
 };
 
 #include "ScriptPCH.h"
- 
+#include "Player.h"
+
 void Enchant(Player* player, Item* item, uint32 enchantid)
 {
     if (!item)
@@ -136,7 +137,7 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
         return;
     }
     
-    if (player->HasEnoughMoney)
+    if (player->HasEnoughMoney())
     {
         player->ModifyMoney(-10*GOLD);
         item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
