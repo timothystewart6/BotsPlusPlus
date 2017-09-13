@@ -138,7 +138,7 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
     
     if (player->HasEnoughMoney)
     {
-        player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "Are you sure you want to enchant your item?" (-10 * GOLD) : false);
+        player->ModifyMoney(-10*GOLD)
         item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
         item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
         player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
