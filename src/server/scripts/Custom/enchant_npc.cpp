@@ -135,11 +135,13 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
         player->GetSession()->SendNotification("Something went wrong in the code. It has been logged for developers and will be looked into, sorry for the inconvenience.");
         return;
     }
-        
-    player->ModifyMoney(-10*GOLD);
-    item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
-    item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
-    player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
+    
+    if (player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "Are you sure you want to enchant your item?" (-10 * GOLD) : false);)
+    {
+        item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+        item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
+        player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
+    }
 }
  
 class npc_enchantment : public CreatureScript
