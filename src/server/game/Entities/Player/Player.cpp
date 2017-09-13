@@ -30,7 +30,6 @@
 #include "CellImpl.h"
 #include "Channel.h"
 #include "ChannelMgr.h"
-#include "CharacterCache.h"
 #include "CharacterDatabaseCleaner.h"
 #include "Chat.h"
 #include "Common.h"
