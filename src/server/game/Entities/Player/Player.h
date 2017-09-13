@@ -29,6 +29,7 @@
 #include "SpellMgr.h"
 #include "SpellHistory.h"
 #include "Unit.h"
+#include "Transmogrification.h"
 #include "TradeData.h"
 #include "CinematicMgr.h"
 
