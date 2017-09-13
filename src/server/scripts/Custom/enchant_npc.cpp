@@ -138,11 +138,11 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
     
     if (player->HasEnoughMoney)
     {
-        player->ModifyMoney(-10*GOLD)
+        player->ModifyMoney(-10*GOLD);
         item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
         item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
         player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
-        return
+        return;
     }
     else
     {
