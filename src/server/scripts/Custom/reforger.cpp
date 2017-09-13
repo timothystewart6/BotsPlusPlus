@@ -153,7 +153,7 @@ static void UpdatePlayerReforgeStats(Item* invItem, Player* player, uint32 decre
     data.stat_value = stat_diff;
     player->_ApplyItemMods(invItem, invItem->GetSlot(), true);
     // CharacterDatabase.PExecute("REPLACE INTO `custom_reforging` (`GUID`, `increase`, `decrease`, `stat_value`) VALUES (%u, %u, %u, %i)", guidlow, increase, decrease, stat_diff);
-    player->ModifyMoney(-10*GOLD);
+    player->ModifyMoney(pProto->SellPrice < (10*GOLD) ? (-10*GOLD) : -(int32)pProto->SellPrice);
     SendReforgePacket(player, invItem->GetEntry(), 0, &data);
     // player->SaveToDB();
 }
