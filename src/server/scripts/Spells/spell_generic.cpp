@@ -954,8 +954,8 @@ class spell_gen_clone_weapon_aura : public SpellScriptLoader
                         {
                             if (Item* rangedItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED))
                             {
-                                if (uint32 entry = TransmogDisplayVendorMgr::GetFakeEntry(rangedItem))
-                                    target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, entry);
+                                if (uint32 entry = sTransmogrification->GetFakeEntry(rangedItem))
+                                    target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 2, entry);
                                 else
                                     target->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 2, rangedItem->GetEntry());
                             }
