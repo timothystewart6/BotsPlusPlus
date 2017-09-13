@@ -121,10 +121,7 @@ enum Enchants
 };
 
 #include "ScriptPCH.h"
-#include "Item.h"
-#include "ItemTemplate.h"
-#include "InstanceSaveMgr.h"
-
+ 
 void Enchant(Player* player, Item* item, uint32 enchantid)
 {
     if (!item)
@@ -139,16 +136,10 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
         return;
     }
         
-    if (player->HasEnoughMoney(invItem->GetTemplate()->SellPrice < (10 * GOLD) ? (10 * GOLD) : invItem->GetTemplate()->SellPrice))
-    {
-        item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
-        item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
-        player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
-    }
-    else 
-    {
-        player->GetSession()->SendNotification("Not enough money");        
-    }
+    player->ModifyMoney(pProto->SellPrice < (10*GOLD) ? (-10*GOLD) : -(int32)pProto->SellPrice);
+    item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+    item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
+    player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
 }
  
 class npc_enchantment : public CreatureScript
