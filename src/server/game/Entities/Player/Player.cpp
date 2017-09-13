@@ -21717,12 +21717,6 @@ bool Player::BuyItemFromVendorSlot(ObjectGuid vendorguid, uint32 vendorslot, uin
         return false;
     }
 
-    if (creature->GetScriptName() == "NPC_TransmogDisplayVendor")
-    {
-        TransmogDisplayVendorMgr::HandleTransmogrify(this, creature, vendorslot, item);
-        return false;
-    }
-
     if (!(pProto->AllowableClass & getClassMask()) && pProto->Bonding == BIND_WHEN_PICKED_UP && !IsGameMaster())
     {
         SendBuyError(BUY_ERR_CANT_FIND_ITEM, nullptr, item, 0);
