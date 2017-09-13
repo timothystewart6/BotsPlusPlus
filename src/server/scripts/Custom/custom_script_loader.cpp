@@ -44,6 +44,7 @@ void AddSC_accountachievement();
 void AddSC_custom_CongratsOnLevel();
 void AddSC_beastmaster_npc();
 void AddSC_REFORGER_NPC();
+void AddSC_npc_enchantment();
 
 void AddCustomScripts()
 {
@@ -73,4 +74,5 @@ void AddCustomScripts()
     AddSC_custom_CongratsOnLevel();
     AddSC_beastmaster_npc();
     AddSC_REFORGER_NPC();
+    AddSC_npc_enchantment();
 }
