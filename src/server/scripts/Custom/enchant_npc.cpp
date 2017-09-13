@@ -126,22 +126,20 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
 {
     if (!item)
     {
-        player->GetSession()->SendNotification("You must first equip the item you are trying to enchant in order to enchant it!");
+        player->GetSession()->SendNotification("You must first equip your item first.");
         return;
     }
 
     if (!enchantid)
     {
-        player->GetSession()->SendNotification("Something went wrong in the code. It has been logged for developers and will be looked into, sorry for the inconvenience.");
+        player->GetSession()->SendNotification("Sorry, I can't enchant that item right now.");
         return;
     }
     
-    if (player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "Are you sure you want to enchant your item?" (-10 * GOLD) : false);)
-    {
+        player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "Are you sure you want to enchant your item?" (-10 * GOLD) : false);
         item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
         item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
         player->GetSession()->SendNotification("|cff0000FF%s |cffFF0000succesfully enchanted!", item->GetTemplate()->Name1.c_str());
-    }
 }
  
 class npc_enchantment : public CreatureScript
