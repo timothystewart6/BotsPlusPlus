@@ -64,6 +64,7 @@ Included in `sql/custom`
 * Transmogrification NPC [rochet2](http://rochet2.github.io/Transmogrification.html)
 * Enchanter NPC [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Lord Psyan patches mentioned above
+* Heirloom Vendor [Fullhouser](http://sqlmegapack.weebly.com/)
 
 ## Docker
 
