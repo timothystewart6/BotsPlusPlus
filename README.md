@@ -52,6 +52,7 @@ Not sure this is necessary but here is the order in which to apply database scri
 Included in `sql/custom`
 
 * Portal Master [rochet2](http://rochet2.github.io/Portal-Master.html)
+* Heirloom Vendor [Fullhouser](http://sqlmegapack.weebly.com/)
 
 `C++` scripts applied:
 
@@ -64,7 +65,6 @@ Included in `sql/custom`
 * Transmogrification NPC [rochet2](http://rochet2.github.io/Transmogrification.html)
 * Enchanter NPC [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Lord Psyan patches mentioned above
-* Heirloom Vendor [Fullhouser](http://sqlmegapack.weebly.com/)
 
 ## Docker
 
