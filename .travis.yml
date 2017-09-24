@@ -37,7 +37,7 @@ before_install:
 
 install:
   - mysql -uroot -e 'create database test_mysql;'
-  - mkdir bin
+  # - mkdir bin
   - cd bin
   - cmake ../ -DWITH_WARNINGS=0 -DTOOLS=1 -DCMAKE_INSTALL_PREFIX=check_install
   - cd ..
