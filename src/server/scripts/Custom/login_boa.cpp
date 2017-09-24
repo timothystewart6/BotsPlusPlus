@@ -123,7 +123,7 @@ public:
                     case CLASS_HUNTER:
                         // player->AddItem(shoulders, 1);
                         // player->AddItem(trinkett, 2);
-                        // player->AddItem(ring, 1);
+                        player->AddItem(ring, 1);
                         // player->AddItem(chest, 1);
                         // player->AddItem(weapon, 1);
                         // player->AddItem(weapon2, 1);
@@ -134,7 +134,7 @@ public:
                     case CLASS_ROGUE:
                         // player->AddItem(shoulders, 1);
                         // player->AddItem(trinkett, 2);
-                        // player->AddItem(ring, 1);
+                        player->AddItem(ring, 1);
                         // player->AddItem(chest, 1);
                         // player->AddItem(weapon, 1);
                         // player->AddItem(weapon2, 1);
@@ -145,7 +145,7 @@ public:
                     case CLASS_DRUID:
                         player->AddItem(shoulders, 1);
                         //player->AddItem(trinkett, 2); // too many items
-                        // player->AddItem(ring, 1);
+                        player->AddItem(ring, 1);
                         // player->AddItem(chest, 1);
                         // player->AddItem(weapon, 1);
                         // player->AddItem(shoulders2, 1);
@@ -160,7 +160,7 @@ public:
                     case CLASS_SHAMAN:
                         // player->AddItem(shoulders, 1);
                         // player->AddItem(trinkett, 2);
-                        // player->AddItem(ring, 1);
+                        player->AddItem(ring, 1);
                         // player->AddItem(chest, 1);
                         // player->AddItem(weapon, 1);
                         // player->AddItem(shoulders2, 1);
@@ -174,7 +174,7 @@ public:
                     default:
                         // player->AddItem(shoulders, 1);
                         // player->AddItem(trinkett, 2);
-                        // player->AddItem(ring, 1);
+                        player->AddItem(ring, 1);
                         // player->AddItem(chest, 1);
                         // player->AddItem(weapon, 1);
                         player->AddItem(enchantChest, 1);
