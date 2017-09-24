@@ -5,6 +5,9 @@ language: cpp
 compiler:
   - clang
 
+cache:
+  directories:
+    - bin
 git:
   depth: 1
 
@@ -34,7 +37,7 @@ before_install:
 
 install:
   - mysql -uroot -e 'create database test_mysql;'
-  - mkdir bin
+  # - mkdir bin // we're caching this folder
   - cd bin
   - cmake ../ -DWITH_WARNINGS=0 -DTOOLS=1 -DCMAKE_INSTALL_PREFIX=check_install
   - cd ..
