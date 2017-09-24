@@ -7,8 +7,8 @@ Bugs and contact with E-mail: Rochet2@post.com
 
 SET
 @ENTRY          := 190000,
-@NAME           := "Portal Master",
-@SUBNAME        := "",
+@NAME           := "Prospero",
+@SUBNAME        := "Portal Master",
 @MODEL          := 21572,
 
 @AURA           := "30540", -- "35766" = casting
