@@ -2,7 +2,7 @@ SET
 @ENTRY         := 600600;
 
 REPLACE INTO `creature_template` (entry,modelid1,name,subname,minlevel,maxlevel,faction,scale,npcflag,InhabitType) VALUES
-(@ENTRY,1460,"EXP Items","Vendor",80,80,35,0.1,128,3);
+(@ENTRY,1460,"Major Oak","Heirloom Vendor",80,80,35,0.1,128,3);
 
 REPLACE INTO `npc_vendor` (`entry`,`slot`,`item`,`maxcount`,`incrtime`,`extendedcost`) VALUES
  (@ENTRY, '0', '13335', '0', '0', '0'),
