@@ -66,6 +66,17 @@ Included in `sql/custom`
 * Enchanter NPC [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Lord Psyan patches mentioned above
 
+
+## NPC List
+
+| Entry  | Name           | Utility  |
+| ------------- |-------------| -----|
+| 99990  | LordPsyan | Beastmaster |
+| 190052 | Simon Magus | Enchanter |
+| 600600 | Major Oak | Heirlooms |
+| 190000 | Prospero | Portal Master |
+| 190011 | Thaumaturge Vashreen | Arcane Reforger |
+| 190010 | Warpweaver | Transmogrifier |
 ## Docker
 
 * Docker images use a modified version of [neechbear/trinitycore](https://github.com/neechbear/trinitycore)
@@ -84,3 +95,5 @@ Included in `sql/custom`
 [Linux Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977288/Linux+Requirements)
 
 * Tested on Debian 9.x
+
+
