@@ -53,6 +53,7 @@ Included in `sql/custom`
 
 * Portal Master [rochet2](http://rochet2.github.io/Portal-Master.html)
 * Heirloom Vendor [Fullhouser](http://sqlmegapack.weebly.com/)
+* Buff Master [Fullhouser](http://sqlmegapack.weebly.com/) and [SingleCore](https://github.com/conan513/SingleCore_TC)
 
 `C++` scripts applied:
 
@@ -76,11 +77,39 @@ Included in `sql/custom`
 | 190000 | Prospero | Portal Master |
 | 190011 | Thaumaturge Vashreen | Arcane Reforger |
 | 190010 | Warpweaver | Transmogrifier |
+| 190005 | Gwydion | Buff Master |
 
 ## Docker
 
 * Docker images use a modified version of [neechbear/trinitycore](https://github.com/neechbear/trinitycore)
 * All credit goes to [neechbear](https://github.com/neechbear) for creating a great set of Docker images to boostrap the ones used in this repo.
+
+### Docker commands
+
+#### Starting the auth server
+
+```bash
+docker run -d \
+-p 3724:3724 -e DB_HOST=192.168.0.100 -e DB_PORT=3306 \
+-v /path/to/your/authserver:/opt/trinitycore/etc/ \
+-v /path/to/your/logs:/opt/trinitycore/logs/ \
+timothystewart6/botsplusplus-authserver:latest
+```
+
+#### Starting the world server
+
+```bash
+docker run -d \
+-p 8085:8085 -e DB_HOST=192.168.0.100 -e DB_PORT=3306 \
+-v path/to/your/worldserverconf:/opt/trinitycore/etc/ \
+-v path/to/your/cameras:/opt/trinitycore/bin/cameras \
+-v path/to/your/dbc:/opt/trinitycore/bin/dbc \
+-v path/to/your/maps:/opt/trinitycore/bin/maps \
+-v path/to/your/mmaps:/opt/trinitycore/bin/mmaps \
+-v path/to/your/vmaps:/opt/trinitycore/bin/vmaps \
+-v path/to/your/logs:/opt/trinitycore/logs/ \
+timothystewart6/botsplusplus-worldserver:latest
+```
 
 ## Build
 
