@@ -40,4 +40,4 @@ UPDATE creature_template SET gossip_menu_id = @GOPTION, npcflag = npcflag|1, AIN
 
 REPLACE INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES 
 ('15121977', @BUFFNPC, '1', '1', '1', '0', '0', '1594.71', '-4404.57', '7.03082', '2.01403', '300', '0', '0', '6495', '0', '0', '0', '0', '0'),
-('15121978', @BUFFNPC, '0', '1', '1', '0', '0', '-8823.335938 ', '648.150085 ', '94.524849', '4.943174', '300', '0', '0', '6495', '0', '0', '0', '0', '0');
+('15121978', @BUFFNPC, '0', '1', '1', '0', '0', '-8823.335938', '648.150085', '94.524849', '4.943174', '300', '0', '0', '6495', '0', '0', '0', '0', '0');
