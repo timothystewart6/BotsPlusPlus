@@ -76,6 +76,7 @@ Included in `sql/custom`
 | 190000 | Prospero | Portal Master |
 | 190011 | Thaumaturge Vashreen | Arcane Reforger |
 | 190010 | Warpweaver | Transmogrifier |
+| 190005 | Gwydion | Buff Master |
 
 ## Docker
 
