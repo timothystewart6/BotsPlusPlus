@@ -54,6 +54,7 @@ Included in `sql/custom`
 * Portal Master [rochet2](http://rochet2.github.io/Portal-Master.html)
 * Heirloom Vendor [Fullhouser](http://sqlmegapack.weebly.com/)
 * Buff Master [Fullhouser](http://sqlmegapack.weebly.com/) and [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Aura Masster [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -78,6 +79,7 @@ Included in `sql/custom`
 | 190011 | Thaumaturge Vashreen | Arcane Reforger |
 | 190010 | Warpweaver | Transmogrifier |
 | 190005 | Gwydion | Buff Master |
+| 99950 | Faegan | Aura Master |
 
 ## Docker
 
