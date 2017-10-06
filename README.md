@@ -95,7 +95,9 @@ Included in `sql/custom`
 
 ```bash
 docker run -d \
--p 3724:3724 -e DB_HOST=192.168.0.100 -e DB_PORT=3306 \
+-p 3724:3724 \
+-e DB_HOST=192.168.0.100 \
+-e DB_PORT=3306 \
 -v /path/to/your/authserver:/opt/trinitycore/etc/ \
 -v /path/to/your/logs:/opt/trinitycore/logs/ \
 timothystewart6/botsplusplus-authserver:latest
@@ -105,7 +107,9 @@ timothystewart6/botsplusplus-authserver:latest
 
 ```bash
 docker run -d \
--p 8085:8085 -e DB_HOST=192.168.0.100 -e DB_PORT=3306 \
+-p 8085:8085 \
+-e DB_HOST=192.168.0.100 \
+-e DB_PORT=3306 \
 -v path/to/your/worldserverconf:/opt/trinitycore/etc/ \
 -v path/to/your/cameras:/opt/trinitycore/bin/cameras \
 -v path/to/your/dbc:/opt/trinitycore/bin/dbc \
