@@ -82,5 +82,5 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 UPDATE creature_template SET gossip_menu_id = @GOPTION, npcflag = npcflag|1, AIName = 'SmartAI' WHERE Entry = @AURANPC;
 
 REPLACE INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES 
-('15129989', @AURANPC, '1', '1', '1', '0', '0', '1590.71', '-4444.57', '7.03082', '2.01403', '300', '0', '0', '6495', '0', '0', '0', '0', '0'),
+('15129989', @AURANPC, '1', '1', '1', '0', '0', '1585.337158', '-4410.303223', '7.647212', '2.156266', '300', '0', '0', '6495', '0', '0', '0', '0', '0'),
 ('15129999', @AURANPC, '0', '1', '1', '0', '0', '-8820.324219', '649.191772', '94.519020', '5.159598', '300', '0', '0', '6495', '0', '0', '0', '0', '0');
