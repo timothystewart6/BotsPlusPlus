@@ -57,6 +57,7 @@ Included in `sql/custom`
 * Aura Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Trainer Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Profession Teleporter [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Profession Material Vendor [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -72,18 +73,19 @@ Included in `sql/custom`
 
 ## NPC List
 
-| Entry  | Name           | Utility  |
-| ------------- |-------------| -----|
-| 99990  | LordPsyan | Beastmaster |
-| 190052 | Simon Magus | Enchanter |
-| 600600 | Major Oak | Heirlooms |
-| 190000 | Prospero | Portal Master |
-| 190011 | Thaumaturge Vashreen | Arcane Reforger |
-| 190010 | Warpweaver | Transmogrifier |
-| 190005 | Gwydion | Buff Master |
-| 99950 | Faegan | Aura Master |
-| 90001 | Ulf | Trainer Master |
-| 190001 | Wu | Profession Teleporter|
+| Name | Utility  |
+|-------------| -----|
+| LordPsyan | Beastmaster |
+| Simon Magus | Enchanter |
+| Major Oak | Heirlooms |
+| Prospero | Portal Master |
+| Thaumaturge Vashreen | Arcane Reforger |
+| Warpweaver | Transmogrifier |
+| Gwydion | Buff Master |
+| Faegan | Aura Master |
+| Ulf | Trainer Master |
+| Wu | Profession Teleporter|
+| Sartie Sweettoe | Profession Material Vendor |
 
 ## Docker
 
