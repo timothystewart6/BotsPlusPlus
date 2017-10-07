@@ -58,6 +58,7 @@ Included in `sql/custom`
 * Trainer Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Profession Teleporter [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Profession Material Vendor [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Class Material Vendor [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -86,6 +87,7 @@ Included in `sql/custom`
 | Ulf | Trainer Master |
 | Wu | Profession Teleporter|
 | Sartie Sweettoe | Profession Material Vendor |
+| Ja'Nanji | Class Materials |
 
 ## Config
 
