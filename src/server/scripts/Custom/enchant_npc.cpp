@@ -138,7 +138,7 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
     }
     if(player->getLevel() < 50)
     {
-        player->GetSession()->SendNotification("Sorry, you must be at least level 50 to user enchant your items.");
+        player->GetSession()->SendNotification("Sorry, you must be at least level 50 to enchant your items.");
         return;
     }
 
