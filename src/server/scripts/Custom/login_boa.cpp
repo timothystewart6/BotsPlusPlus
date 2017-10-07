@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Chat.h"
-#define Welcome_Name "Blood Lust"
+#define Welcome_Name "Aurora Borealis"
 
 class Player_Boa : public PlayerScript
 {
