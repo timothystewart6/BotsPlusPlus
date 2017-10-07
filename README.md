@@ -56,7 +56,7 @@ Included in `sql/custom`
 * Buff Master [Fullhouser](http://sqlmegapack.weebly.com/) and [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Aura Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Trainer Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
-
+* Profession Teleporter [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -83,6 +83,7 @@ Included in `sql/custom`
 | 190005 | Gwydion | Buff Master |
 | 99950 | Faegan | Aura Master |
 | 90001 | Ulf | Trainer Master |
+| 190001 | Wu | Profession Teleporter|
 
 ## Docker
 
