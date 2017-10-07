@@ -87,6 +87,13 @@ Included in `sql/custom`
 | Wu | Profession Teleporter|
 | Sartie Sweettoe | Profession Material Vendor |
 
+## Config
+
+We have included better defaults that are taoilred for customizations this server supports.  They are ready to use, all you need to do is update the database info. Both auth and world configs can be found at:
+
+`src/server/authserver/authserver.conf`
+`src/server/worldserver/worldserver.conf`
+
 ## Docker
 
 * Docker images use a modified version of [neechbear/trinitycore](https://github.com/neechbear/trinitycore)
