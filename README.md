@@ -88,6 +88,7 @@ Included in `sql/custom`
 | Wu | Profession Teleporter|
 | Sartie Sweettoe | Profession Material Vendor |
 | Ja'Nanji | Class Materials |
+
 ## Config
 
 We have included better defaults that are taoilred for customizations this server supports.  They are ready to use, all you need to do is update the database info. Both auth and world configs can be found at:
