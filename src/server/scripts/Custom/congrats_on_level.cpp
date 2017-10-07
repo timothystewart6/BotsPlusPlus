@@ -112,14 +112,14 @@ public:
 				break;
 			case 70:
 				//500G
-				money = 500;
+				money = 250;
 				//item = ITEMID;
 				//item2 = ITEMID2;
 				//spell = SPELLID;
 				break;
 			case 80:
 				//1000G
-				money = 1000;
+				money = 500;
 				//item = ITEMID;
 				//item2 = ITEMID2;
 				//spell = SPELLID;
