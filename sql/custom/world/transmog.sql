@@ -1,10 +1,10 @@
 SET
-@ENTRY = 190010,
-@NAME = "Warpweaver",
-@SUBNAME = "Transmogrifier";
+@Entry = 190010,
+@Name = "Warpweaver",
+@Subname = "Transmogrifier";
 
 REPLACE INTO `creature_template` (`entry`, `modelid1`, `modelid2`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction`, `npcflag`, `scale`, `rank`, `dmgschool`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `AIName`, `MovementType`, `InhabitType`, `HoverHeight`, `RacialLeader`, `movementId`, `RegenHealth`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES
-(@ENTRY, 19646, 0, @NAME, @SUBNAME, NULL, 0, 80, 80, 2, 35, 1, 1, 0, 0, 2000, 0, 1, 0, 7, 138936390, 0, 0, 0, '', 0, 3, 1, 0, 0, 1, 0, 0, 'Creature_Transmogrify');
+(@Entry, 19646, 0, @Name, @Subname, NULL, 0, 80, 80, 2, 35, 1, 1, 0, 0, 2000, 0, 1, 0, 7, 138936390, 0, 0, 0, '', 0, 3, 1, 0, 0, 1, 0, 0, 'Creature_Transmogrify');
 
 REPLACE INTO `creature` VALUES ('15122156', '190010', '0', '0', '0', '1', '1', '0', '0', '-8829.8', '645.669', '94.5523', '4.6554', '300', '0', '0', '12600', '0', '0', '0', '0', '0', '0');
 REPLACE INTO `creature` VALUES ('15122178', '190010', '1', '0', '0', '1', '1', '0', '0', '1591.65', '-4406.32', '6.92044', '2.03883', '300', '0', '0', '12600', '0', '0', '0', '0', '0', '0');
