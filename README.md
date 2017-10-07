@@ -57,6 +57,7 @@ Included in `sql/custom`
 * Aura Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Trainer Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Profession Teleporter [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Profession Material Vendor [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -84,6 +85,7 @@ Included in `sql/custom`
 | 99950 | Faegan | Aura Master |
 | 90001 | Ulf | Trainer Master |
 | 190001 | Wu | Profession Teleporter|
+| 511853 | Sartie Sweettoe | Profession Material Vendor |
 
 ## Docker
 
