@@ -198,4 +198,4 @@ REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_i
 
 DELETE FROM `spell_required` WHERE (`spell_id`=5784);
 DELETE FROM `spell_required` WHERE (`req_spell`=686);
-INSERT INTO `spell_required` (`spell_id`, `req_spell`) VALUES ('5784', '686')
+INSERT INTO `spell_required` (`spell_id`, `req_spell`) VALUES ('5784', '686');
