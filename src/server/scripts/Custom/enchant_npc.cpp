@@ -127,7 +127,7 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
 {
     if (!item)
     {
-        player->GetSession()->SendNotification("You must first equip your item first.");
+        player->GetSession()->SendNotification("You must first equip your item.");
         return;
     }
 
