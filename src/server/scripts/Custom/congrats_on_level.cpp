@@ -61,7 +61,7 @@ public:
 
 	void OnLevelChanged(Player* player, uint8 newLevel)
 	{
-		uint32 money /*item, item2, spell*/;
+		uint32 money, item /*, item2, spell*/;
 
 
 		if (sConfigMgr->GetBoolDefault("Congrats.Level", true)) {
