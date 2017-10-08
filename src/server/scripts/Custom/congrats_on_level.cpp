@@ -70,7 +70,7 @@ public:
 			case 10:
 				//1G
 				money = 1;
-				//item = ITEMID;
+				item = 6897;
 				//item2 = ITEMID2;
 				//spell = SPELLID;
 
