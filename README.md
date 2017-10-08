@@ -51,14 +51,15 @@ Not sure this is necessary but here is the order in which to apply database scri
 
 Included in `sql/custom`
 
-* Portal Master [rochet2](http://rochet2.github.io/Portal-Master.html)
-* Heirloom Vendor [Fullhouser](http://sqlmegapack.weebly.com/)
-* Buff Master [Fullhouser](http://sqlmegapack.weebly.com/) and [SingleCore](https://github.com/conan513/SingleCore_TC)
-* Aura Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
-* Trainer Master [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
-* Profession Teleporter [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
-* Profession Material Vendor [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
-* Class Material Vendor [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Portal Master by [rochet2](http://rochet2.github.io/Portal-Master.html)
+* Heirloom Vendor by [Fullhouser](http://sqlmegapack.weebly.com/)
+* Buff Master by [Fullhouser](http://sqlmegapack.weebly.com/) and [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Aura Master by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Trainer Master by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Profession Teleporter by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Profession Material Vendor by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Class Material Vendor by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Level Rewards by [thesawolf](https://github.com/thesawolf/TrinityCore/tree/TrinityCoreLegacy/sql/TrinityCore-Patches/LegacyTrinityCore) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
