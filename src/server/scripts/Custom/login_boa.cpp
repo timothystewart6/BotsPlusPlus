@@ -19,7 +19,7 @@ class Player_Boa : public PlayerScript
                chest2 = 0, trinkett2 = 0, bag = 0, enchantChest = 0, enchantWeapon = 0, enchantWeapon2 = 0;
 
         bag = 41600;
-        ring = 50255;
+        // ring = 50255;
         enchantChest = 38865;
 
         switch (player->getClass())
@@ -127,7 +127,7 @@ class Player_Boa : public PlayerScript
             // player->AddItem(chest, 1);
             // player->AddItem(weapon, 1);
             // player->AddItem(weapon2, 1);
-            player->AddItem(bag, 4);
+            player->AddItem(bag, 1);
             player->AddItem(enchantChest, 1);
             player->AddItem(enchantWeapon, 1);
             break;
@@ -138,7 +138,7 @@ class Player_Boa : public PlayerScript
             // player->AddItem(chest, 1);
             // player->AddItem(weapon, 1);
             // player->AddItem(weapon2, 1);
-            player->AddItem(bag, 4);
+            player->AddItem(bag, 1);
             player->AddItem(enchantChest, 1);
             player->AddItem(enchantWeapon, 2);
             break;
@@ -152,7 +152,7 @@ class Player_Boa : public PlayerScript
             // player->AddItem(chest2, 1);
             // player->AddItem(trinkett2, 2);
             // player->AddItem(weapon2, 1);
-            player->AddItem(bag, 4);
+            player->AddItem(bag, 1);
             player->AddItem(enchantChest, 1);
             player->AddItem(enchantWeapon, 1);
             player->AddItem(enchantWeapon2, 1);
@@ -166,7 +166,7 @@ class Player_Boa : public PlayerScript
             // player->AddItem(shoulders2, 1);
             // player->AddItem(chest2, 1);
             // player->AddItem(weapon2, 1);
-            player->AddItem(bag, 4);
+            player->AddItem(bag, 1);
             player->AddItem(enchantChest, 2);
             player->AddItem(enchantWeapon, 1);
             player->AddItem(enchantWeapon2, 1);
@@ -174,12 +174,12 @@ class Player_Boa : public PlayerScript
         default:
             // player->AddItem(shoulders, 1);
             // player->AddItem(trinkett, 2);
-            player->AddItem(ring, 1);
+            // player->AddItem(ring, 1);
             // player->AddItem(chest, 1);
             // player->AddItem(weapon, 1);
             player->AddItem(enchantChest, 1);
             player->AddItem(enchantWeapon, 1);
-            player->AddItem(bag, 4);
+            player->AddItem(bag, 1);
         }
     }
 };
