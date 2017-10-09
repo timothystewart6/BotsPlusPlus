@@ -34,7 +34,8 @@ REPLACE INTO `npc_vendor` (`entry`,`slot`,`item`,`maxcount`,`incrtime`,`extended
  (@ENTRY, '0', '42985', '0', '0', '0'),
  (@ENTRY, '0', '48691', '0', '0', '0'),
  (@ENTRY, '0', '42945', '0', '0', '0'),
- (@ENTRY, '0', '48716', '0', '0', '0');
+ (@ENTRY, '0', '48716', '0', '0', '0'),
+ (@ENTRY, '0', '50255', '0', '0', '0');
 
 REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, currentwaypoint, curhealth, curmana, MovementType, npcflag, unit_flags, dynamicflags) VALUE
  ('15118465', @ENTRY, '1', '1', '1', '0', '0', '1572.35', '-4404.91', '7.49669', '5.40851', '300', '0', '0', '1', '0', '0', '0', '0', '0'),
