@@ -166,7 +166,7 @@ class Player_Boa : public PlayerScript
             // player->AddItem(shoulders2, 1);
             // player->AddItem(chest2, 1);
             // player->AddItem(weapon2, 1);
-            player->AddItem(bag, 1;
+            player->AddItem(bag, 1);
             player->AddItem(enchantChest, 2);
             player->AddItem(enchantWeapon, 1);
             player->AddItem(enchantWeapon2, 1);
