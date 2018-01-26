@@ -16,12 +16,8 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     libssl1.0.0 \
     libmysqlclient18 \
     netcat \
-    tzdata \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
-
-# Set your timezone here
-RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 # Configurable via INSTALL_PREFIX from the Makefile, and/or using
 # --define CMAKE_INSTALL_PREFIX=/your/path with the docker/build/ container,
