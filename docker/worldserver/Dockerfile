@@ -19,12 +19,8 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     mysql-client \
     netcat \
     xml2 \
-    tzdata \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
-
-# Set your timezone here
-RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 ENV GM_USER trinity
 ENV GM_PASSWORD trinity
