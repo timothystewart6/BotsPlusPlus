@@ -1,124 +1,160 @@
-#ifndef DEF_TRANSMOGRIFICATION_H
-#define DEF_TRANSMOGRIFICATION_H
+#ifndef DEF_TRANSMOGRIFICATION_DISPLAY_H
+#define DEF_TRANSMOGRIFICATION_DISPLAY_H
 
-#include <vector>
+/*
+Transmogrification display vendor
+Code by Rochet2
+Ideas LilleCarl
+
+ScriptName for NPC:
+NPC_TransmogDisplayVendor
+
+Compatible with Transmogrification 6.1 by Rochet2
+http://rochet2.github.io/Transmogrification
+*/
+
+// use 0 or 1
+#define TRANSMOGRIFICATION_ALREADY_INSTALLED    0
+// Note! If you use both, set this to true (1) and in scriptloader make transmog load first
+
 #include "Define.h"
-#include "ObjectGuid.h"
+#include "ItemTemplate.h"
+#include "SharedDefines.h"
+#include <set>
+#include <vector>
+#include <unordered_map>
+#include <boost/thread/locks.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
-#define PRESETS // comment this line to disable preset feature totally
-#define MAX_OPTIONS 25 // do not alter
-
+class Creature;
 class Item;
 class Player;
 class WorldSession;
 struct ItemTemplate;
 
-enum TransmogTrinityStrings // Language.h might have same entries, appears when executing SQL, change if needed
+enum TransmogDisplayVendorSenders
 {
-    LANG_ERR_TRANSMOG_OK = 11100, // change this
-    LANG_ERR_TRANSMOG_INVALID_SLOT,
-    LANG_ERR_TRANSMOG_INVALID_SRC_ENTRY,
-    LANG_ERR_TRANSMOG_MISSING_SRC_ITEM,
-    LANG_ERR_TRANSMOG_MISSING_DEST_ITEM,
-    LANG_ERR_TRANSMOG_INVALID_ITEMS,
-    LANG_ERR_TRANSMOG_NOT_ENOUGH_MONEY,
-    LANG_ERR_TRANSMOG_NOT_ENOUGH_TOKENS,
-
-    LANG_ERR_UNTRANSMOG_OK,
-    LANG_ERR_UNTRANSMOG_NO_TRANSMOGS,
-
-#ifdef PRESETS
-    LANG_PRESET_ERR_INVALID_NAME,
-#endif
+    SENDER_START = MAX_ITEM_QUALITY,
+    SENDER_BACK,
+    SENDER_SELECT_VENDOR,
+    SENDER_REMOVE_ALL,
+    SENDER_REMOVE_ONE,
+    SENDER_REMOVE_MENU,
+    SENDER_END,
 };
 
-class TC_GAME_API Transmogrification
+namespace
 {
-private:
-    Transmogrification() { };
-    ~Transmogrification() { };
-    Transmogrification(const Transmogrification&);
-    Transmogrification& operator=(const Transmogrification&);
+    class RWLockable
+    {
+    public:
+        typedef boost::shared_mutex LockType;
+        typedef boost::shared_lock<boost::shared_mutex> ReadGuard;
+        typedef boost::unique_lock<boost::shared_mutex> WriteGuard;
+        LockType& GetLock() { return _lock; }
+    private:
+        LockType _lock;
+    };
+};
 
+class TC_GAME_API SelectionStore : public RWLockable
+{
 public:
-    static Transmogrification* instance();
+    struct Selection { uint32 item; uint8 slot; uint32 offset; uint32 quality; };
+    typedef std::unordered_map<uint32, Selection> PlayerLowToSelection;
 
-#ifdef PRESETS
+    void SetSelection(uint32 playerLow, const Selection& selection)
+    {
+        WriteGuard guard(GetLock());
+        hashmap[playerLow] = selection;
+    }
 
-    bool EnableSetInfo;
-    uint32 SetNpcText;
+    bool GetSelection(uint32 playerLow, Selection& returnVal)
+    {
+        ReadGuard guard(GetLock());
 
-    bool EnableSets;
-    uint8 MaxSets;
-    float SetCostModifier;
-    int32 SetCopperCost;
+        PlayerLowToSelection::iterator it = hashmap.find(playerLow);
+        if (it == hashmap.end())
+            return false;
 
-    void LoadPlayerSets(Player* player);
+        returnVal = it->second;
+        return true;
+    }
 
-    void PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot);
-#endif
+    void RemoveSelection(uint32 playerLow)
+    {
+        WriteGuard guard(GetLock());
+        hashmap.erase(playerLow);
+    }
 
-    bool EnableTransmogInfo;
-    uint32 TransmogNpcText;
-
-    // Use IsAllowed() and IsNotAllowed()
-    // these are thread unsafe, but assumed to be static data so it should be safe
-    std::set<uint32> Allowed;
-    std::set<uint32> NotAllowed;
-
-    float ScaledCostModifier;
-    int32 CopperCost;
-
-    bool RequireToken;
-    uint32 TokenEntry;
-    uint32 TokenAmount;
-
-    bool AllowPoor;
-    bool AllowCommon;
-    bool AllowUncommon;
-    bool AllowRare;
-    bool AllowEpic;
-    bool AllowLegendary;
-    bool AllowArtifact;
-    bool AllowHeirloom;
-
-    bool AllowMixedArmorTypes;
-    bool AllowMixedWeaponTypes;
-    bool AllowFishingPoles;
-
-    bool IgnoreReqRace;
-    bool IgnoreReqClass;
-    bool IgnoreReqSkill;
-    bool IgnoreReqSpell;
-    bool IgnoreReqLevel;
-    bool IgnoreReqEvent;
-    bool IgnoreReqStats;
-
-    bool IsAllowed(uint32 entry) const;
-    bool IsNotAllowed(uint32 entry) const;
-    bool IsAllowedQuality(uint32 quality) const;
-    bool IsRangedWeapon(uint32 Class, uint32 SubClass) const;
-
-    void LoadConfig(bool reload); // thread unsafe
-
-    std::string GetItemIcon(uint32 entry, uint32 width, uint32 height, int x, int y) const;
-    std::string GetSlotIcon(uint8 slot, uint32 width, uint32 height, int x, int y) const;
-    const char * GetSlotName(uint8 slot, WorldSession* session) const;
-    std::string GetItemLink(Item* item, WorldSession* session) const;
-    std::string GetItemLink(uint32 entry, WorldSession* session) const;
-    uint32 GetFakeEntry(const Item* item);
-    void UpdateItem(Player* player, Item* item) const;
-    void DeleteFakeEntry(Player* player, Item* item);
-    void SetFakeEntry(Player* player, Item* item, uint32 entry);
-
-    TransmogTrinityStrings Transmogrify(Player* player, ObjectGuid itemGUID, uint8 slot, bool no_cost = false);
-    bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* destination, ItemTemplate const* source) const;
-    bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const;
-    // bool CanBeTransmogrified(Item const* item);
-    // bool CanTransmogrify(Item const* item);
-    uint32 GetSpecialPrice(ItemTemplate const* proto) const;
-    std::vector<ObjectGuid> GetItemList(const Player* player) const;
+private:
+    PlayerLowToSelection hashmap;
 };
-#define sTransmogrification Transmogrification::instance()
+
+class TC_GAME_API TransmogDisplayVendorMgr
+{
+public:
+    // Selection store
+    static SelectionStore selectionStore; // selectionStore[lowGUID] = Selection
+
+    // Vendor data store
+    // optionMap[Class? + SubClass][invtype][Quality] = EntryVector
+    typedef std::vector<uint32> EntryVector;
+    static EntryVector* optionMap[MAX_ITEM_SUBCLASS_WEAPON + MAX_ITEM_SUBCLASS_ARMOR][MAX_INVTYPE][MAX_ITEM_QUALITY];
+
+    static const std::set<uint32> AllowedItems;
+    static const std::set<uint32> NotAllowedItems;
+
+    static const float ScaledCostModifier;
+    static const int32 CopperCost;
+
+    static const bool RequireToken;
+    static const uint32 TokenEntry;
+    static const uint32 TokenAmount;
+
+    static const bool AllowPoor;
+    static const bool AllowCommon;
+    static const bool AllowUncommon;
+    static const bool AllowRare;
+    static const bool AllowEpic;
+    static const bool AllowLegendary;
+    static const bool AllowArtifact;
+    static const bool AllowHeirloom;
+
+    static const bool AllowMixedArmorTypes;
+    static const bool AllowMixedWeaponTypes;
+    static const bool AllowFishingPoles;
+
+    static const bool IgnoreReqRace;
+    static const bool IgnoreReqClass;
+    static const bool IgnoreReqSkill;
+    static const bool IgnoreReqSpell;
+    static const bool IgnoreReqLevel;
+    static const bool IgnoreReqEvent;
+    static const bool IgnoreReqStats;
+
+    static std::vector<uint32> Allowed;
+    static std::vector<uint32> NotAllowed;
+
+    static void HandleTransmogrify(Player* player, Creature* creature, uint32 vendorslot, uint32 itemEntry, bool no_cost = false);
+
+    static const char* getQualityName(uint32 quality);
+    static std::string getItemName(const ItemTemplate* itemTemplate, WorldSession* session);
+    static uint32 getCorrectInvType(uint32 inventorytype);
+
+    // From Transmogrification
+    static uint32 GetFakeEntry(const Item* item);
+    static void DeleteFakeEntry(Player* player, Item* item);
+    static void SetFakeEntry(Player* player, Item* item, uint32 entry);
+    static const char* getSlotName(uint8 slot, WorldSession* session);
+    static void UpdateItem(Player* player, Item* item);
+    static uint32 GetSpecialPrice(ItemTemplate const* proto);
+    static bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* target, ItemTemplate const* source);
+    static bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto);
+    static bool IsRangedWeapon(uint32 Class, uint32 SubClass);
+    static bool IsAllowed(uint32 entry);
+    static bool IsNotAllowed(uint32 entry);
+    static bool IsAllowedQuality(uint32 quality);
+};
 
 #endif
