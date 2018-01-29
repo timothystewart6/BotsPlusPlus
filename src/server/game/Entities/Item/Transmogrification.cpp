@@ -10,7 +10,7 @@ Compatible with Transmogrification 6.1 by Rochet2
 http://rochet2.github.io/Transmogrification
 */
 
-#include "TransmogDisplayVendorConf.h"
+#include "Transmogrification.h"
 #include "Common.h"
 #include "QueryResult.h"
 #include "DatabaseEnv.h"
