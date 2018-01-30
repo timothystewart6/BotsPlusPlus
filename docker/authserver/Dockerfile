@@ -16,6 +16,7 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     libssl1.0.0 \
     libmysqlclient18 \
     netcat \
+    tzdata \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
@@ -23,6 +24,11 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
 # --define CMAKE_INSTALL_PREFIX=/your/path with the docker/build/ container,
 # (which is also published on Ducker Hub as nicolaw/trinitycore).
 ENV install_prefix /opt/trinitycore
+
+# Set a default timezone.  You are free to override this
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+ENV timezone="America/Chicago"
+RUN ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime
 
 WORKDIR "${install_prefix}/bin"
 VOLUME "${install_prefix}/etc"
