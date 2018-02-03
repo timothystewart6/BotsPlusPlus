@@ -1,7 +1,7 @@
 SET
 @ENTRY = 600900,
 @NAME = "Acantha",
-@SUBNAME = "Gear Vendor";
+@SUBNAME = "Gear Master";
 
 REPLACE INTO `creature_template` (entry,modelid1,name,subname,minlevel,maxlevel,faction,scale,npcflag,InhabitType) VALUES
 (@ENTRY,27970,@NAME,@SUBNAME,80,80,35,0.5,128,3);
