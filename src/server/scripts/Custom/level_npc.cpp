@@ -25,7 +25,6 @@ public:
 	{
 		pPlayer->PlayerTalkClass->ClearMenus();
 				pPlayer->SetLevel(uiAction*10); // changed to setlevel, give level gives X amount of levels I think.
-				pPlayer->DestroyItemCount(TOKEN_ID, uiAction, true);
 				pPlayer->GetSession()->SendAreaTriggerMessage("You are now Level %u!", uiAction*10);
 				pPlayer->PlayerTalkClass->SendCloseGossip();
 				return true;
