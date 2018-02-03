@@ -46,6 +46,7 @@ void AddSC_beastmaster_npc();
 void AddSC_REFORGER_NPC();
 void AddSC_Transmogrification();
 void AddSC_npc_enchantment();
+void AddSC_Level_NPC();
 
 void AddCustomScripts()
 {
@@ -77,4 +78,5 @@ void AddCustomScripts()
     AddSC_REFORGER_NPC();
     AddSC_Transmogrification();
     AddSC_npc_enchantment();
+    AddSC_Level_NPC();
 }
