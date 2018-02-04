@@ -3942,3 +3942,14 @@ StartGuild.Horde = 46
 # Prepatch by LordPsyan.
 # See http://www.realmsofwarcraft.com/bb for forums and information.
 #
+
+###################################################################################################
+#
+
+PlayedTimeReward.Interval = 0
+PlayedTimeReward.Money    = 0
+PlayedTimeReward.Honor    = 0
+PlayedTimeReward.Arena    = 0
+
+#
++###################################################################################################
