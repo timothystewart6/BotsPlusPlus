@@ -2,6 +2,9 @@
 #include "World.h"
 #include "Chat.h"
 #include <string>
+#include<chrono>
+#include<thread>
+
 
 using namespace std;
 
@@ -39,6 +42,9 @@ public:
         "Be sure to visit the Heirloom vendor for gear and a mount that you can use immediately. " +
         "Be sure to make your way to Stormwind or Orgrimmar, there's plenty to see and do there including a level 70 boost. ";
         // Calls the message handler function which sends our message.
+
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(10));
         MessageHandler(player, messageType, msg);
     }
 
