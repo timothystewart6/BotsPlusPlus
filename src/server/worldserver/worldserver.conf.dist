@@ -3938,18 +3938,19 @@ StartGuild.Horde = 46
 #
 ###################################################################################################
 
+###################################################################################################
+#
+#     Default:  PlayedTimeReward.Interval = 3600000 (1 hour) [0 - disabled]
+#               PlayedTimeReward.Money    = 1000 (10 silver)
+
+PlayedTimeReward.Interval = 3600000
+PlayedTimeReward.Money    = 100000
+
+#
+###################################################################################################
+
 #
 # Prepatch by LordPsyan.
 # See http://www.realmsofwarcraft.com/bb for forums and information.
 #
 
-###################################################################################################
-#
-
-PlayedTimeReward.Interval = 0
-PlayedTimeReward.Money    = 0
-PlayedTimeReward.Honor    = 0
-PlayedTimeReward.Arena    = 0
-
-#
-###################################################################################################
