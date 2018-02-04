@@ -27,7 +27,7 @@ With [Lord Psyan Patches](https://bitbucket.org/technotim/lordpsyan-patches)
 
 * Start Guild
 * Auto Learn New Spells
-* Annouce Login
+* Announce Login
 * Account Mounts
 * Login BoA (with enchants)
 * Start Guild
@@ -60,6 +60,9 @@ Included in `sql/custom`
 * Profession Material Vendor by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Class Material Vendor by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 * Level Rewards by [thesawolf](https://github.com/thesawolf/TrinityCore/tree/TrinityCoreLegacy/sql/TrinityCore-Patches/LegacyTrinityCore) and fixes by [timothystewart6](https://github.com/timothystewart6)
+* Spawned NPC Bots by [timothystewart6](https://github.com/timothystewart6)
+* Gear Master by [timothystewart6](https://github.com/timothystewart6)
+* Level Master by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -71,6 +74,8 @@ Included in `sql/custom`
 * Arcane Reforger [rochet2](http://rochet2.github.io/Reforging.html) from [fd44b6d9](https://github.com/Rochet2/TrinityCore/commit/fd44b6d998818ffaa70b605a58c63318598e3f9a)
 * Transmogrification NPC [rochet2](http://rochet2.github.io/Transmogrification.html)
 * Enchanter NPC [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Played Time Rewards [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Level NPC [rochet2](http://rochet2.github.io/Item-Enchant-Visuals.html) (forum post)
 * Lord Psyan patches mentioned above
 
 ## NPC List
@@ -89,6 +94,10 @@ Included in `sql/custom`
 | Wu | Profession Teleporter|
 | Sartie Sweettoe | Profession Material Vendor |
 | Ja'Nanji | Class Materials |
+| Acantha | Gear Master |
+| Maiden of the Stars| Level Master |
+| NPC Bots| Stormwind |
+| NPC Bots| Orgrimmar |
 
 ## Config
 
@@ -140,10 +149,11 @@ timothystewart6/botsplusplus-worldserver:latest
 
 * Visual Studio 2017 (x64)
 * Boost 1.63.0 (x64)
-* MySQL 5.6.37.0 (x64)
+* MySQL 5.6.39.0 (x64)
 * CMake 3.9.1 (x64)
 * OpenSSL 1.0.2L (x64)
 
 [Linux Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977288/Linux+Requirements)
 
+* Built on Debian 9.x
 * Tested on Debian 9.x
