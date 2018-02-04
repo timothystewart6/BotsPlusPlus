@@ -52,3 +52,45 @@ VALUES
 INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
 VALUES
 	(15130107, 70301, 0, 0, 0, 1, 1, 0, 0, -8805.89, 621.839, 94.9007, 2.17483, 300, 0, 0, 13033, 0, 0, 0, 0, 0, 0);
+
+
+-- orgrimmar
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200116, 70013, 1, 0, 0, 1, 1, 0, 0, 1579.53, -4417.63, 8.06971, 4.322, 300, 0, 0, 12600, 0, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200127, 70077, 1, 0, 0, 1, 1, 0, 0, 1587.2, -4428.46, 8.06566, 3.52676, 300, 0, 0, 12600, 3994, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200119, 70142, 1, 0, 0, 1, 1, 0, 0, 1586.15, -4420.8, 8.54724, 3.92145, 300, 0, 0, 12600, 0, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200117, 70150, 1, 0, 0, 1, 1, 0, 0, 1582.6, -4418.48, 8.36294, 4.14529, 300, 0, 0, 12600, 3994, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200126, 70186, 1, 0, 0, 1, 1, 0, 0, 1580.48, -4415.22, 7.88295, 2.61374, 300, 0, 0, 12600, 3994, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200118, 70197, 1, 0, 0, 1, 1, 0, 0, 1584.54, -4419.42, 8.51261, 4.12762, 300, 0, 0, 12600, 3994, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200124, 70203, 1, 0, 0, 1, 1, 0, 0, 1589.88, -4432.24, 8.23905, 3.79774, 300, 0, 0, 10080, 8814, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200120, 70215, 1, 0, 0, 1, 1, 0, 0, 1587.35, -4422.42, 8.55282, 3.78008, 300, 0, 0, 10080, 8814, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200123, 70232, 1, 0, 0, 1, 1, 0, 0, 1588.53, -4430.27, 8.23697, 3.64459, 300, 0, 0, 10080, 8814, 0, 0, 0, 0, 0);
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `VerifiedBuild`)
+VALUES
+	(15200121, 70245, 1, 0, 0, 1, 1, 0, 0, 1587.99, -4425.16, 8.51593, 3.52679, 300, 0, 0, 12600, 0, 0, 0, 0, 0, 0);
