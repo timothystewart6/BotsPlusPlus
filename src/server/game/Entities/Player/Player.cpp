@@ -419,8 +419,8 @@ Player::Player(WorldSession* session): Unit(true)
     }
 
     // TimeIsMoneyFriend
-    ptr_Interval = sConfigMgr->GetIntDefault("TimeIsMoneyFriend.Interval", 0);
-  	ptr_Money = sConfigMgr->GetIntDefault("TimeIsMoneyFriend.Money", 0);
+    ptr_Interval = sConfigMgr->GetIntDefault("PlayedTimeReward.Interval", 0);
+  	ptr_Money = sConfigMgr->GetIntDefault("PlayedTimeReward.Money", 0);
 
     m_logintime = time(nullptr);
     m_Last_tick = m_logintime;
