@@ -35,9 +35,9 @@ public:
 
     void SendMsg(Player* player) const {
         // Edit the following line if you want to customize the message itself.
-        string msg = serverName + messageColor + "Welcome, " + player->GetName() + "!|r" +
-        "Be sure to visit the Heirloom vendor for gear and a mount that you can use immediately." +
-        "Be sure to make your way to Stormwind or Orgrimmar, there's plenty to see and do there including a level 700 boost.";
+        string msg = serverName + messageColor + "Welcome, " + player->GetName() + "!|r " +
+        "Be sure to visit the Heirloom vendor for gear and a mount that you can use immediately. " +
+        "Be sure to make your way to Stormwind or Orgrimmar, there's plenty to see and do there including a level 70 boost. ";
         // Calls the message handler function which sends our message.
         MessageHandler(player, messageType, msg);
     }
