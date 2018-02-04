@@ -13,7 +13,7 @@ class Player_Boa : public PlayerScript
         if (!firstLogin) // Run script only on first login
             return;
         std::ostringstream ss;
-        ss << "|cffFF0000[" << Welcome_Name << "]|r Welcome " << player->GetName() << " to the server! ";
+        ss << "|cffFF0000[" << Welcome_Name << "]|r Welcome " << player->GetName() << " to the server! Be sure to visit the Heirloom vendor for gear and a mount that you can use immediately. Also, be sure to make your way to Stormwind or Orgrimmar, there's plenty to see and do there including a level 70 boost. ";
         sWorld->SendServerMessage(SERVER_MSG_STRING, ss.str().c_str());
         uint32 shoulders = 0, chest = 0, ring = 0, trinkett = 0, weapon = 0, weapon2 = 0, shoulders2 = 0,
                chest2 = 0, trinkett2 = 0, bag = 0, enchantChest = 0, enchantWeapon = 0, enchantWeapon2 = 0;
