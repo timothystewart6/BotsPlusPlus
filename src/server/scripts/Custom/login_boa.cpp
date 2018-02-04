@@ -13,7 +13,7 @@ class Player_Boa : public PlayerScript
         if (!firstLogin) // Run script only on first login
             return;
         std::ostringstream ss;
-        ss << "|cffFF0000[" << Welcome_Name << "]|r Welcome " << player->GetName() << " to the server! "
+        ss << "|cffFF0000[" << Welcome_Name << "]|r Welcome " << player->GetName() << " to the server! " +
          "Be sure to visit the Heirloom vendor for gear and a mount that you can use immediately. " +
          "Be sure to make your way to Stormwind or Orgrimmar, there's plenty to see and do there including a level 70 boost. ";
         sWorld->SendServerMessage(SERVER_MSG_STRING, ss.str().c_str());
