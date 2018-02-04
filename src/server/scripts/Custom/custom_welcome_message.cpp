@@ -2,8 +2,6 @@
 #include "World.h"
 #include "Chat.h"
 #include <string>
-#include<chrono>
-#include<thread>
 
 
 using namespace std;
@@ -31,7 +29,7 @@ public:
     static constexpr int messageType = 0;
 
     // Server name along with its own color.
-    const string serverName = "|cffFFFFFF[ServerName]|r ";
+    const string serverName = "|cffFFFFFF[Aurora Borealis]|r ";
 
     // This is the color for the rest of the message.
     const string messageColor = "|cff70f98e";
@@ -42,9 +40,6 @@ public:
         "Be sure to visit the Heirloom vendor for gear and a mount that you can use immediately. " +
         "Be sure to make your way to Stormwind or Orgrimmar, there's plenty to see and do there including a level 70 boost. ";
         // Calls the message handler function which sends our message.
-
-        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
-        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(10));
         MessageHandler(player, messageType, msg);
     }
 
@@ -70,7 +65,7 @@ public:
         }
     }
 
-    // This is the OnLogin player hook that is called everytime a player logs in. It then calls our other functions.
+    // This is the OnLogin player hook that is called every time a player logs in. It then calls our other functions.
     void OnLogin(Player* player, bool firstLogin) {
         if (newCharactersOnly) {
             if (firstLogin) SendMsg(player);
