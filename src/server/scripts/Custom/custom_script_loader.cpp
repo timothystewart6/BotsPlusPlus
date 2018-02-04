@@ -47,7 +47,6 @@ void AddSC_REFORGER_NPC();
 void AddSC_Transmogrification();
 void AddSC_npc_enchantment();
 void AddSC_Level_NPC();
-void AddSC_welcome_message();
 
 void AddCustomScripts()
 {
@@ -80,5 +79,4 @@ void AddCustomScripts()
     AddSC_Transmogrification();
     AddSC_npc_enchantment();
     AddSC_Level_NPC();
-    AddSC_welcome_message();
 }
