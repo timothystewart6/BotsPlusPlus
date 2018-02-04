@@ -1,111 +1,124 @@
+/*
+Transmog display vendor
+Code by Rochet2
+Ideas LilleCarl
+
+ScriptName for NPC:
+NPC_TransmogDisplayVendor
+
+Compatible with Transmogrification 6.1 by Rochet2
+http://rochet2.github.io/Transmogrification
+*/
+
 #include "Transmogrification.h"
-#include "Bag.h"
 #include "Common.h"
-#include "Config.h"
+#include "QueryResult.h"
 #include "DatabaseEnv.h"
-#include "DBCStructure.h"
-#include "Define.h"
+#include "Transaction.h"
 #include "Field.h"
-#include "GameEventMgr.h"
+#include "DBCStructure.h"
 #include "Item.h"
 #include "ItemTemplate.h"
 #include "Language.h"
 #include "Log.h"
+#include "Player.h"
 #include "ObjectGuid.h"
 #include "ObjectMgr.h"
-#include "Player.h"
-#include "QueryResult.h"
-#include "ScriptMgr.h"
-#include "SharedDefines.h"
-#include "Transaction.h"
 #include "WorldSession.h"
+#include "GameEventMgr.h"
 #include <sstream>
 #include <string>
 
-#ifdef PRESETS
-void Transmogrification::PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot)
+// Config start
+
+// Edit Transmogrification compatibility in TransmogDisplayVendorConf.h
+
+// A multiplier for the default gold cost (change to 0.0f for no default cost)
+const float TransmogDisplayVendorMgr::ScaledCostModifier = 1.0f;
+// Cost added on top of other costs (can be negative)
+const int32 TransmogDisplayVendorMgr::CopperCost = 0;
+// For custom gold cost set ScaledCostModifier to 0.0f and CopperCost to what ever cost you want
+
+const bool TransmogDisplayVendorMgr::RequireToken = false;
+const uint32 TransmogDisplayVendorMgr::TokenEntry = 49426;
+const uint32 TransmogDisplayVendorMgr::TokenAmount = 1;
+
+const bool TransmogDisplayVendorMgr::AllowPoor = false;
+const bool TransmogDisplayVendorMgr::AllowCommon = false;
+const bool TransmogDisplayVendorMgr::AllowUncommon = true;
+const bool TransmogDisplayVendorMgr::AllowRare = true;
+const bool TransmogDisplayVendorMgr::AllowEpic = true;
+const bool TransmogDisplayVendorMgr::AllowLegendary = false;
+const bool TransmogDisplayVendorMgr::AllowArtifact = false;
+const bool TransmogDisplayVendorMgr::AllowHeirloom = true;
+
+const bool TransmogDisplayVendorMgr::AllowMixedArmorTypes = false;
+const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = false;
+const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
+
+const bool TransmogDisplayVendorMgr::IgnoreReqRace = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqClass = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqSkill = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqSpell = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqLevel = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqEvent = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqStats = false;
+
+// Example AllowedItems[] = { 123, 234, 345 };
+const std::set<uint32> TransmogDisplayVendorMgr::AllowedItems = { };
+const std::set<uint32> TransmogDisplayVendorMgr::NotAllowedItems = { };
+
+// Config end
+
+std::vector<uint32> TransmogDisplayVendorMgr::Allowed;
+std::vector<uint32> TransmogDisplayVendorMgr::NotAllowed;
+SelectionStore TransmogDisplayVendorMgr::selectionStore;
+TransmogDisplayVendorMgr::EntryVector* TransmogDisplayVendorMgr::optionMap[MAX_ITEM_SUBCLASS_WEAPON + MAX_ITEM_SUBCLASS_ARMOR][MAX_INVTYPE][MAX_ITEM_QUALITY] = { };
+
+uint32 TransmogDisplayVendorMgr::GetFakeEntry(const Item* item)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::PresetTransmog");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::GetFakeEntry");
 
-    if (!EnableSets)
-        return;
-    if (!player || !itemTransmogrified)
-        return;
-    if (slot >= EQUIPMENT_SLOT_END)
-        return;
-    if (!CanTransmogrifyItemWithItem(player, itemTransmogrified->GetTemplate(), sObjectMgr->GetItemTemplate(fakeEntry)))
-        return;
+    Player* owner = item->GetOwner();
 
-    SetFakeEntry(player, itemTransmogrified, fakeEntry);
+    if (!owner)
+        return 0;
+    if (owner->transmogMap.empty())
+        return 0;
 
-    itemTransmogrified->UpdatePlayedTime(player);
-
-    itemTransmogrified->SetOwnerGUID(player->GetGUID());
-    itemTransmogrified->SetNotRefundable(player);
-    itemTransmogrified->ClearSoulboundTradeable(player);
+    TransmogMapType::const_iterator it = owner->transmogMap.find(item->GetGUID());
+    if (it == owner->transmogMap.end())
+        return 0;
+    return it->second;
 }
-
-void Transmogrification::LoadPlayerSets(Player* player)
+void TransmogDisplayVendorMgr::DeleteFakeEntry(Player* player, Item* item)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::LoadPlayerSets");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::DeleteFakeEntry");
 
-    player->presetMap.clear();
+    if (player->transmogMap.erase(item->GetGUID()) != 0)
+        UpdateItem(player, item);
+}
+void TransmogDisplayVendorMgr::SetFakeEntry(Player* player, Item* item, uint32 entry)
+{
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::SetFakeEntry");
 
-    QueryResult result = CharacterDatabase.PQuery("SELECT `PresetID`, `SetName`, `SetData` FROM `custom_transmogrification_sets` WHERE Owner = %u", player->GetGUID().GetCounter());
-    if (!result)
-        return;
+    player->transmogMap[item->GetGUID()] = entry;
+    UpdateItem(player, item);
+}
+void TransmogDisplayVendorMgr::UpdateItem(Player* player, Item* item)
+{
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::UpdateItem");
 
-    do
+    if (item->IsEquipped())
     {
-        Field* field = result->Fetch();
-        uint8 PresetID = field[0].GetUInt8();
-        std::string SetName = field[1].GetString();
-        std::istringstream SetData(field[2].GetString());
-
-        player->presetMap[PresetID].name = SetName;
-
-        while (SetData.good())
-        {
-            uint32 slot;
-            uint32 entry;
-            SetData >> slot >> entry;
-            if (SetData.fail())
-                break;
-            if (slot >= EQUIPMENT_SLOT_END)
-            {
-                TC_LOG_ERROR("custom.transmog", "Item entry (FakeEntry: %u, playerGUID: %u, slot: %u, presetId: %u) has invalid slot, ignoring.", entry, player->GetGUID().GetCounter(), uint32(slot), uint32(PresetID));
-                continue;
-            }
-            if (sObjectMgr->GetItemTemplate(entry))
-            {
-                player->presetMap[PresetID].slotMap[slot] = entry;
-            }
-            else
-                TC_LOG_ERROR("custom.transmog", "Item entry (FakeEntry: %u, playerGUID: %u, slot: %u, presetId: %u) does not exist, ignoring.", entry, player->GetGUID().GetCounter(), uint32(slot), uint32(PresetID));
-        }
-
-        if (player->presetMap[PresetID].slotMap.empty())
-        {
-            // Should never happen
-            player->presetMap.erase(PresetID);
-            CharacterDatabase.PExecute("DELETE FROM `custom_transmogrification_sets` WHERE Owner = %u AND PresetID = %u", player->GetGUID().GetCounter(), uint32(PresetID));
-            return;
-        }
-
-    } while (result->NextRow());
+        player->SetVisibleItemSlot(item->GetSlot(), item);
+        if (player->IsInWorld())
+            item->SendUpdateToPlayer(player);
+    }
 }
-#endif
-
-Transmogrification* Transmogrification::instance()
+const char* TransmogDisplayVendorMgr::getSlotName(uint8 slot, WorldSession* /*session*/)
 {
-    // Thread safe in C++11 standard
-    static Transmogrification instance;
-    return &instance;
-}
-
-const char* Transmogrification::GetSlotName(uint8 slot, WorldSession* /*session*/) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetSlotName");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::TransmogDisplayVendorMgr::getSlotName");
 
     switch (slot)
     {
@@ -123,263 +136,19 @@ const char* Transmogrification::GetSlotName(uint8 slot, WorldSession* /*session*
         case EQUIPMENT_SLOT_OFFHAND: return  "Off hand";// session->GetTrinityString(LANG_SLOT_NAME_OFFHAND);
         case EQUIPMENT_SLOT_RANGED: return  "Ranged";// session->GetTrinityString(LANG_SLOT_NAME_RANGED);
         case EQUIPMENT_SLOT_TABARD: return  "Tabard";// session->GetTrinityString(LANG_SLOT_NAME_TABARD);
-        default: return NULL;
+        default: return nullptr;
     }
 }
-
-std::string Transmogrification::GetItemIcon(uint32 entry, uint32 width, uint32 height, int x, int y) const
+uint32 TransmogDisplayVendorMgr::GetSpecialPrice(ItemTemplate const* proto)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetItemIcon");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::GetSpecialPrice");
 
-    std::ostringstream ss;
-    ss << "|TInterface";
-    const ItemTemplate* temp = sObjectMgr->GetItemTemplate(entry);
-    const ItemDisplayInfoEntry* dispInfo = NULL;
-    if (temp)
-    {
-        dispInfo = sItemDisplayInfoStore.LookupEntry(temp->DisplayInfoID);
-        if (dispInfo)
-            ss << "/ICONS/" << dispInfo->inventoryIcon;
-    }
-    if (!dispInfo)
-        ss << "/InventoryItems/WoWUnknownItem01";
-    ss << ":" << width << ":" << height << ":" << x << ":" << y << "|t";
-    return ss.str();
+    uint32 cost = proto->SellPrice < 10000 ? 10000 : proto->SellPrice;
+    return cost;
 }
-
-std::string Transmogrification::GetSlotIcon(uint8 slot, uint32 width, uint32 height, int x, int y) const
+bool TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* target, ItemTemplate const* source)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetSlotIcon");
-
-    std::ostringstream ss;
-    ss << "|TInterface/PaperDoll/";
-    switch (slot)
-    {
-        case EQUIPMENT_SLOT_HEAD: ss << "UI-PaperDoll-Slot-Head"; break;
-        case EQUIPMENT_SLOT_SHOULDERS: ss << "UI-PaperDoll-Slot-Shoulder"; break;
-        case EQUIPMENT_SLOT_BODY: ss << "UI-PaperDoll-Slot-Shirt"; break;
-        case EQUIPMENT_SLOT_CHEST: ss << "UI-PaperDoll-Slot-Chest"; break;
-        case EQUIPMENT_SLOT_WAIST: ss << "UI-PaperDoll-Slot-Waist"; break;
-        case EQUIPMENT_SLOT_LEGS: ss << "UI-PaperDoll-Slot-Legs"; break;
-        case EQUIPMENT_SLOT_FEET: ss << "UI-PaperDoll-Slot-Feet"; break;
-        case EQUIPMENT_SLOT_WRISTS: ss << "UI-PaperDoll-Slot-Wrists"; break;
-        case EQUIPMENT_SLOT_HANDS: ss << "UI-PaperDoll-Slot-Hands"; break;
-        case EQUIPMENT_SLOT_BACK: ss << "UI-PaperDoll-Slot-Chest"; break;
-        case EQUIPMENT_SLOT_MAINHAND: ss << "UI-PaperDoll-Slot-MainHand"; break;
-        case EQUIPMENT_SLOT_OFFHAND: ss << "UI-PaperDoll-Slot-SecondaryHand"; break;
-        case EQUIPMENT_SLOT_RANGED: ss << "UI-PaperDoll-Slot-Ranged"; break;
-        case EQUIPMENT_SLOT_TABARD: ss << "UI-PaperDoll-Slot-Tabard"; break;
-        default: ss << "UI-Backpack-EmptySlot";
-    }
-    ss << ":" << width << ":" << height << ":" << x << ":" << y << "|t";
-    return ss.str();
-}
-
-std::string Transmogrification::GetItemLink(Item* item, WorldSession* session) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetItemLink");
-
-    int loc_idx = session->GetSessionDbLocaleIndex();
-    const ItemTemplate* temp = item->GetTemplate();
-    std::string name = temp->Name1;
-    if (ItemLocale const* il = sObjectMgr->GetItemLocale(temp->ItemId))
-        ObjectMgr::GetLocaleString(il->Name, loc_idx, name);
-
-    if (int32 itemRandPropId = item->GetItemRandomPropertyId())
-    {
-        char* const* suffix = NULL;
-        if (itemRandPropId < 0)
-        {
-            const ItemRandomSuffixEntry* itemRandEntry = sItemRandomSuffixStore.LookupEntry(-item->GetItemRandomPropertyId());
-            if (itemRandEntry)
-                suffix = itemRandEntry->nameSuffix;
-        }
-        else
-        {
-            const ItemRandomPropertiesEntry* itemRandEntry = sItemRandomPropertiesStore.LookupEntry(item->GetItemRandomPropertyId());
-            if (itemRandEntry)
-                suffix = itemRandEntry->nameSuffix;
-        }
-        if (suffix)
-        {
-            std::string test(suffix[(name != temp->Name1) ? loc_idx : DEFAULT_LOCALE]);
-            if (!test.empty())
-            {
-                name += ' ';
-                name += test;
-            }
-        }
-    }
-
-    std::ostringstream oss;
-    oss << "|c" << std::hex << ItemQualityColors[temp->Quality] << std::dec <<
-        "|Hitem:" << temp->ItemId << ":" <<
-        item->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) << ":" <<
-        item->GetEnchantmentId(SOCK_ENCHANTMENT_SLOT) << ":" <<
-        item->GetEnchantmentId(SOCK_ENCHANTMENT_SLOT_2) << ":" <<
-        item->GetEnchantmentId(SOCK_ENCHANTMENT_SLOT_3) << ":" <<
-        item->GetEnchantmentId(BONUS_ENCHANTMENT_SLOT) << ":" <<
-        item->GetItemRandomPropertyId() << ":" << item->GetItemSuffixFactor() << ":" <<
-        (uint32)item->GetOwner()->getLevel() << "|h[" << name << "]|h|r";
-
-    return oss.str();
-}
-
-std::string Transmogrification::GetItemLink(uint32 entry, WorldSession* session) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetItemLink");
-
-    const ItemTemplate* temp = sObjectMgr->GetItemTemplate(entry);
-    int loc_idx = session->GetSessionDbLocaleIndex();
-    std::string name = temp->Name1;
-    if (ItemLocale const* il = sObjectMgr->GetItemLocale(entry))
-        ObjectMgr::GetLocaleString(il->Name, loc_idx, name);
-
-    std::ostringstream oss;
-    oss << "|c" << std::hex << ItemQualityColors[temp->Quality] << std::dec <<
-        "|Hitem:" << entry << ":0:0:0:0:0:0:0:0:0|h[" << name << "]|h|r";
-
-    return oss.str();
-}
-
-uint32 Transmogrification::GetFakeEntry(const Item* item)
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetFakeEntry");
-
-    Player* owner = item->GetOwner();
-
-    if (!owner)
-        return 0;
-    if (owner->transmogMap.empty())
-        return 0;
-
-    TransmogMapType::const_iterator it = owner->transmogMap.find(item->GetGUID());
-    if (it == owner->transmogMap.end())
-        return 0;
-    return it->second;
-}
-
-void Transmogrification::UpdateItem(Player* player, Item* item) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::UpdateItem");
-
-    if (item->IsEquipped())
-    {
-        player->SetVisibleItemSlot(item->GetSlot(), item);
-        if (player->IsInWorld())
-            item->SendUpdateToPlayer(player);
-    }
-}
-
-void Transmogrification::DeleteFakeEntry(Player* player, Item* item)
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::DeleteFakeEntry");
-
-    if (player->transmogMap.erase(item->GetGUID()) != 0)
-        UpdateItem(player, item);
-}
-
-void Transmogrification::SetFakeEntry(Player* player, Item* item, uint32 entry)
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::SetFakeEntry");
-
-    player->transmogMap[item->GetGUID()] = entry;
-    UpdateItem(player, item);
-}
-
-TransmogTrinityStrings Transmogrification::Transmogrify(Player* player, ObjectGuid itemGUID, uint8 slot, bool no_cost)
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::Transmogrify");
-
-    // slot of the transmogrified item
-    if (slot >= EQUIPMENT_SLOT_END)
-    {
-        TC_LOG_DEBUG("custom.transmog", "Transmogrification::Transmogrify - %s (%s) tried to transmogrify an %s with a wrong slot (%u) when transmogrifying items.", player->GetName().c_str(), player->GetGUID().ToString().c_str(), itemGUID.ToString().c_str(), slot);
-        return LANG_ERR_TRANSMOG_INVALID_SLOT;
-    }
-
-    Item* itemTransmogrifier = NULL;
-    // guid of the transmogrifier item, if it's not 0
-    if (!itemGUID.IsEmpty())
-    {
-        itemTransmogrifier = player->GetItemByGuid(itemGUID);
-        if (!itemTransmogrifier)
-        {
-            TC_LOG_DEBUG("custom.transmog", "Transmogrification::Transmogrify - %s (%s) tried to transmogrify with an invalid %s.", player->GetName().c_str(), player->GetGUID().ToString().c_str(), itemGUID.ToString().c_str());
-            return LANG_ERR_TRANSMOG_MISSING_SRC_ITEM;
-        }
-    }
-
-    // transmogrified item
-    Item* itemTransmogrified = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
-    if (!itemTransmogrified)
-    {
-        TC_LOG_DEBUG("custom.transmog", "Transmogrification::Transmogrify - %s (%s) tried to transmogrify an invalid item in a valid slot (slot: %u).", player->GetName().c_str(), player->GetGUID().ToString().c_str(), slot);
-        return LANG_ERR_TRANSMOG_MISSING_DEST_ITEM;
-    }
-
-    if (!itemTransmogrifier) // reset look newEntry
-    {
-        DeleteFakeEntry(player, itemTransmogrified);
-    }
-    else
-    {
-        if (!CanTransmogrifyItemWithItem(player, itemTransmogrified->GetTemplate(), itemTransmogrifier->GetTemplate()))
-        {
-            TC_LOG_DEBUG("custom.transmog", "Transmogrification::Transmogrify - %s (%s) failed CanTransmogrifyItemWithItem (%u with %u).", player->GetName().c_str(), player->GetGUID().ToString().c_str(), itemTransmogrified->GetEntry(), itemTransmogrifier->GetEntry());
-            return LANG_ERR_TRANSMOG_INVALID_ITEMS;
-        }
-
-        if (!no_cost)
-        {
-            if (RequireToken)
-            {
-                if (player->HasItemCount(TokenEntry, TokenAmount))
-                    player->DestroyItemCount(TokenEntry, TokenAmount, true);
-                else
-                    return LANG_ERR_TRANSMOG_NOT_ENOUGH_TOKENS;
-            }
-
-            int32 cost = 0;
-            cost = GetSpecialPrice(itemTransmogrified->GetTemplate());
-            cost *= ScaledCostModifier;
-            cost += CopperCost;
-
-            if (cost) // 0 cost if reverting look
-            {
-                if (cost < 0)
-                    TC_LOG_DEBUG("custom.transmog", "Transmogrification::Transmogrify - %s (%s) transmogrification invalid cost (non negative, amount %i). Transmogrified %u with %u", player->GetName().c_str(), player->GetGUID().ToString().c_str(), -cost, itemTransmogrified->GetEntry(), itemTransmogrifier->GetEntry());
-                else
-                {
-                    if (!player->HasEnoughMoney(cost))
-                        return LANG_ERR_TRANSMOG_NOT_ENOUGH_MONEY;
-                    player->ModifyMoney(-cost, false);
-                }
-            }
-        }
-
-        SetFakeEntry(player, itemTransmogrified, itemTransmogrifier->GetEntry());
-
-        itemTransmogrified->UpdatePlayedTime(player);
-
-        itemTransmogrified->SetOwnerGUID(player->GetGUID());
-        itemTransmogrified->SetNotRefundable(player);
-        itemTransmogrified->ClearSoulboundTradeable(player);
-
-        if (itemTransmogrifier->GetTemplate()->Bonding == BIND_WHEN_EQUIPED || itemTransmogrifier->GetTemplate()->Bonding == BIND_WHEN_USE)
-            itemTransmogrifier->SetBinding(true);
-
-        itemTransmogrifier->SetOwnerGUID(player->GetGUID());
-        itemTransmogrifier->SetNotRefundable(player);
-        itemTransmogrifier->ClearSoulboundTradeable(player);
-    }
-
-    return LANG_ERR_TRANSMOG_OK;
-}
-
-bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* target, ItemTemplate const* source) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::CanTransmogrifyItemWithItem");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem");
 
     if (!target || !source)
         return false;
@@ -429,25 +198,24 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
     {
         if (source->Class == ITEM_CLASS_WEAPON && !((IsRangedWeapon(target->Class, target->SubClass) ||
             ((target->InventoryType == INVTYPE_WEAPON || target->InventoryType == INVTYPE_2HWEAPON) &&
-                (source->InventoryType == INVTYPE_WEAPON || source->InventoryType == INVTYPE_2HWEAPON)) ||
-            ((target->InventoryType == INVTYPE_WEAPONMAINHAND || target->InventoryType == INVTYPE_WEAPONOFFHAND) &&
-                (source->InventoryType == INVTYPE_WEAPON || source->InventoryType == INVTYPE_2HWEAPON)))))
+            (source->InventoryType == INVTYPE_WEAPON || source->InventoryType == INVTYPE_2HWEAPON)) ||
+                ((target->InventoryType == INVTYPE_WEAPONMAINHAND || target->InventoryType == INVTYPE_WEAPONOFFHAND) &&
+            (source->InventoryType == INVTYPE_WEAPON || source->InventoryType == INVTYPE_2HWEAPON)))))
             return false;
         if (source->Class == ITEM_CLASS_ARMOR &&
             !((source->InventoryType == INVTYPE_CHEST || source->InventoryType == INVTYPE_ROBE) &&
-                (target->InventoryType == INVTYPE_CHEST || target->InventoryType == INVTYPE_ROBE)))
+            (target->InventoryType == INVTYPE_CHEST || target->InventoryType == INVTYPE_ROBE)))
             return false;
     }
 
     return true;
 }
-
-bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const
+bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, ItemTemplate const* proto)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::SuitableForTransmogrification");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::SuitableForTransmogrification");
 
     // ItemTemplate const* proto = item->GetTemplate();
-    if (!player || !proto)
+    if (!proto)
         return false;
 
     if (proto->Class != ITEM_CLASS_ARMOR &&
@@ -467,31 +235,34 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (!IsAllowedQuality(proto->Quality)) // (proto->Quality == ITEM_QUALITY_LEGENDARY)
         return false;
 
-    if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
-        return false;
-
-    if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
-        return false;
-
-    if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
-        return false;
-
-    if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
-        return false;
-
-    if (!IgnoreReqSkill && proto->RequiredSkill != 0)
+    if (player)
     {
-        if (player->GetSkillValue(proto->RequiredSkill) == 0)
+        if ((proto->Flags2 & ITEM_FLAG2_FACTION_HORDE) && player->GetTeam() != HORDE)
             return false;
-        else if (player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank)
+
+        if ((proto->Flags2 & ITEM_FLAG2_FACTION_ALLIANCE) && player->GetTeam() != ALLIANCE)
+            return false;
+
+        if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
+            return false;
+
+        if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
+            return false;
+
+        if (!IgnoreReqSkill && proto->RequiredSkill != 0)
+        {
+            if (player->GetSkillValue(proto->RequiredSkill) == 0)
+                return false;
+            else if (player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank)
+                return false;
+        }
+
+        if (!IgnoreReqSpell && proto->RequiredSpell != 0 && !player->HasSpell(proto->RequiredSpell))
+            return false;
+
+        if (!IgnoreReqLevel && player->getLevel() < proto->RequiredLevel)
             return false;
     }
-
-    if (!IgnoreReqSpell && proto->RequiredSpell != 0 && !player->HasSpell(proto->RequiredSpell))
-        return false;
-
-    if (!IgnoreReqLevel && player->getLevel() < proto->RequiredLevel)
-        return false;
 
     // If World Event is not active, prevent using event dependant items
     if (!IgnoreReqEvent && proto->HolidayId && !IsHolidayActive((HolidayIds)proto->HolidayId))
@@ -518,105 +289,30 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     return true;
 }
 
-/*
-bool Transmogrification::CanTransmogrify(Item const* item)
+bool TransmogDisplayVendorMgr::IsRangedWeapon(uint32 Class, uint32 SubClass)
 {
-ItemTemplate const* proto = item->GetTemplate();
-
-if (!proto)
-return false;
-
-if (proto->Flags2 & ITEM_FLAGS_EXTRA_CANNOT_TRANSMOG)
-return false;
-
-if (proto->Quality == ITEM_QUALITY_LEGENDARY)
-return false;
-
-if (proto->Class != ITEM_CLASS_ARMOR &&
-proto->Class != ITEM_CLASS_WEAPON)
-return false;
-
-if (proto->Class == ITEM_CLASS_WEAPON && proto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-return false;
-
-if (proto->Flags2 & ITEM_FLAGS_EXTRA_CAN_TRANSMOG)
-return true;
-
-if (item->GetItemRandomPropertyId() == 0)
-return false;
-
-for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
-if (proto->ItemStat[i].ItemStatValue != 0)
-return true;
-
-return false;
-}
-bool Transmogrification::CanBeTransmogrified(Item const* item)
-{
-ItemTemplate const* proto = item->GetTemplate();
-
-if (!proto)
-return false;
-
-if (proto->Quality == ITEM_QUALITY_LEGENDARY)
-return false;
-
-if (proto->Class != ITEM_CLASS_ARMOR &&
-proto->Class != ITEM_CLASS_WEAPON)
-return false;
-
-if (proto->Class == ITEM_CLASS_WEAPON && proto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-return false;
-
-if (proto->Flags2 & ITEM_FLAGS_EXTRA_CANNOT_BE_TRANSMOG)
-return false;
-
-if (item->GetItemRandomPropertyId() == 0)
-return false;
-
-for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
-if (proto->ItemStat[i].ItemStatValue != 0)
-return true;
-
-return false;
-}
-*/
-
-uint32 Transmogrification::GetSpecialPrice(ItemTemplate const* proto) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::GetSpecialPrice");
-
-    uint32 cost = proto->SellPrice < 10000 ? 10000 : proto->SellPrice;
-    return cost;
-}
-
-bool Transmogrification::IsRangedWeapon(uint32 Class, uint32 SubClass) const
-{
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::IsRangedWeapon");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::IsRangedWeapon");
 
     return Class == ITEM_CLASS_WEAPON && (
         SubClass == ITEM_SUBCLASS_WEAPON_BOW ||
         SubClass == ITEM_SUBCLASS_WEAPON_GUN ||
         SubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW);
 }
-
-bool Transmogrification::IsAllowed(uint32 entry) const
+bool TransmogDisplayVendorMgr::IsAllowed(uint32 entry)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::IsAllowed");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::IsAllowed");
 
-    return Allowed.find(entry) != Allowed.end();
+    return std::find(Allowed.begin(), Allowed.end(), entry) != Allowed.end();
 }
-
-bool Transmogrification::IsNotAllowed(uint32 entry) const
+bool TransmogDisplayVendorMgr::IsNotAllowed(uint32 entry)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::IsNotAllowed");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::IsNotAllowed");
 
-    return NotAllowed.find(entry) != NotAllowed.end();
+    return std::find(NotAllowed.begin(), NotAllowed.end(), entry) != NotAllowed.end();
 }
-
-bool Transmogrification::IsAllowedQuality(uint32 quality) const
+bool TransmogDisplayVendorMgr::IsAllowedQuality(uint32 quality)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::IsAllowedQuality");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::IsAllowedQuality");
 
     switch (quality)
     {
@@ -632,124 +328,232 @@ bool Transmogrification::IsAllowedQuality(uint32 quality) const
     }
 }
 
-void Transmogrification::LoadConfig(bool reload)
+void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*creature*/, uint32 vendorslot, uint32 itemEntry, bool no_cost)
 {
-    TC_LOG_DEBUG("custom.transmog", "Transmogrification::LoadConfig");
+    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::HandleTransmogrify");
 
-#ifdef PRESETS
-    EnableSetInfo = sConfigMgr->GetBoolDefault("Transmogrification.EnableSetInfo", true);
-    SetNpcText = uint32(sConfigMgr->GetIntDefault("Transmogrification.SetNpcText", 50001));
+    SelectionStore::Selection selection;
+    if (!selectionStore.GetSelection(player->GetGUID().GetCounter(), selection))
+        return; // cheat, no slot selected
 
-    EnableSets = sConfigMgr->GetBoolDefault("Transmogrification.EnableSets", true);
-    MaxSets = (uint8)sConfigMgr->GetIntDefault("Transmogrification.MaxSets", 10);
-    SetCostModifier = sConfigMgr->GetFloatDefault("Transmogrification.SetCostModifier", 3.0f);
-    SetCopperCost = sConfigMgr->GetIntDefault("Transmogrification.SetCopperCost", 0);
+    const char* slotname = TransmogDisplayVendorMgr::getSlotName(selection.slot, player->GetSession());
+    if (!slotname)
+        return;
+    uint8 slot = selection.slot;
 
-    if (MaxSets > MAX_OPTIONS)
-        MaxSets = MAX_OPTIONS;
-
-    if (reload) // dont store presets for nothing
+    // slot of the transmogrified item
+    if (slot >= EQUIPMENT_SLOT_END)
     {
-        // this should be thread safe as long as LoadConfig is triggered on thread safe env
-        SessionMap const& sessions = sWorld->GetAllSessions();
-        for (SessionMap::const_iterator it = sessions.begin(); it != sessions.end(); ++it)
+        TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::HandleTransmogrify - %s (%s) tried to transmogrify item %u with a wrong slot (%u) when transmogrifying items.", player->GetName().c_str(), player->GetGUID().ToString().c_str(), itemEntry, slot);
+        return; // LANG_ERR_TRANSMOG_INVALID_SLOT
+    }
+
+    const ItemTemplate* itemTransmogrifier = nullptr;
+    // guid of the transmogrifier item, if it's not 0
+    if (itemEntry)
+    {
+        itemTransmogrifier = sObjectMgr->GetItemTemplate(itemEntry);
+        if (!itemTransmogrifier)
         {
-            if (Player* player = it->second->GetPlayer())
-            {
-                // skipping session check
-                if (EnableSets)
-                    LoadPlayerSets(player);
-            }
+            TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::HandleTransmogrify - %s (%s) tried to transmogrify with an invalid item entry %u.", player->GetName().c_str(), player->GetGUID().ToString().c_str(), itemEntry);
+            return; // LANG_ERR_TRANSMOG_MISSING_SRC_ITEM
         }
     }
-#endif
 
-    EnableTransmogInfo = sConfigMgr->GetBoolDefault("Transmogrification.EnableTransmogInfo", true);
-    TransmogNpcText = uint32(sConfigMgr->GetIntDefault("Transmogrification.TransmogNpcText", 50000));
-
-    std::istringstream issAllowed(sConfigMgr->GetStringDefault("Transmogrification.Allowed", ""));
-    std::istringstream issNotAllowed(sConfigMgr->GetStringDefault("Transmogrification.NotAllowed", ""));
-    while (issAllowed.good())
+    // transmogrified item
+    Item* itemTransmogrified = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+    if (!itemTransmogrified)
     {
-        uint32 entry;
-        issAllowed >> entry;
-        if (issAllowed.fail())
-            break;
-        Allowed.insert(entry);
-    }
-    while (issNotAllowed.good())
-    {
-        uint32 entry;
-        issNotAllowed >> entry;
-        if (issNotAllowed.fail())
-            break;
-        NotAllowed.insert(entry);
+        TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::HandleTransmogrify - %s (%s) tried to transmogrify an invalid item in a valid slot (slot: %u).", player->GetName().c_str(), player->GetGUID().ToString().c_str(), slot);
+        player->GetSession()->SendNotification("No item in %s slot", slotname);
+        return; // LANG_ERR_TRANSMOG_MISSING_DEST_ITEM
     }
 
-    ScaledCostModifier = sConfigMgr->GetFloatDefault("Transmogrification.ScaledCostModifier", 1.0f);
-    CopperCost = sConfigMgr->GetIntDefault("Transmogrification.CopperCost", 0);
-
-    RequireToken = sConfigMgr->GetBoolDefault("Transmogrification.RequireToken", false);
-    TokenEntry = uint32(sConfigMgr->GetIntDefault("Transmogrification.TokenEntry", 49426));
-    TokenAmount = uint32(sConfigMgr->GetIntDefault("Transmogrification.TokenAmount", 1));
-
-    AllowPoor = sConfigMgr->GetBoolDefault("Transmogrification.AllowPoor", false);
-    AllowCommon = sConfigMgr->GetBoolDefault("Transmogrification.AllowCommon", false);
-    AllowUncommon = sConfigMgr->GetBoolDefault("Transmogrification.AllowUncommon", true);
-    AllowRare = sConfigMgr->GetBoolDefault("Transmogrification.AllowRare", true);
-    AllowEpic = sConfigMgr->GetBoolDefault("Transmogrification.AllowEpic", true);
-    AllowLegendary = sConfigMgr->GetBoolDefault("Transmogrification.AllowLegendary", false);
-    AllowArtifact = sConfigMgr->GetBoolDefault("Transmogrification.AllowArtifact", false);
-    AllowHeirloom = sConfigMgr->GetBoolDefault("Transmogrification.AllowHeirloom", true);
-
-    AllowMixedArmorTypes = sConfigMgr->GetBoolDefault("Transmogrification.AllowMixedArmorTypes", false);
-    AllowMixedWeaponTypes = sConfigMgr->GetBoolDefault("Transmogrification.AllowMixedWeaponTypes", false);
-    AllowFishingPoles = sConfigMgr->GetBoolDefault("Transmogrification.AllowFishingPoles", false);
-
-    IgnoreReqRace = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqRace", false);
-    IgnoreReqClass = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqClass", false);
-    IgnoreReqSkill = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqSkill", false);
-    IgnoreReqSpell = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqSpell", false);
-    IgnoreReqLevel = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqLevel", false);
-    IgnoreReqEvent = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqEvent", false);
-    IgnoreReqStats = sConfigMgr->GetBoolDefault("Transmogrification.IgnoreReqStats", false);
-
-    if (!sObjectMgr->GetItemTemplate(TokenEntry))
+    if (!itemTransmogrifier) // reset look newEntry
     {
-        TC_LOG_INFO("custom.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default (%u).", TokenEntry, 49426);
-        TokenEntry = 49426;
+        DeleteFakeEntry(player, itemTransmogrified);
+    }
+    else
+    {
+        if (!CanTransmogrifyItemWithItem(player, itemTransmogrified->GetTemplate(), itemTransmogrifier))
+        {
+            TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::HandleTransmogrify - %s (%s) failed CanTransmogrifyItemWithItem (%u with %u).", player->GetName().c_str(), player->GetGUID().ToString().c_str(), itemTransmogrified->GetEntry(), itemTransmogrifier->ItemId);
+            player->GetSession()->SendNotification("Equipped item is not suitable for selected transmogrification");
+            return; // LANG_ERR_TRANSMOG_INVALID_ITEMS
+        }
+
+        if (uint32 fakeEntry = GetFakeEntry(itemTransmogrified))
+        {
+            if (const ItemTemplate* fakeItemTemplate = sObjectMgr->GetItemTemplate(fakeEntry))
+            {
+                if (fakeItemTemplate->DisplayInfoID == itemTransmogrifier->DisplayInfoID)
+                {
+                    player->GetSession()->SendNotification("%s already transmogrified with %s", slotname, getItemName(itemTransmogrifier, player->GetSession()).c_str());
+                    return;
+                }
+            }
+        }
+
+        // {{entry}, {entry}, ...}
+        std::list<uint32> L;
+        uint32 counter = 0;
+        bool over = false;
+        if (itemTransmogrified->GetTemplate()->Class != ITEM_CLASS_WEAPON && TransmogDisplayVendorMgr::AllowMixedArmorTypes)
+        {
+            for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_ARMOR; ++i)
+            {
+                const EntryVector* oM = optionMap[MAX_ITEM_SUBCLASS_WEAPON + i][getCorrectInvType(itemTransmogrified->GetTemplate()->InventoryType)][selection.quality];
+                if (!oM)
+                    continue;
+                if (!over && counter + oM->size() < selection.offset)
+                {
+                    counter += oM->size();
+                }
+                else
+                {
+                    over = true;
+                    L.insert(L.end(), oM->begin(), oM->end());
+                }
+            }
+        }
+        else if (itemTransmogrified->GetTemplate()->Class == ITEM_CLASS_WEAPON && TransmogDisplayVendorMgr::AllowMixedWeaponTypes)
+        {
+            for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_WEAPON; ++i)
+            {
+                const EntryVector* oM = optionMap[i][getCorrectInvType(itemTransmogrified->GetTemplate()->InventoryType)][selection.quality];
+                if (!oM)
+                    continue;
+                if (!over && counter + oM->size() < selection.offset)
+                {
+                    counter += oM->size();
+                }
+                else
+                {
+                    over = true;
+                    L.insert(L.end(), oM->begin(), oM->end());
+                }
+            }
+        }
+        else
+        {
+            const EntryVector* oM = optionMap[(itemTransmogrified->GetTemplate()->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itemTransmogrified->GetTemplate()->SubClass][getCorrectInvType(itemTransmogrified->GetTemplate()->InventoryType)][selection.quality];
+            if (oM)
+            {
+                if (!over && counter + oM->size() < selection.offset)
+                {
+                    counter += oM->size();
+                }
+                else
+                {
+                    over = true;
+                    L.insert(L.end(), oM->begin(), oM->end());
+                }
+            }
+        }
+        std::list<uint32>::const_iterator it = L.begin();
+        std::advance(it, (selection.offset - counter) + vendorslot);
+        if (it == L.end() || (*it) != itemEntry)
+        {
+            player->GetSession()->SendNotification("Equipped item is not suitable for selected transmogrification");
+            return; // either cheat or changed items (not found in correct place in transmog vendor view)
+        }
+
+        if (!no_cost)
+        {
+            if (RequireToken)
+            {
+                if (player->HasItemCount(TokenEntry, TokenAmount))
+                {
+                    player->DestroyItemCount(TokenEntry, TokenAmount, true);
+                }
+                else
+                {
+                    player->GetSession()->SendNotification("You do not have enough %ss", getItemName(sObjectMgr->GetItemTemplate(TransmogDisplayVendorMgr::TokenEntry), player->GetSession()).c_str());
+                    return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_TOKENS
+                }
+            }
+
+            int32 cost = 0;
+            cost = GetSpecialPrice(itemTransmogrified->GetTemplate());
+            cost *= ScaledCostModifier;
+            cost += CopperCost;
+
+            if (cost) // 0 cost if reverting look
+            {
+                if (cost < 0)
+                {
+                    TC_LOG_DEBUG("custom.transmog", "TransmogDisplayVendorMgr::HandleTransmogrify - %s (%s) transmogrification invalid cost (non negative, amount %i). Transmogrified %u with %u", player->GetName().c_str(), player->GetGUID().ToString().c_str(), -cost, itemTransmogrified->GetEntry(), itemTransmogrifier->ItemId);
+                }
+                else
+                {
+                    if (!player->HasEnoughMoney(cost))
+                    {
+                        player->GetSession()->SendNotification("You do not have enough money");
+                        return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_MONEY
+                    }
+                    player->ModifyMoney(-cost, false);
+                }
+            }
+
+            SetFakeEntry(player, itemTransmogrified, itemTransmogrifier->ItemId);
+
+            itemTransmogrified->UpdatePlayedTime(player);
+
+            itemTransmogrified->SetOwnerGUID(player->GetGUID());
+            itemTransmogrified->SetNotRefundable(player);
+            itemTransmogrified->ClearSoulboundTradeable(player);
+
+            //if (itemTransmogrifier->GetTemplate()->Bonding == BIND_WHEN_EQUIPED || itemTransmogrifier->GetTemplate()->Bonding == BIND_WHEN_USE)
+            //    itemTransmogrifier->SetBinding(true);
+
+            //itemTransmogrifier->SetOwnerGUID(player->GetGUID());
+            //itemTransmogrifier->SetNotRefundable(player);
+            //itemTransmogrifier->ClearSoulboundTradeable(player);
+        }
+
+        player->GetSession()->SendAreaTriggerMessage("%s transmogrified", slotname);
+        //return LANG_ERR_TRANSMOG_OK;
     }
 }
 
-std::vector<ObjectGuid> Transmogrification::GetItemList(const Player* player) const
+const char * TransmogDisplayVendorMgr::getQualityName(uint32 quality)
 {
-    std::vector<ObjectGuid> itemlist;
+    switch (quality)
+    {
+        case ITEM_QUALITY_POOR: return "|CFF9d9d9d[Poor]";
+        case ITEM_QUALITY_NORMAL: return "|CFFffffff[Common]";
+        case ITEM_QUALITY_UNCOMMON: return "|CFF1eff00[Uncommon]";
+        case ITEM_QUALITY_RARE: return "|CFF0070dd[Rare]";
+        case ITEM_QUALITY_EPIC: return "|CFFa335ee[Epic]";
+        case ITEM_QUALITY_LEGENDARY: return "|CFFff8000[Legendary]";
+        case ITEM_QUALITY_ARTIFACT: return "|CFFe6cc80[Artifact]";
+        case ITEM_QUALITY_HEIRLOOM: return "|CFFe5cc80[Heirloom]";
+        default: return "[Unknown]";
+    }
+}
 
-    // Copy paste from Player::GetItemByGuid(guid)
+std::string TransmogDisplayVendorMgr::getItemName(const ItemTemplate * itemTemplate, WorldSession * session)
+{
+    std::string name = itemTemplate->Name1;
+    LocaleConstant loc_idx = session->GetSessionDbLocaleIndex();
+    if (loc_idx >= 0)
+        if (ItemLocale const* il = sObjectMgr->GetItemLocale(itemTemplate->ItemId))
+            sObjectMgr->GetLocaleString(il->Name, loc_idx, name);
+    return name;
+}
 
-    for (uint8 i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
-        if (Item* pItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            itemlist.push_back(pItem->GetGUID());
-
-    for (uint8 i = KEYRING_SLOT_START; i < CURRENCYTOKEN_SLOT_END; ++i)
-        if (Item* pItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            itemlist.push_back(pItem->GetGUID());
-
-    for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_BAG_END; ++i)
-        if (Item* pItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            itemlist.push_back(pItem->GetGUID());
-
-    for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
-        if (Bag* pBag = player->GetBagByPos(i))
-            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
-                if (Item* pItem = pBag->GetItemByPos(j))
-                    itemlist.push_back(pItem->GetGUID());
-
-    for (uint8 i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
-        if (Bag* pBag = player->GetBagByPos(i))
-            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
-                if (Item* pItem = pBag->GetItemByPos(j))
-                    itemlist.push_back(pItem->GetGUID());
-
-    return itemlist;
+uint32 TransmogDisplayVendorMgr::getCorrectInvType(uint32 inventorytype)
+{
+    switch (inventorytype)
+    {
+        case INVTYPE_WEAPONMAINHAND:
+        case INVTYPE_WEAPONOFFHAND:
+            return INVTYPE_WEAPON;
+        case INVTYPE_RANGEDRIGHT:
+            return INVTYPE_RANGED;
+        case INVTYPE_ROBE:
+            return INVTYPE_CHEST;
+        default:
+            return inventorytype;
+    }
 }
