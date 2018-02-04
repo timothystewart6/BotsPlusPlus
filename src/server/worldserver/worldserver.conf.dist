@@ -3944,7 +3944,7 @@ StartGuild.Horde = 46
 #               PlayedTimeReward.Money    = 1000 (10 silver)
 
 PlayedTimeReward.Interval = 3600000
-PlayedTimeReward.Money    = 100000
+PlayedTimeReward.Money    = 10000
 
 #
 ###################################################################################################
