@@ -1320,7 +1320,7 @@ void Player::Update(uint32 p_time)
     {
         if (ptr_Interval <= p_time)
         {
-            GetSession()->SendAreaTriggerMessage("Bonus for played time. Thank you for playing!");
+            GetSession()->SendAreaTriggerMessage("Bonus gold added for played time. Thank you for playing!");
             ModifyMoney(ptr_Money);
             ModifyHonorPoints(ptr_Honor);
             ModifyArenaPoints(ptr_Arena);
