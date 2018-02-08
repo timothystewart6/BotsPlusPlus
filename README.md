@@ -63,6 +63,7 @@ Included in `sql/custom`
 * Spawned NPC Bots by [timothystewart6](https://github.com/timothystewart6)
 * Gear Master by [timothystewart6](https://github.com/timothystewart6)
 * Level Master by [timothystewart6](https://github.com/timothystewart6)
+* Jewel Crafting trainers in Stormwind and Orgrimmar by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
