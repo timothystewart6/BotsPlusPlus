@@ -64,6 +64,7 @@ Included in `sql/custom`
 * Gear Master by [timothystewart6](https://github.com/timothystewart6)
 * Level Master by [timothystewart6](https://github.com/timothystewart6)
 * Jewel Crafting trainers in Stormwind and Orgrimmar by [timothystewart6](https://github.com/timothystewart6)
+* Title Master by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -77,6 +78,8 @@ Included in `sql/custom`
 * Enchanter NPC [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Played Time Rewards [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Level NPC [rochet2](http://rochet2.github.io/Item-Enchant-Visuals.html) (forum post)
+* Double XP Weekend [SingleCore](https://github.com/conan513/SingleCore_TC)
+* Title NPC [JunkyBulgaria/BattleArenas-2](https://github.com/JunkyBulgaria/BattleArenas-2)
 * Lord Psyan patches mentioned above
 
 ## NPC List
@@ -99,6 +102,7 @@ Included in `sql/custom`
 | Maiden of the Stars| Level Master |
 | NPC Bots| Stormwind |
 | NPC Bots| Orgrimmar |
+| Grunty | Title Master |
 
 ## Config
 
