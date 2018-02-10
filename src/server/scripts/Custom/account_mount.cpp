@@ -1,15 +1,15 @@
-#pragma clang diagnostic ignored "-Wunused-variable"
+#include "Player.h"
+
 class AccountMounts : public PlayerScript
 {
-    static const bool limitrace = true; // This set to true will only learn mounts from chars on the same team, do what you want.
+    static const bool limitrace = false; // This set to true will only learn mounts from chars on the same team, do what you want.
 public:
     AccountMounts() : PlayerScript("AccountMounts") { }
 
-    void OnLogin(Player* player, bool /*firstLogin*/) override
+    void OnLogin(Player* pPlayer, bool first_login)
     {
         std::vector<uint32> Guids;
-        uint32 playerGUID = player->GetGUID();
-        QueryResult result1 = CharacterDatabase.PQuery("SELECT guid, race FROM characters WHERE account = %u", playerGUID);
+        QueryResult result1 = CharacterDatabase.PQuery("SELECT guid, race FROM characters WHERE account = %u", pPlayer->GetSession()->GetAccountId());
         if (!result1)
             return;
 
@@ -20,7 +20,7 @@ public:
             uint32 guid = fields[0].GetUInt32();
             uint32 race = fields[1].GetUInt8();
 
-            if ((Player::TeamForRace(race) == Player::TeamForRace(player->getRace())) || !limitrace)
+            if ((Player::TeamForRace(race) == Player::TeamForRace(pPlayer->getRace())) || !limitrace)
                 Guids.push_back(result1->Fetch()[0].GetUInt32());
 
         } while (result1->NextRow());
@@ -43,12 +43,12 @@ public:
         {
             auto sSpell = sSpellStore.LookupEntry(i);
             if (sSpell->Effect[0] == SPELL_EFFECT_APPLY_AURA && sSpell->EffectApplyAuraName[0] == SPELL_AURA_MOUNTED)
-                player->LearnSpell(sSpell->Id, false);
+                pPlayer->LearnSpell(sSpell->Id, false);
         }
     }
 };
 
 void AddSC_accontmounts()
 {
-    new AccountMounts;
+    new AccountMounts();
 }
