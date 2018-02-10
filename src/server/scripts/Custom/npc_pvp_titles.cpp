@@ -109,7 +109,7 @@ class TitleNpc : public CreatureScript
 			{
 				case ACTION_TITLE_PRIVATE:
 					{
-					    if (GetTotalKill(Player) >= 10)
+					    if (GetTotalKill(Player) >= 0)
 					        Player->SetTitle(sCharTitlesStore.LookupEntry(1));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -117,7 +117,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_CORPORAL:
 					{
-						if (GetTotalKill(Player) >= 50)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(2));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -125,7 +125,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_SERGEANT:
 					{
-						if (GetTotalKill(Player) >= 100)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(3));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -133,7 +133,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_MASTER_SERGEANT:
 					{
-						if (GetTotalKill(Player) >= 200)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(4));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -141,7 +141,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_SERGEANT_MAJOR:
 					{
-						if (GetTotalKill(Player) >= 400)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(5));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -149,7 +149,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_KNIGHT:
 					{
-						if (GetTotalKill(Player) >= 500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(6));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -157,7 +157,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_KNIGHT_LIEUTENANT:
 					{
-						if (GetTotalKill(Player) >= 600)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(7));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -165,7 +165,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_KNIGHT_CAPTAIN:
 					{
-						if (GetTotalKill(Player) >= 800)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(8));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -173,7 +173,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_KNIGHT_CHAMPION:
 					{
-						if (GetTotalKill(Player) >= 1000)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(9));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -181,7 +181,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_LIEUTENANT_COMMANDER:
 					{
-						if (GetTotalKill(Player) >= 1500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(10));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -189,7 +189,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_COMMANDER:
 					{
-						if (GetTotalKill(Player) >= 2500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(11));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -197,7 +197,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_MARSHAL:
 					{
-						if (GetTotalKill(Player) >= 4000)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(12));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -205,7 +205,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_FIELD_MARSHAL:
 					{
-						if (GetTotalKill(Player) >= 4500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(13));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -213,7 +213,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_GRAND_MARSHAL:
 					{
-						if (GetTotalKill(Player) >= 5500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(14));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -221,7 +221,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_SCOUT:
 					{
-						if (GetTotalKill(Player) >= 10)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(15));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -229,7 +229,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_GRUNT:
 					{
-						if (GetTotalKill(Player) >= 50)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(16));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -237,7 +237,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_SERGEANT_H:
 					{
-						if (GetTotalKill(Player) >= 100)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(17));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -245,7 +245,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_SENIOR_SERGEANT:
 					{
-						if (GetTotalKill(Player) >= 200)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(18));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -253,7 +253,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_FIRST_SERGEANT:
 					{
-						if (GetTotalKill(Player) >= 400)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(19));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -261,7 +261,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_STONE_GUARD:
 					{
-						if (GetTotalKill(Player) >= 500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(20));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -269,7 +269,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_BLOOD_GUARD:
 					{
-						if (GetTotalKill(Player) >= 600)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(21));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -277,7 +277,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_LEGIONNAIRE:
 					{
-						if (GetTotalKill(Player) >= 800)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(22));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -285,7 +285,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_CENTURION:
 					{
-						if (GetTotalKill(Player) >= 1000)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(23));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -293,7 +293,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_CHAMPION:
 					{
-						if (GetTotalKill(Player) >= 1500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(24));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -301,7 +301,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_LIEUTENANT_GENERAL:
 					{
-						if (GetTotalKill(Player) >= 2500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(25));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -309,7 +309,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_GENERAL:
 					{
-						if (GetTotalKill(Player) >= 4000)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(26));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -317,7 +317,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_WARLORD:
 					{
-						if (GetTotalKill(Player) >= 4500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(27));
 						else
 							ws->SendNotification("You dont have enough kills");
@@ -325,7 +325,7 @@ class TitleNpc : public CreatureScript
 				break;
 				case ACTION_TITLE_HIGH_WARLORD:
 					{
-						if (GetTotalKill(Player) >= 5500)
+						if (GetTotalKill(Player) >= 0)
 							Player->SetTitle(sCharTitlesStore.LookupEntry(28));
 						else
 							ws->SendNotification("You dont have enough kills");
