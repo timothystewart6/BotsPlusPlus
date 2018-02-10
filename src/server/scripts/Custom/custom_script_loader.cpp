@@ -48,6 +48,7 @@ void AddSC_Transmogrification();
 void AddSC_npc_enchantment();
 void AddSC_Level_NPC();
 void AddSC_XpWeekend();
+AddSC_npc_pvp_titles();
 
 void AddCustomScripts()
 {
@@ -81,4 +82,5 @@ void AddCustomScripts()
     AddSC_npc_enchantment();
     AddSC_Level_NPC();
     AddSC_XpWeekend();
+    AddSC_npc_pvp_titles();
 }
