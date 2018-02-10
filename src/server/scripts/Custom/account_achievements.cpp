@@ -73,5 +73,5 @@ public:
 
 void AddSC_accountachievement()
 {
-	new AccountAchievements;
+	new AccountAchievements();
 }

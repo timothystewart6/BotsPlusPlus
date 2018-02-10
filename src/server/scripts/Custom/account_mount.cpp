@@ -48,7 +48,7 @@ public:
     }
 };
 
-void AddSC_accontmounts()
+void AddSC_AccountMounts()
 {
     new AccountMounts();
 }
