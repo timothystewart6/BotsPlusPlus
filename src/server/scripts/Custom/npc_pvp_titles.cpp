@@ -70,7 +70,7 @@ class TitleNpc : public CreatureScript
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_03:24|t|r Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT);
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_04:24|t|r Master Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_MASTER_SERGEANT);
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_05:24|t|r Sergeant Major.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT_MAJOR);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_06:24|t|r Knight.(500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_06:24|t|r Knight.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT);
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_07:24|t|r Knight Lieutenant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_LIEUTENANT);
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_08:24|t|r Knight Captain.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_CAPTAIN);
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_09:24|t|r Knight Champion.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_CHAMPION);
