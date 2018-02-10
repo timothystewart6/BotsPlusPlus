@@ -35,15 +35,15 @@ public:
             if (entry)
             {
                 count++;
-                std::string findS = std::string(entry->Name);
+                std::string findS = std::string(entry->name);
                 if(findS.find("%s") != std::string::npos)
                 {
-                    char* text = fixText(entry->Name, player->GetName());
+                    char* text = fixText(entry->name, player->GetName());
                     player->ADD_GOSSIP_ITEM(0, text, 0, entry->ID);
                 }
                 else
                 {
-                    player->ADD_GOSSIP_ITEM(0, entry->Name, 0, entry->ID);
+                    player->ADD_GOSSIP_ITEM(0, entry->name, 0, entry->ID);
                 }
                 if (count >= 15)
                 {
@@ -68,7 +68,7 @@ public:
                 if (entry)
                 {
                     count++;
-                    char* text = fixText(entry->Name, player->GetName());
+                    char* text = fixText(entry->name, player->GetName());
                     player->ADD_GOSSIP_ITEM(0, text, 0, entry->ID);
                     if (count >= 15)
                     {
@@ -90,7 +90,7 @@ public:
                 if (entry)
                 {
                     count++;
-                    char* text = fixText(entry->Name, player->GetName());
+                    char* text = fixText(entry->name, player->GetName());
                     player->ADD_GOSSIP_ITEM(0, text, 0, entry->ID);
                     if (count >= 15)
                     {
