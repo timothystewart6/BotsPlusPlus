@@ -35,5 +35,5 @@ public:
 
 void AddSC_Boss_Announcer()
 {
-	new Boss_Announcer;
+	new Boss_Announcer();
 }

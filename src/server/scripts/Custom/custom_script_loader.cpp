@@ -33,7 +33,7 @@ void AddSC_script_bot_commands();
 
 // Custom
 void AddSC_gon_playerscripts();
-void AddSC_accontmounts();
+void AddSC_AccountMounts();
 void AddSC_announce_login();
 void AddSC_LearnSpellsOnLevelUp();
 void AddSC_FireWorksOnLevelUp();
@@ -47,6 +47,7 @@ void AddSC_REFORGER_NPC();
 void AddSC_Transmogrification();
 void AddSC_npc_enchantment();
 void AddSC_Level_NPC();
+void AddSC_XpWeekend();
 
 void AddCustomScripts()
 {
@@ -65,7 +66,7 @@ void AddCustomScripts()
     AddSC_script_bot_commands();
     // Custom
     AddSC_gon_playerscripts();
-    AddSC_accontmounts();
+    AddSC_AccountMounts();
     AddSC_announce_login();
     AddSC_LearnSpellsOnLevelUp();
     AddSC_FireWorksOnLevelUp();
@@ -79,4 +80,5 @@ void AddCustomScripts()
     AddSC_Transmogrification();
     AddSC_npc_enchantment();
     AddSC_Level_NPC();
+    AddSC_XpWeekend();
 }

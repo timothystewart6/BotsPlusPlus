@@ -13,5 +13,5 @@ public:
 
 void AddSC_announce_login()
 {
-    new announce_login;
+    new announce_login();
 }

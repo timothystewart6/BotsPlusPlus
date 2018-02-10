@@ -310,5 +310,5 @@
  };
  
  void AddSC_beastmaster_npc() {
-     new beastmaster_creaturescript;
+     new beastmaster_creaturescript();
  }
