@@ -65,37 +65,37 @@ class TitleNpc : public CreatureScript
 		{
 			if (player->GetTeam() == ALLIANCE)
 			{
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_01:24|t|r Private.(10 Kill)", GOSSIP_SENDER_MAIN, ACTION_TITLE_PRIVATE);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_02:24|t|r Corporal.(50 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_CORPORAL);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_03:24|t|r Sergeant.(100 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_04:24|t|r Master Sergeant.(200 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_MASTER_SERGEANT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_05:24|t|r Sergeant Major.(400 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT_MAJOR);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_01:24|t|r Private.", GOSSIP_SENDER_MAIN, ACTION_TITLE_PRIVATE);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_02:24|t|r Corporal.", GOSSIP_SENDER_MAIN, ACTION_TITLE_CORPORAL);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_03:24|t|r Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_04:24|t|r Master Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_MASTER_SERGEANT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_05:24|t|r Sergeant Major.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT_MAJOR);
 				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_06:24|t|r Knight.(500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_07:24|t|r Knight Lieutenant.(600 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_LIEUTENANT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_08:24|t|r Knight Captain.(800 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_CAPTAIN);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_09:24|t|r Knight Champion.(1000 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_CHAMPION);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_10:24|t|r Lieutenant Commander.(1500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_LIEUTENANT_COMMANDER);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_11:24|t|r Commander.(2500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_COMMANDER);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_12:24|t|r Marshal.(4000 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_MARSHAL);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_13:24|t|r Field Marshal.(4500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_FIELD_MARSHAL);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_14:24|t|r Grand Marshal.(5500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_GRAND_MARSHAL);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_07:24|t|r Knight Lieutenant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_LIEUTENANT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_08:24|t|r Knight Captain.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_CAPTAIN);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_09:24|t|r Knight Champion.", GOSSIP_SENDER_MAIN, ACTION_TITLE_KNIGHT_CHAMPION);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_10:24|t|r Lieutenant Commander.", GOSSIP_SENDER_MAIN, ACTION_TITLE_LIEUTENANT_COMMANDER);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_11:24|t|r Commander.", GOSSIP_SENDER_MAIN, ACTION_TITLE_COMMANDER);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_12:24|t|r Marshal.", GOSSIP_SENDER_MAIN, ACTION_TITLE_MARSHAL);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_13:24|t|r Field Marshal.", GOSSIP_SENDER_MAIN, ACTION_TITLE_FIELD_MARSHAL);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_A_14:24|t|r Grand Marshal.", GOSSIP_SENDER_MAIN, ACTION_TITLE_GRAND_MARSHAL);
 			}
 			else
 			{
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_01:24|t|r Scout.(10 Kill)", GOSSIP_SENDER_MAIN, ACTION_TITLE_SCOUT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_02:24|t|r Grunt.(50 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_GRUNT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_03:24|t|r Sergeant.(100 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT_H);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_04:24|t|r Senior Sergeant.(200 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_SENIOR_SERGEANT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_05:24|t|r First Sergeant.(400 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_FIRST_SERGEANT);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_06:24|t|r Stone Guard.(500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_STONE_GUARD);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_07:24|t|r Blood Guard.(600 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_BLOOD_GUARD);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_08:24|t|r Legionnaire.(800 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_LEGIONNAIRE);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_09:24|t|r Centurion.(1000 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_CENTURION);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_10:24|t|r Champion.(1500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_CHAMPION);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_11:24|t|r Lieutenant General.(2500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_LIEUTENANT_GENERAL);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_12:24|t|r General.(4000 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_GENERAL);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_13:24|t|r Warlord.(4500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_WARLORD);
-				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_14:24|t|r High Warlord.(5500 Kills)", GOSSIP_SENDER_MAIN, ACTION_TITLE_HIGH_WARLORD);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_01:24|t|r Scout.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SCOUT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_02:24|t|r Grunt.", GOSSIP_SENDER_MAIN, ACTION_TITLE_GRUNT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_03:24|t|r Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SERGEANT_H);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_04:24|t|r Senior Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_SENIOR_SERGEANT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_05:24|t|r First Sergeant.", GOSSIP_SENDER_MAIN, ACTION_TITLE_FIRST_SERGEANT);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_06:24|t|r Stone Guard.", GOSSIP_SENDER_MAIN, ACTION_TITLE_STONE_GUARD);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_07:24|t|r Blood Guard.", GOSSIP_SENDER_MAIN, ACTION_TITLE_BLOOD_GUARD);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_08:24|t|r Legionnaire.", GOSSIP_SENDER_MAIN, ACTION_TITLE_LEGIONNAIRE);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_09:24|t|r Centurion.", GOSSIP_SENDER_MAIN, ACTION_TITLE_CENTURION);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_10:24|t|r Champion.", GOSSIP_SENDER_MAIN, ACTION_TITLE_CHAMPION);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_11:24|t|r Lieutenant General.", GOSSIP_SENDER_MAIN, ACTION_TITLE_LIEUTENANT_GENERAL);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_12:24|t|r General.", GOSSIP_SENDER_MAIN, ACTION_TITLE_GENERAL);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_13:24|t|r Warlord.", GOSSIP_SENDER_MAIN, ACTION_TITLE_WARLORD);
+				player->ADD_GOSSIP_ITEM(4, "|cff00ff00|TInterface\\icons\\Achievement_PVP_H_14:24|t|r High Warlord.", GOSSIP_SENDER_MAIN, ACTION_TITLE_HIGH_WARLORD);
 			}
 			player->PlayerTalkClass->SendGossipMenu(9425, creature->GetGUID());
 			    return true;
