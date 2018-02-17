@@ -1319,7 +1319,7 @@ void Player::Update(uint32 p_time)
         if (ptr_Interval <= p_time)
         {
             GetSession()->SendNotification("Bonus gold added for played time. Thank you for playing!");
-            ChatHandler(player->GetSession()).PSendSysMessage("Bonus gold added for played time. Thank you for playing!");
+            ChatHandler(GetSession()).PSendSysMessage("Bonus gold added for played time. Thank you for playing!");
 			ModifyMoney(ptr_Money);
             ptr_Interval = sConfigMgr->GetIntDefault("PlayedTimeReward.Interval", 0);
         }
