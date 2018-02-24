@@ -13,3 +13,7 @@ CREATE TABLE IF NOT EXISTS `custom_transmogrification_sets` (
   `SetData` text COMMENT 'Slot1 Entry1 Slot2 Entry2',
   PRIMARY KEY (`Owner`,`PresetID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='6_1';
+
+ALTER TABLE `custom_transmogrification`
+	COMMENT='6_2',
+	COLLATE='utf8_general_ci';
