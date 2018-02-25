@@ -91,7 +91,7 @@ Included in `sql/custom`
 | Major Oak | Heirlooms |
 | Prospero | Portal Master |
 | Thaumaturge Vashreen | Arcane Reforger |
-| Warpweaver | Transmogrifier |
+| Warphoof | Transmogrifier |
 | Gwydion | Buff Master |
 | Faegan | Aura Master |
 | Ulf | Trainer Master |
