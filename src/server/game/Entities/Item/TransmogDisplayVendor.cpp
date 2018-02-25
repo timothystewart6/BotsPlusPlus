@@ -56,13 +56,13 @@ const bool TransmogDisplayVendorMgr::AllowMixedArmorTypes = false;
 const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = false;
 const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
 
-const bool TransmogDisplayVendorMgr::IgnoreReqRace = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqClass = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqSkill = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqSpell = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqRace = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqClass = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqSkill = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqSpell = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqLevel = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqEvent = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqStats = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqEvent = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqStats = true;
 
 // Example AllowedItems[] = { 123, 234, 345 };
 const std::set<uint32> TransmogDisplayVendorMgr::AllowedItems = { };
