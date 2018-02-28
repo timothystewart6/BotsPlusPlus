@@ -29,7 +29,7 @@ public:
 
            for (auto& i : Guids)
            {
-               QueryResult result2 = CharacterDatabase.PQuery("SELECT spell FROM character_spell WHERE guid = %u", i);
+               QueryResult result2 = CharacterDatabase.PQuery("SELECT DISTINCT spell FROM character_spell WHERE guid = %u", i);
                if (!result2)
                    continue;
 
@@ -41,10 +41,9 @@ public:
 
 		std::vector<uint32> CompanionSpells;
 
-
         for (auto& i : Spells)
 		{
-			QueryResult result3 = WorldDatabase.PQuery("SELECT spellid_2 FROM item_template WHERE spellid_2 = %u", i);
+			QueryResult result3 = WorldDatabase.PQuery("SELECT DISTINCT spellid_2 FROM item_template WHERE spellid_2 = %u AND class = 15 AND subclass = 2", i);
 			if (!result3)
 				continue;
 
