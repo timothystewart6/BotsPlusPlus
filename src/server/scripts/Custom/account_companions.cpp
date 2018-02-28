@@ -54,6 +54,7 @@ public:
 			} while (result2->NextRow());
 		}
 
+		std::vector<uint32> CompanionSpell;
 
 
         for (auto& i : Spell)
