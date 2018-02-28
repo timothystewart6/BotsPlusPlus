@@ -44,7 +44,7 @@ public:
 
 		for (auto& i : Guids)
 		{
-			QueryResult result2 = CharacterDatabase.PQuery("SELECT DISTINCT spell FROM character_spell WHERE guid = %u", i);
+			QueryResult result2 = CharacterDatabase.PQuery("SELECT spell FROM character_spell WHERE guid = %u", i);
 			if (!result2)
 				continue;
 
@@ -59,7 +59,7 @@ public:
 
         for (auto& i : Spell)
 		{
-			QueryResult result2 = WorldDatabase.PQuery("SELECT DISTINCT spell FROM item_template WHERE spellid_2 = %u and class = 6", i);
+			QueryResult result2 = WorldDatabase.PQuery("SELECT spellid_2 FROM item_template WHERE spellid_2 = %u and class = 6", i);
 			if (!result2)
 				continue;
 
