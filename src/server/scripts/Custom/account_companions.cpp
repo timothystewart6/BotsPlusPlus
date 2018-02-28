@@ -88,7 +88,7 @@ public:
 	}
 };
 
-void AddSC_accountcompanions()
+void AddSC_AccountCompanions()
 {
 	new AccountCompanions();
 }
