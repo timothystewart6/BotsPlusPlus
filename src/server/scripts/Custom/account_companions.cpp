@@ -75,17 +75,8 @@ public:
 		for (auto& i : CompanionSpell)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
-			AddSpells(pPlayer, sSpell->ID);
+            pPlayer->LearnSpell(sSpell->Id, false);
 		}
-	}
-
-	void AddSpells(Player* player, uint32 SpellID)
-	{
-		if (limitlevel)
-			setlevel = minlevel;
-
-		if (player->getLevel() >= setlevel)
-            player->LearnSpell(sSpell->SpellID, false);
 	}
 };
 
