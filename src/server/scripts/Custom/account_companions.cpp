@@ -39,20 +39,6 @@ public:
                } while (result2->NextRow());
            }
 
-//		std::vector<uint32> CompanionSpells;
-//
-//        for (auto& i : Spells)
-//		{
-//			QueryResult result3 = WorldDatabase.PQuery("SELECT DISTINCT spellid_2 FROM item_template WHERE spellid_2 = %u AND class = 15 AND subclass = 2", i);
-//			if (!result3)
-//				continue;
-//
-//			do
-//			{
-//				CompanionSpells.push_back(result3->Fetch()[0].GetUInt32());
-//			} while (result3->NextRow());
-//		}
-
 		for (auto& i : Spells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
