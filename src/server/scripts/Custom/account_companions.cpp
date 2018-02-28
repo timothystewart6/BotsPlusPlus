@@ -42,7 +42,7 @@ public:
 		std::vector<uint32> CompanionSpells;
 
 
-        for (auto& i : Spell)
+        for (auto& i : Spells)
 		{
 			QueryResult result3 = WorldDatabase.PQuery("SELECT spellid_2 FROM item_template WHERE spellid_2 = %u and class = 6", i);
 			if (!result3)
