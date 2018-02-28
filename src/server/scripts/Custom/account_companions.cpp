@@ -85,7 +85,7 @@ public:
 			setlevel = minlevel;
 
 		if (player->getLevel() >= setlevel)
-			player->LearnSpell(sSpellStore.LookupEntry(SpellID));
+            pPlayer->LearnSpell(sSpell->SpellID, false);
 	}
 };
 
