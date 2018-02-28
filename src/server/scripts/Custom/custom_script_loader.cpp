@@ -67,8 +67,6 @@ void AddCustomScripts()
     AddSC_blademaster_bot();
     AddSC_script_bot_commands();
     // Custom
-    AddSC_accountachievement();
-    AddSC_AccountCompanions();
     AddSC_gon_playerscripts();
     AddSC_AccountMounts();
     AddSC_announce_login();
@@ -77,6 +75,7 @@ void AddCustomScripts()
     AddSC_item_enchant_visuals();    
     AddSC_Player_Boa();
     AddSC_Boss_Announcer();
+    AddSC_accountachievement();
     AddSC_custom_CongratsOnLevel();
     AddSC_beastmaster_npc();
     AddSC_REFORGER_NPC();
@@ -85,4 +84,5 @@ void AddCustomScripts()
     AddSC_Level_NPC();
     AddSC_XpWeekend();
     AddSC_TitleNpc();
+    AddSC_AccountCompanions();
 }
