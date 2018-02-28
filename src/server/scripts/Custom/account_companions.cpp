@@ -54,7 +54,7 @@ public:
 			} while (result3->NextRow());
 		}
 
-		for (auto& i : CompanionSpell)
+		for (auto& i : CompanionSpells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
             pPlayer->LearnSpell(sSpell->Id, false);
