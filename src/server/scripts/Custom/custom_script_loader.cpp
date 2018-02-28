@@ -83,4 +83,5 @@ void AddCustomScripts()
     AddSC_Level_NPC();
     AddSC_XpWeekend();
     AddSC_TitleNpc();
+    AddSC_accountcompanions();
 }
