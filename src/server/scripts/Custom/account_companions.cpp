@@ -42,7 +42,7 @@ public:
 		for (auto& i : Spells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->SummonType[0] == SUMMON_TYPE_MINIPET)
+			 if (sSpell->Category[0] == SUMMON_TYPE_MINIPET)
                             pPlayer->LearnSpell(sSpell->Id, false);
 		}
 	}
