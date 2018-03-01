@@ -1741,7 +1741,7 @@ SpellCastResult SpellInfo::CheckVehicle(Unit const* caster) const
 bool SpellInfo::CheckTargetCreatureType(Unit const* target) const
 {
     // Curse of Doom & Exorcism: not find another way to fix spell target check :/
-    if (SpellFamilyName == SPELLFAMILY_WARLOCK && GetCategory() == 1179)
+    if (SpellFamilyName == SPELLFAMILY_WARLOCK GetCategory() == 1179)
     {
         // not allow cast at player
         if (target->GetTypeId() == TYPEID_PLAYER)
