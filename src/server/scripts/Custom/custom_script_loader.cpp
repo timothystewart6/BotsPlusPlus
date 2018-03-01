@@ -49,6 +49,7 @@ void AddSC_npc_enchantment();
 void AddSC_Level_NPC();
 void AddSC_XpWeekend();
 void AddSC_TitleNpc();
+void AddSC_AccountCompanions();
 
 void AddCustomScripts()
 {
@@ -83,4 +84,5 @@ void AddCustomScripts()
     AddSC_Level_NPC();
     AddSC_XpWeekend();
     AddSC_TitleNpc();
+    AddSC_AccountCompanions();
 }
