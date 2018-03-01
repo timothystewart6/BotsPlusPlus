@@ -42,7 +42,7 @@ public:
 		for (auto& i : Spells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->Effect[0] == SUMMON_TYPE_MINIPET)
+			 if (sSpell->Effect[57] == SPELL_EFFECT_SUMMON_PET)
                             pPlayer->LearnSpell(sSpell->Id, false);
 		}
 	}
