@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "SpellMgr.h"
 
 class AccountCompanions : public PlayerScript
 {
@@ -42,8 +41,10 @@ public:
 
 		for (auto& i : Spells)
 		{
+		// https://trinitycore.atlassian.net/wiki/spaces/tc/pages/2130104/Spell
+		// https://trinitycore.atlassian.net/wiki/spaces/tc/pages/2130136/spell+dbc
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->EffectMiscValueB[0] == 41)
+			 if (sSpell->Effect[0] == SPELL_EFFECT_SUMMON && sSpell->EffectMiscValueB[0] == 41)
 			 pPlayer->LearnSpell(sSpell->Id, false);
 		}
 	}
