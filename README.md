@@ -65,6 +65,7 @@ Included in `sql/custom`
 * Level Master by [timothystewart6](https://github.com/timothystewart6)
 * Jewel Crafting trainers in Stormwind and Orgrimmar by [timothystewart6](https://github.com/timothystewart6)
 * Title Master by [timothystewart6](https://github.com/timothystewart6)
+* Reputation Master by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -80,6 +81,7 @@ Included in `sql/custom`
 * Level NPC [rochet2](http://rochet2.github.io/Item-Enchant-Visuals.html) (forum post)
 * Double XP Weekend [SingleCore](https://github.com/conan513/SingleCore_TC)
 * Title NPC [JunkyBulgaria/BattleArenas-2](https://github.com/JunkyBulgaria/BattleArenas-2)
+* Account Companions [timothystewart6](https://github.com/timothystewart6)
 * Lord Psyan patches mentioned above
 
 ## NPC List
@@ -103,6 +105,7 @@ Included in `sql/custom`
 | NPC Bots| Stormwind |
 | NPC Bots| Orgrimmar |
 | Grunty | Title Master |
+| Wal'rufus | Reputation Master |
 
 ## Config
 
