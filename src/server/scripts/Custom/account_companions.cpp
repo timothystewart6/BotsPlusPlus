@@ -43,9 +43,9 @@ public:
 		for (auto& i : Spells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->Effect[1] == 28) {
-			                pPlayer->LearnSpell(sSpell->Id, false);
-			 }
+			 if (sSpell->Effect[0] == 28)
+			 pPlayer->LearnSpell(sSpell->Id, false);
+
 
 		}
 	}
