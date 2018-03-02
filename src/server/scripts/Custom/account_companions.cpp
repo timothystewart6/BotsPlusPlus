@@ -43,7 +43,7 @@ public:
 		for (auto& i : Spells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->Effect[0] == SPELL_EFFECT_SUMMON && sSpell->Effect[0] == SPELL_ATTR1_DISMISS_PET) {
+			 if (sSpell->Effect[1] == SPELL_EFFECT_SUMMON_PET) {
 			                pPlayer->LearnSpell(sSpell->Id, false);
 			 }
 
