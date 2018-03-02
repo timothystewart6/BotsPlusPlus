@@ -2,7 +2,7 @@
 
 class AccountCompanions : public PlayerScript
 {
-    static const bool limitrace = false; // This set to true will only learn mounts from chars on the same team, do what you want.
+    static const bool limitrace = false; // This set to true will only learn pets from chars on the same team, do what you want.
 public:
 	AccountCompanions() : PlayerScript("AccountCompanions") { }
 
@@ -41,9 +41,11 @@ public:
 
 		for (auto& i : Spells)
 		{
+		// https://trinitycore.atlassian.net/wiki/spaces/tc/pages/2130104/Spell
+		// https://trinitycore.atlassian.net/wiki/spaces/tc/pages/2130136/spell+dbc
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->Effect[0] == SPELL_EFFECT_SUMMON)
-                            pPlayer->LearnSpell(sSpell->Id, false);
+			 if (sSpell->Effect[0] == SPELL_EFFECT_SUMMON && sSpell->EffectMiscValueB[0] == 41)
+			 pPlayer->LearnSpell(sSpell->Id, false);
 		}
 	}
 };
