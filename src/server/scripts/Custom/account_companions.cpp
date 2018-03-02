@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "SpellMgr.h"
 
 class AccountCompanions : public PlayerScript
 {
