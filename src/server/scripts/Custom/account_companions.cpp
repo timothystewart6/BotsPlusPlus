@@ -43,7 +43,7 @@ public:
 		for (auto& i : Spells)
 		{
 			auto sSpell = sSpellStore.LookupEntry(i);
-			 if (sSpell->EffectMiscValue[0] == 17252)
+			 if (sSpell->EffectMiscValue[1] == 17252)
 			 pPlayer->LearnSpell(sSpell->Id, false);
 		}
 	}
