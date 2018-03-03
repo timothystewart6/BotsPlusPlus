@@ -66,6 +66,7 @@ Included in `sql/custom`
 * Jewel Crafting trainers in Stormwind and Orgrimmar by [timothystewart6](https://github.com/timothystewart6)
 * Title Master by [timothystewart6](https://github.com/timothystewart6)
 * Reputation Master by [timothystewart6](https://github.com/timothystewart6)
+* Welcome Master by [Fullhouser](http://sqlmegapack.weebly.com/) and fixes by [timothystewart6](https://github.com/timothystewart6)
 
 `C++` scripts applied:
 
@@ -106,6 +107,7 @@ Included in `sql/custom`
 | NPC Bots| Orgrimmar |
 | Grunty | Title Master |
 | Wal'rufus | Reputation Master |
+| Commencer | Welcome Master |
 
 ## Config
 
