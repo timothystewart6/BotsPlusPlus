@@ -7,10 +7,9 @@ DELETE FROM creature_template WHERE entry = @ENTRY;
 DELETE FROM creature WHERE id = @ENTRY;
 
 REPLACE INTO `creature_template` (entry,modelid1,name,subname,minlevel,maxlevel,faction,scale,npcflag,InhabitType) VALUES
-(600800,27500,@NAME,@SUBNAME,80,80,35,1,128,3);
+(600800,28690,@NAME,@SUBNAME,80,80,35,1,128,3);
 
 REPLACE INTO `npc_vendor` (`entry`,`slot`,`item`,`maxcount`,`incrtime`,`extendedcost`,`verifiedbuild`) VALUES
-  (@ENTRY, '0', '13335', '0', '0', '0', '0'),
   (@ENTRY, '0', '5178', '0', '0', '0', '0'),
   (@ENTRY, '0', '5175', '0', '0', '0', '0'),
   (@ENTRY, '0', '5176', '0', '0', '0', '0'),
@@ -38,7 +37,10 @@ REPLACE INTO `npc_vendor` (`entry`,`slot`,`item`,`maxcount`,`incrtime`,`extended
   (@ENTRY, '0', '21177', '0', '0', '0', '0'),
   (@ENTRY, '0', '44605', '0', '0', '0', '0'),
   (@ENTRY, '0', '22148', '0', '0', '0', '0'),
-  (@ENTRY, '0', '6265', '0', '0', '0', '0');
+  (@ENTRY, '0', '6265', '0', '0', '0', '0'),
+  (@ENTRY, '0', '23197', '0', '0', '0', '0'),
+  (@ENTRY, '0', '23199', '0', '0', '0', '0'),
+  (@ENTRY, '0', '23203', '0', '0', '0', '0');
 
 REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, currentwaypoint, curhealth, curmana, MovementType, npcflag, unit_flags, dynamicflags) VALUE
  ('15115101', @ENTRY, '1', '1', '1', '0', '0', '1586.680420', '-4394.539062', '6.399858', '5.040626', '300', '0', '0', '1', '0', '0', '0', '0', '0'),
