@@ -14,7 +14,7 @@ REPLACE INTO `creature_questender` VALUES
 
  REPLACE INTO `quest_offer_reward` (`ID`, `RewardText`)
 VALUES
-	(@ID, "Welcome $N... Thank you for deciding to play on our realm. This is the first of many quests to do while here, however this may be the easiest. There is much work to be done. $B$BBefore continuing on your journey, be sure to talk to Major Oak.  He offers heirloom gear that levels with you and a mount you can start riding now. $B$BIf you want to boost to level 70 and some raiding gear, be sure to make your way to Stormwind or Orgrimmar. While there, be sure to check the fully stocked Auction House.  You too can make some coin. $B$BGood luck, safe travels, and do not lose faith...");
+	(@ID, "Welcome $N... Thank you for deciding to play on our realm. This is the first of many quests to do while here, however this may be the easiest. There is much work to be done. $B$BBefore continuing on your journey, be sure to talk to Major Oak.  He offers heirloom gear that levels with you and a mount you can start riding now. $B$BIf you want to boost to level 70 and pick up some raiding gear, be sure to make your way to Stormwind or Orgrimmar. While there, be sure to check the fully stocked Auction House.  You too can make some coin. $B$BGood luck, safe travels, and do not lose faith...");
 
 
 
