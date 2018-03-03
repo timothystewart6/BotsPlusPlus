@@ -22,11 +22,11 @@ DELETE FROM creature_template WHERE entry = @Trainer;
 DELETE FROM npc_trainer WHERE id = @Trainer;
 
 -- Create Trainer NPC
-INSERT INTO creature_template (entry,modelid1,name,subname,minlevel,maxlevel,faction,npcflag,scale,unit_class,trainer_type,type,inhabittype) VALUES
+REPLACE INTO creature_template (entry,modelid1,name,subname,minlevel,maxlevel,faction,npcflag,scale,unit_class,trainer_type,type,inhabittype) VALUES
 (@Trainer,@MODEL,@NAME,@SUBNAME,80,80,35,51,1,2,2,7,3);
 
 -- Insert spells to trainer
-INSERT INTO npc_trainer (id,spellid) VALUES
+REPLACE INTO npc_trainer (id,spellid) VALUES
 (@Trainer,-200001), -- Warrior-Lowlevel
 (@Trainer,-200002), -- Warrior-Highlevel
 (@Trainer,-200003), -- Paladin-Lowlevel
@@ -48,7 +48,7 @@ INSERT INTO npc_trainer (id,spellid) VALUES
 -- (@Trainer,-200019); -- Death Knights-Alllevel (Disable because alot of frost spell available to any class. Remade the DK spells and will remove the one trainable by any class)
 
 -- DeathKnight Spells
-INSERT INTO npc_trainer (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank`,`reqlevel`) VALUES 
+REPLACE INTO npc_trainer (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank`,`reqlevel`) VALUES
 (@Deathknight,50977,0,0,0,55), -- Death Gate
 (@Deathknight,53428,0,0,0,55), -- Runeforging
 (@Deathknight,49998,5600,0,0,56), -- Death Strike Rank 1
@@ -135,7 +135,7 @@ INSERT INTO npc_trainer (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank
 (@Deathknight,62158,360000,0,0,72); -- Rune of the Stoneskin Gargoyle
 
 -- Missing spells you get from quest.
-INSERT INTO `npc_trainer` (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank`,`reqlevel`) VALUES 
+REPLACE INTO `npc_trainer` (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank`,`reqlevel`) VALUES
 (@Druid,5487,0,0,0,10), -- Bear Form
 (@Druid,1446,0,0,0,10), -- Aquatic Form
 (@Druid,8947,0,0,0,10), -- Cure Poison
@@ -169,7 +169,7 @@ INSERT INTO `npc_trainer` (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillra
 (@Warrior,2458,0,0,0,30); -- Berserker Stance
 
 -- Skills
-INSERT INTO `npc_trainer` (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank`,`reqlevel`) VALUES 
+REPLACE INTO `npc_trainer` (`id`,`spellid`,`moneycost`,`reqskillline`,`reqskillrank`,`reqlevel`) VALUES
 (@Skills,33388,40000,0,0,20), -- Apprentice Riding
 (@Skills,33391,500000,33388,0,40), -- Journeyman Riding
 (@Skills,34090,2500000,33391,0,60), -- Expert Riding
@@ -198,4 +198,4 @@ REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_i
 
 DELETE FROM `spell_required` WHERE (`spell_id`=5784);
 DELETE FROM `spell_required` WHERE (`req_spell`=686);
-INSERT INTO `spell_required` (`spell_id`, `req_spell`) VALUES ('5784', '686');
+REPLACE INTO `spell_required` (`spell_id`, `req_spell`) VALUES ('5784', '686');

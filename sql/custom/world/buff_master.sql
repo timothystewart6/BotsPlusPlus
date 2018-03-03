@@ -7,11 +7,11 @@ DELETE FROM gossip_menu_option WHERE menu_id = @GOPTION;
 DELETE FROM smart_scripts WHERE entryorguid = @BUFFNPC;
 DELETE FROM creature_template WHERE entry = @BUFFNPC;
 
-INSERT INTO creature_template (entry, modelid1, name, subname, IconName, gossip_menu_id, minlevel, maxlevel, HealthModifier, ManaModifier, ArmorModifier, faction, npcflag, speed_walk, speed_run, scale, rank, DamageModifier, unit_class, unit_flags, type, type_flags, InhabitType, RegenHealth, flags_extra, AiName) VALUES
+REPLACE INTO creature_template (entry, modelid1, name, subname, IconName, gossip_menu_id, minlevel, maxlevel, HealthModifier, ManaModifier, ArmorModifier, faction, npcflag, speed_walk, speed_run, scale, rank, DamageModifier, unit_class, unit_flags, type, type_flags, InhabitType, RegenHealth, flags_extra, AiName) VALUES
 (@BUFFNPC, '21572', @NAME, @SUBNAME, 'Directions', '50000', 71, 71, 1.56, 1.56, 1.56, 35, 3, 1, 1.14286, 1, 1, 1, 1, 2, 7, 138936390, 3, 1, 2, 'SmartAI');
 
 SET @GID := IFNULL((SELECT id FROM gossip_menu_option WHERE menu_id = @GOPTION ORDER BY id DESC LIMIT 1), 0)+1;
-INSERT INTO gossip_menu_option (menu_id, id, option_icon, option_text, option_id, npc_option_npcflag, action_menu_id, action_poi_id, box_coded, box_money, box_text) VALUES
+REPLACE INTO gossip_menu_option (menu_id, id, option_icon, option_text, option_id, npc_option_npcflag, action_menu_id, action_poi_id, box_coded, box_money, box_text) VALUES
 (@GOPTION, @GID, 2, 'Power Word: Fortitude', 1, 1, @GOPTION, 0, 0, 0, NULL), 
 (@GOPTION, @GID+1, 2, 'Divine Spirit', 1, 1, @GOPTION, 0, 0, 0, NULL), 
 (@GOPTION, @GID+2, 2, 'Shadow Protection', 1, 1, @GOPTION, 0, 0, 0, NULL), 
@@ -24,7 +24,7 @@ INSERT INTO gossip_menu_option (menu_id, id, option_icon, option_text, option_id
 (@GOPTION, @GID+9, 2, 'Mark of the Wild', 1, 1, @GOPTION, 0, 0, 0, NULL); 
 
 SET @SID := IFNULL((SELECT id FROM smart_scripts WHERE entryorguid = @BUFFNPC ORDER BY id DESC LIMIT 1), 0)+1;
-INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+REPLACE INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
 (@BUFFNPC, 0, @SID, 0, 62, 0, 100, 0, @GOPTION, @GID, 0, 0, 85, 48161, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, ''),
 (@BUFFNPC, 0, @SID+1, 0, 62, 0, 100, 0, @GOPTION, @GID+1, 0, 0, 85, 48073, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, ''),
 (@BUFFNPC, 0, @SID+2, 0, 62, 0, 100, 0, @GOPTION, @GID+2, 0, 0, 85, 48169, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, ''),
