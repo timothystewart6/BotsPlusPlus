@@ -14,7 +14,7 @@ REPLACE INTO `creature_questender` VALUES
 
  REPLACE INTO `quest_offer_reward` (`ID`, `RewardText`)
 VALUES
-	(@ID, "Welcome $N... Thank you for deciding to play on our realm. This is the first of many quests to do while here, however this may be the easiest. There is much work to be done. $B$BBefore continuing on your journey, be sure to talk to Major Oak.  He offers heirloom gear that levels with you and a mount you can start riding now. $B$BIf you want to boost to level 70 and some raiding gear, be sure to make your way to Stormwind or Orgrimmar. While there, be sure to check the fully stocked Auction House.  You too can make some coin. $B$BGood luck, safe travels, and do not lose faith...");
+	(@ID, "Welcome $N... Thank you for deciding to play on our realm. This is the first of many quests to do while here, however this may be the easiest. There is much work to be done. $B$BBefore continuing on your journey, be sure to talk to Major Oak.  He offers heirloom gear that levels with you and a mount you can start riding now. $B$BIf you want to boost to level 70 and pick up some raiding gear, be sure to make your way to Stormwind or Orgrimmar. While there, be sure to check the fully stocked Auction House.  You too can make some coin. $B$BGood luck, safe travels, and do not lose faith...");
 
 REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, currentwaypoint, curhealth, curmana, MovementType, npcflag, unit_flags, dynamicflags) VALUE
    (15121656, 190004, 1, 1, 1, 0, 0, -611.809, -4244.23, 38.9562, 3.05946, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
@@ -24,6 +24,4 @@ REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_i
    (15121660, 190004, 530, 1, 1, 0, 0, 10354, -6363.58, 34.9047, 3.15741, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
    (15121661, 190004, 0, 1, 1, 0, 0, 1660.83, 1665.7, 120.719, 1.65421, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
    (15121662, 190004, 0, 1, 1, 0, 0, -8916.02, -120.186, 82.0557, 3.97086, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
-   (15121663, 190004, 0, 1, 1, 0, 0, -6217.81, 334.406, 383.246, 3.31351, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
-   (15121664, 190004, 0, 1, 1, 0, 0, -8844.87, 629.432, 94.8839, 0.382052, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
-   (15121665, 190004, 1, 1, 1, 0, 0, 1602.82, -4401.24, 9.7374, 1.98458, 300, 0, 0, 5342, 0, 0, 0, 0, 0);
+   (15121663, 190004, 0, 1, 1, 0, 0, -6217.81, 334.406, 383.246, 3.31351, 300, 0, 0, 5342, 0, 0, 0, 0, 0);
