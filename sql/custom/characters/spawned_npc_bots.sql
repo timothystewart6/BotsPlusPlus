@@ -1,5 +1,5 @@
 -- insert all npc_bot characters
-INSERT INTO `characters_npcbot` (`entry`, `owner`, `roles`, `faction`, `equipMhEx`, `equipOhEx`, `equipRhEx`, `equipHead`, `equipShoulders`, `equipChest`, `equipWaist`, `equipLegs`, `equipFeet`, `equipWrist`, `equipHands`, `equipBack`, `equipBody`, `equipFinger1`, `equipFinger2`, `equipTrinket1`, `equipTrinket2`, `equipNeck`)
+REPLACE INTO `characters_npcbot` (`entry`, `owner`, `roles`, `faction`, `equipMhEx`, `equipOhEx`, `equipRhEx`, `equipHead`, `equipShoulders`, `equipChest`, `equipWaist`, `equipLegs`, `equipFeet`, `equipWrist`, `equipHands`, `equipBack`, `equipBody`, `equipFinger1`, `equipFinger2`, `equipTrinket1`, `equipTrinket2`, `equipNeck`)
 VALUES
 (70023, 0, 6, 1802, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     (70024, 0, 10, 1802, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -14,7 +14,7 @@ VALUES
     (70301, 0, 2, 1802, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
-INSERT INTO `characters_npcbot` (`entry`, `owner`, `roles`, `faction`, `equipMhEx`, `equipOhEx`, `equipRhEx`, `equipHead`, `equipShoulders`, `equipChest`, `equipWaist`, `equipLegs`, `equipFeet`, `equipWrist`, `equipHands`, `equipBack`, `equipBody`, `equipFinger1`, `equipFinger2`, `equipTrinket1`, `equipTrinket2`, `equipNeck`)
+REPLACE INTO `characters_npcbot` (`entry`, `owner`, `roles`, `faction`, `equipMhEx`, `equipOhEx`, `equipRhEx`, `equipHead`, `equipShoulders`, `equipChest`, `equipWaist`, `equipLegs`, `equipFeet`, `equipWrist`, `equipHands`, `equipBack`, `equipBody`, `equipFinger1`, `equipFinger2`, `equipTrinket1`, `equipTrinket2`, `equipNeck`)
 VALUES
 	(70013, 0, 2, 1801, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 	(70077, 0, 6, 1801, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),

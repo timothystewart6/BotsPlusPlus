@@ -1,5 +1,5 @@
 DELETE FROM `rbac_permissions` WHERE `id` IN (1800,1801,1802,1803,1804,1805,1806,1807,1808,1809,1810,1811,1812,1813,1814,1815,1816);
-INSERT INTO `rbac_permissions` (`id`, `name`) VALUES
+REPLACE INTO `rbac_permissions` (`id`, `name`) VALUES
 (1800, 'Command: npcbot'),
 (1801, 'Command: npcbot set faction'),
 (1802, 'Command: npcbot set owner'),
@@ -18,7 +18,7 @@ INSERT INTO `rbac_permissions` (`id`, `name`) VALUES
 (1815, 'Command: npcbot attack'),
 (1816, 'Command: npcbot withdraw');
 DELETE FROM `rbac_linked_permissions` WHERE `linkedid` IN (1800,1801,1802,1803,1804,1805,1806,1807,1808,1809,1810,1811,1812,1813,1814,1815,1816);
-INSERT INTO `rbac_linked_permissions` (`id`,`linkedId`) VALUES
+REPLACE INTO `rbac_linked_permissions` (`id`,`linkedId`) VALUES
 (195, 1800),
 (195, 1801),
 (197, 1802),

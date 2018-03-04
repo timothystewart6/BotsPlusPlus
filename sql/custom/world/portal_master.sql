@@ -32,16 +32,16 @@ DELETE from gameobject WHERE ID = @RUNE AND guid >= 200000;
 
 -- Teleporter
 
-INSERT INTO creature_template (entry, modelid1, name, subname, IconName, gossip_menu_id, minlevel, maxlevel, faction, npcflag, speed_walk, speed_run, scale, rank, unit_class, unit_flags, type, type_flags, InhabitType, RegenHealth, flags_extra, AiName) VALUES
+REPLACE INTO creature_template (entry, modelid1, name, subname, IconName, gossip_menu_id, minlevel, maxlevel, faction, npcflag, speed_walk, speed_run, scale, rank, unit_class, unit_flags, type, type_flags, InhabitType, RegenHealth, flags_extra, AiName) VALUES
 (@ENTRY, @MODEL, @NAME, @SUBNAME, "Directions", @GOSSIP_MENU, 71, 71, 35, 3, 1, 1.14286, 1.25, 1, 1, 2, 7, 138936390, 3, 1, 2, "SmartAI");
 
 -- Teleporter aura
 
-INSERT INTO creature_template_addon (entry, mount, bytes1, bytes2, emote, path_id, auras) VALUES (@ENTRY, 0, 0, 0, 0, 0, @AURA);
+REPLACE INTO creature_template_addon (entry, mount, bytes1, bytes2, emote, path_id, auras) VALUES (@ENTRY, 0, 0, 0, 0, 0, @AURA);
 
 -- Gossip header text link to menus
 
-INSERT INTO gossip_menu (entry, text_id) VALUES
+REPLACE INTO gossip_menu (entry, text_id) VALUES
 (@GOSSIP_MENU+4, @TEXT_ID+3),
 (@GOSSIP_MENU+3, @TEXT_ID+2),
 (@GOSSIP_MENU+2, @TEXT_ID+2),
@@ -55,7 +55,7 @@ INSERT INTO gossip_menu (entry, text_id) VALUES
 
 -- Gossip header texts
 
-INSERT INTO npc_text (ID, text0_0, em0_1) VALUES
+REPLACE INTO npc_text (ID, text0_0, em0_1) VALUES
 (@TEXT_ID+4, "$BWhere would you like to be ported?$B", 0),
 (@TEXT_ID+3, "$BBe careful with choosing raids, I won't be there if you wipe.$B", 0),
 (@TEXT_ID+2, "$BUp for some dungeon exploring?$B", 0),
@@ -64,7 +64,7 @@ INSERT INTO npc_text (ID, text0_0, em0_1) VALUES
 
 -- Conditions for gossip option and menu factions
 
-INSERT INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, ConditionTypeOrReference, ConditionValue1, Comment) VALUES
+REPLACE INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, ConditionTypeOrReference, ConditionValue1, Comment) VALUES
 (15, @GOSSIP_MENU, 1, 6, 469, "Stormwind"),
 (15, @GOSSIP_MENU+5, 2, 6, 469, "Dun Morogh"),
 (15, @GOSSIP_MENU+5, 3, 6, 67, "Tirisfal Glades"),
@@ -107,7 +107,7 @@ INSERT INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, Condi
 
 -- Conditions for gossip option levels
 
-INSERT INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, ConditionTypeOrReference, ConditionValue1, ConditionValue2, ConditionValue3, Comment) VALUES
+REPLACE INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, ConditionTypeOrReference, ConditionValue1, ConditionValue2, ConditionValue3, Comment) VALUES
 (15, @GOSSIP_MENU+8, 9, 27, 77, 3, 0, "Portal Master - Level req"),
 (15, @GOSSIP_MENU+8, 8, 27, 77, 3, 0, "Portal Master - Level req"),
 (15, @GOSSIP_MENU+8, 7, 27, 77, 3, 0, "Portal Master - Level req"),
@@ -232,7 +232,7 @@ INSERT INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, Condi
 
 -- Gossip options:
 
-INSERT INTO gossip_menu_option (menu_id, id, option_icon, option_text, option_id, npc_option_npcflag, action_menu_id, action_poi_id, box_coded, box_money, box_text) VALUES
+REPLACE INTO gossip_menu_option (menu_id, id, option_icon, option_text, option_id, npc_option_npcflag, action_menu_id, action_poi_id, box_coded, box_money, box_text) VALUES
 (@GOSSIP_MENU, 1, 2, "Stormwind", 1, 1, @GOSSIP_MENU, 0, 0, 0, "Are you sure, that you want to go to Stormwind?"),
 (@GOSSIP_MENU, 2, 2, "Orgrimmar", 1, 1, @GOSSIP_MENU, 0, 0, 0, "Are you sure, that you want to go to Orgrimmar?"),
 (@GOSSIP_MENU, 3, 2, "Darnassus", 1, 1, @GOSSIP_MENU, 0, 0, 0, "Are you sure, that you want to go to Darnassus?"),
@@ -383,7 +383,7 @@ INSERT INTO gossip_menu_option (menu_id, id, option_icon, option_text, option_id
 
 -- Teleport scripts:
 
-INSERT INTO smart_scripts (entryorguid, source_type, id, link, event_type, event_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action_type, action_param1, action_param2, action_param3, action_param4, action_param5, action_param6, target_type, target_param1, target_param2, target_param3, target_x, target_y, target_z, target_o, comment) VALUES 
+REPLACE INTO smart_scripts (entryorguid, source_type, id, link, event_type, event_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action_type, action_param1, action_param2, action_param3, action_param4, action_param5, action_param6, target_type, target_param1, target_param2, target_param3, target_x, target_y, target_z, target_o, comment) VALUES
 (@ENTRY, 0, 1, 0, 62, 0, 100, 0, @GOSSIP_MENU, 1, 0, 0, 62, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, -8842.09, 626.358, 94.0867, 3.61363, "Teleporter script"),
 (@ENTRY, 0, 2, 0, 62, 0, 100, 0, @GOSSIP_MENU, 2, 0, 0, 62, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 1601.08, -4378.69, 9.9846, 2.14362, "Teleporter script"),
 (@ENTRY, 0, 3, 0, 62, 0, 100, 0, @GOSSIP_MENU, 11, 0, 0, 62, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, -14281.9, 552.564, 8.90422, 0.860144, "Teleporter script"),
@@ -519,7 +519,7 @@ INSERT INTO smart_scripts (entryorguid, source_type, id, link, event_type, event
 -- Teleporter spawns:
 
 ALTER TABLE creature AUTO_INCREMENT = 200000;
-INSERT INTO creature (id, map, spawnMask, phaseMask, modelid, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, curhealth, curmana) VALUES
+REPLACE INTO creature (id, map, spawnMask, phaseMask, modelid, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, curhealth, curmana) VALUES
 (@ENTRY, 0, 1, 1, 0, -13180.5, 342.503, 43.1936, 4.32977, 25, 0, 13700, 6540), 
 (@ENTRY, 530, 1, 1, 0, -3862.69, -11645.8, -137.629, 2.38273, 25, 0, 13700, 6540), 
 (@ENTRY, 0, 1, 1, 0, -4898.37, -965.118, 501.447, 2.25986, 25, 0, 13700, 6540), 
@@ -536,7 +536,7 @@ INSERT INTO creature (id, map, spawnMask, phaseMask, modelid, position_x, positi
 -- Rune spawns:
 
 ALTER TABLE gameobject AUTO_INCREMENT = 200000;
-INSERT INTO gameobject (id, map, spawnMask, phaseMask, position_x, position_y, position_z, orientation, rotation2, rotation3, spawntimesecs, state) VALUES
+REPLACE INTO gameobject (id, map, spawnMask, phaseMask, position_x, position_y, position_z, orientation, rotation2, rotation3, spawntimesecs, state) VALUES
 (@RUNE, 1, 1, 1, 1601.08, -4378.69, 9.9846, 2.14362, 0.878068, 0.478536, 25, 1), 
 (@RUNE, 0, 1, 1, -14281.9, 552.564, 8.90382, 0.860144, 0.416936, 0.908936, 25, 1), 
 (@RUNE, 0, 1, 1, -8842.09, 626.358, 94.0868, 3.61363, 0.972276, -0.233836, 25, 1), 
