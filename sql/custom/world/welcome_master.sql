@@ -5,7 +5,7 @@ REPLACE INTO `creature_template` (entry,modelid1,name,subname,minlevel,maxlevel,
 (@ENTRY,31011,"Commencer","Welcome Master",80,80,35,2,.75,"SmartAI",3);
 
 REPLACE INTO quest_template (Id, QuestType, LogTitle, RewardMoney, RewardNextQuest) VALUES
-   (@ID, 0,"|cff58FAF4WELCOME",10000,@ID);
+   (@ID, 0,"|cff58FAF4Welcome",10000,@ID);
  REPLACE INTO `creature_queststarter` VALUES
  (@ENTRY, @ID);
 REPLACE INTO `creature_questender` VALUES
@@ -15,8 +15,6 @@ REPLACE INTO `creature_questender` VALUES
  REPLACE INTO `quest_offer_reward` (`ID`, `RewardText`)
 VALUES
 	(@ID, "Welcome $N... Thank you for deciding to play on our realm. This is the first of many quests to do while here, however this may be the easiest. There is much work to be done. $B$BBefore continuing on your journey, be sure to talk to Major Oak.  He offers heirloom gear that levels with you and a mount you can start riding now. $B$BIf you want to boost to level 70 and some raiding gear, be sure to make your way to Stormwind or Orgrimmar. While there, be sure to check the fully stocked Auction House.  You too can make some coin. $B$BGood luck, safe travels, and do not lose faith...");
-
-
 
 REPLACE INTO creature (guid, id, map, spawnMask, phaseMask, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, currentwaypoint, curhealth, curmana, MovementType, npcflag, unit_flags, dynamicflags) VALUE
    (15121656, 190004, 1, 1, 1, 0, 0, -611.809, -4244.23, 38.9562, 3.05946, 300, 0, 0, 5342, 0, 0, 0, 0, 0),
