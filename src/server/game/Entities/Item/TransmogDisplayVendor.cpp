@@ -62,7 +62,7 @@ const bool TransmogDisplayVendorMgr::IgnoreReqSkill = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqSpell = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqLevel = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqEvent = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqStats = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqStats = true;
 
 // Example AllowedItems[] = { 123, 234, 345 };
 const std::set<uint32> TransmogDisplayVendorMgr::AllowedItems = { };
