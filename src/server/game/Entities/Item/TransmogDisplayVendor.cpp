@@ -58,7 +58,7 @@ const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
 
 const bool TransmogDisplayVendorMgr::IgnoreReqRace = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqClass = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqSkill = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqSkill = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqSpell = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqLevel = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqEvent = false;
