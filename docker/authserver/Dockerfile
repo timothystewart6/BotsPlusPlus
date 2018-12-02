@@ -34,7 +34,7 @@ WORKDIR "${install_prefix}/bin"
 VOLUME "${install_prefix}/etc"
 
 # Wait for the database server to come up first.
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh "${install_prefix}/bin/wait-for-it.sh"
+ADD https://raw.githubusercontent.com/timothystewart6/wait-for-it/master/wait-for-it.sh "${install_prefix}/bin/wait-for-it.sh"
 COPY authserver.sh "${install_prefix}/bin/authserver.sh"
 COPY authserver "${install_prefix}/bin/authserver"
 COPY etc "${install_prefix}/etc"
