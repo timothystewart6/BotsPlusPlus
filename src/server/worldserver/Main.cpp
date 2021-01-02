@@ -123,7 +123,7 @@ extern int main(int argc, char** argv)
                                  configError))
     {
         printf("Error in config file: %s\n", configError.c_str());
-        printf("sleeping for 30 seconds before closing");
+        printf("sleeping for 60 seconds before closing");
         std::this_thread::sleep_for(std::chrono::milliseconds(60000));
         return 1;
     }
