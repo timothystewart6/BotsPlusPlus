@@ -105,6 +105,8 @@ int main(int argc, char** argv)
                                  configError))
     {
         printf("Error in config file: %s\n", configError.c_str());
+        printf("sleeping for 30 seconds before closing");
+        Sleep( 60000 );
         return 1;
     }
 
