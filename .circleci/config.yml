@@ -45,7 +45,7 @@ jobs:
             docker build -f Dockerfile -t $REPO:$SHORT_GIT_HASH .
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$TAG
             docker tag $REPO:$SHORT_GIT_HASH $REPO:$CIRCLE_BUILD_NUM
-            docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+            docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
             docker push $REPO
             # worldserver
             cd ../worldserver
