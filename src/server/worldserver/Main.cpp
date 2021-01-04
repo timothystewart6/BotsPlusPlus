@@ -123,9 +123,6 @@ extern int main(int argc, char** argv)
                                  configError))
     {
         printf("Error in config file: %s\n", configError.c_str());
-        printf("sleeping for 5 minutes before closing");
-        // this is in case you need to copy the files into the container before it crashes
-        std::this_thread::sleep_for(std::chrono::milliseconds(300000)); 
         return 1;
     }
 
