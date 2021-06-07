@@ -153,6 +153,60 @@ docker run -d \
 timothystewart6/botsplusplus-worldserver:latest
 ```
 
+### Docker Compose
+
+Auth Server
+
+`docker-compose.yml`
+
+```yml
+version: "3"
+services:
+  trinity-auth:
+    image: timothystewart6/botsplusplus-authserver:latest
+    container_name: trinity-auth
+    environment:
+      - DB_HOST=192.168.0.100
+      - DB_PORT=3306
+    volumes:
+      - path/to/your/authserver:/opt/trinitycore/etc/
+      - /path/to/your/logs:/opt/trinitycore/logs/
+    ports:
+      - 3724:3724
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+```
+
+World Server
+
+`docker-compose.yml`
+
+```yml
+version: "3"
+services:
+  trinity-world:
+    image: timothystewart6/botsplusplus-worldserver:latest
+    container_name: trinity-world
+    environment:
+      - DB_HOST=192.168.0.100
+      - DB_PORT=3306
+    volumes:
+      - path/to/your/worldserverconf:/opt/trinitycore/etc/
+      - path/to/your/camera/cameras:/opt/trinitycore/bin/cameras
+      - path/to/your/dbc:/opt/trinitycore/bin/dbc
+      - path/to/your/maps:/opt/trinitycore/bin/maps
+      - path/to/your/mmaps:/opt/trinitycore/bin/mmaps
+      - path/to/your/vmaps:/opt/trinitycore/bin/vmaps
+      - path/to/your/logs:/opt/trinitycore/logs/
+    ports:
+      - 8085:8085 
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+```
+
+
 ## Build
 
 [Windows Requirements](https://trinitycore.atlassian.net/wiki/spaces/tc/pages/10977296/Windows+Requirements)
